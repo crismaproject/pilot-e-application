@@ -10,7 +10,7 @@
         <!-- Name: Name of the widget -->
         <Name>pilot-E-master-patient-widget-wirecloud</Name>
         <!-- Version: Current widget version number-->
-        <Version>0.1.0</Version>
+        <Version>0.1.1</Version>
         <!-- DisplayName: Name shown in the UI of the widget -->
         <DisplayName>Pilot E Master Patient Widget Wirecloud</DisplayName>
         <!-- Author: Widget developer(s) -->
@@ -20,7 +20,7 @@
         <!-- Description: Full widget description to be shown in the catalogue -->
         <Description>This wrapper for the Pilot E Master Patient Widget mainly serves as an example on how to integrate existing angular modules in wirecloud.</Description>
         <!-- Absolute or template-relative path to the image shown in the catalogue -->
-        <ImageURI></ImageURI>
+        <ImageURI>img/masterWidget.png</ImageURI>
         <!-- Absolute or template-relative path to the image to be used in smartphones -->
         <iPhoneImageURI></iPhoneImageURI>
         <!-- Absolute or template-relative path to the widget's documentation -->
