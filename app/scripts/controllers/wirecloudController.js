@@ -10,7 +10,7 @@ angular.module('eu.crismaproject.pilotE.controllers',
             function ($scope, ooi) {
                 'use strict';
 
-                var setSelectedPatient;
+                var setSelectedPatient, getSelectedPatient, unwatch;
 
                 setSelectedPatient = function (patient) {
                     console.log('setSelectedPatientL callback: ' + patient);
@@ -18,22 +18,27 @@ angular.module('eu.crismaproject.pilotE.controllers',
                     var patientId;
 
                     if (patient) {
-                        patientId = patient.substr(patient.lastIndexOf('/'));
+                        patientId = patient.substr(patient.lastIndexOf('/') + 1);
                         console.log('patientId = ' + patientId);
 
                         ooi.getCapturePatients().get({patientId: patientId}).$promise.then(function (thePatient) {
+                            // wirecloud will not check if value has changed
+                            unwatch();
                             $scope.selectedPatient = thePatient;
+                            unwatch = $scope.$watch('selectedPatient', getSelectedPatient);
                         });
                     }
                 };
 
-                $scope.$watch('selectedPatient', function (n) {
+                getSelectedPatient = function (n) {
                     console.log('selectedPatient watch: ' + n);
-                    
+
                     if (n) {
                         MashupPlatform.wiring.pushEvent('getSelectedPatient', n.$self);
                     }
-                });
+                };
+
+                unwatch = $scope.$watch('selectedPatient', getSelectedPatient);
 
                 MashupPlatform.wiring.registerCallback('setSelectedPatient', setSelectedPatient);
 
