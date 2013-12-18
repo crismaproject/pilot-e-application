@@ -22,9 +22,7 @@ angular.module('eu.crismaproject.pilotE.controllers',
                         console.log('patientId = ' + patientId);
 
                         ooi.getCapturePatients().get({patientId: patientId}).$promise.then(function (thePatient) {
-                            if (!angular.equals($scope.selectedPatient, thePatient)) {
-                                $scope.selectedPatient = thePatient;
-                            }
+                            $scope.selectedPatient = thePatient;
                         });
                     }
                 };
