@@ -1,0 +1,77 @@
+<?xml version="1.0" encoding="UTF-8"?>
+
+<!-- The Template core element. This element is mandatory -->
+<Template xmlns="http://wirecloud.conwet.fi.upm.es/ns/template#">
+
+    <!-- Catalog.ResourceDescription element. This element defines the core metadata of the widget -->
+    <Catalog.ResourceDescription>
+        <!-- Vendor: Company that distributes the widget -->
+        <Vendor>cismet GmbH</Vendor>
+        <!-- Name: Name of the widget -->
+        <Name>pilot-E-master-patient-widget-wirecloud</Name>
+        <!-- Version: Current widget version number-->
+        <Version>0.1.0</Version>
+        <!-- DisplayName: Name shown in the UI of the widget -->
+        <DisplayName>Pilot E Master Patient Widget Wirecloud</DisplayName>
+        <!-- Author: Widget developer(s) -->
+        <Author>Martin Scholl (cismet)</Author>
+        <!-- Mail: Developer's email address -->
+        <Mail>martin.scholl@cismet.de</Mail>
+        <!-- Description: Full widget description to be shown in the catalogue -->
+        <Description>This wrapper for the Pilot E Master Patient Widget mainly serves as an example on how to integrate existing angular modules in wirecloud.</Description>
+        <!-- Absolute or template-relative path to the image shown in the catalogue -->
+        <ImageURI></ImageURI>
+        <!-- Absolute or template-relative path to the image to be used in smartphones -->
+        <iPhoneImageURI></iPhoneImageURI>
+        <!-- Absolute or template-relative path to the widget's documentation -->
+        <WikiURI>doc/index.html</WikiURI>
+    </Catalog.ResourceDescription>
+
+    <!-- Platform.Preferences element. It defines user preferences -->
+    <Platform.Preferences>
+    </Platform.Preferences>
+
+    <!-- Platform.StateProperties element. It defines user preferences -->
+    <Platform.StateProperties>
+    </Platform.StateProperties>
+
+    <!-- Platform.Wiring element. It defines both the widget inputs and outputs -->
+    <Platform.Wiring>
+        <InputEndpoint 
+            name="setSelectedPatient" 
+            type="text" 
+            label="Select a patient" 
+            description="Let's other widgets select a specific patient. The text has to be a resource uri so that the patient can actually be loaded" 
+            friendcode="selectedPatient"/>
+        <InputEndpoint 
+            name="setPatients" 
+            type="text" 
+            label="Sets all the available patients" 
+            description="The dataset to operate on. The text has to be a resource uri so that the patients can actually be loaded" 
+            friendcode="patients"/>
+        <OutputEndpoint 
+            name="getSelectedPatient" 
+            type="text" 
+            label="Get the currently selected patient" 
+            description="Let's other widgets know which patient is selected. The text is a resource uri so that the patient can actually be loaded" 
+            friendcode="selectedPatient"/>
+        <OutputEndpoint 
+            name="getPatients" 
+            type="text" 
+            label="Gets all the available patients" 
+            description="The dataset currently operated on. The text is a resource uri so that the patients can actually be loaded" 
+            friendcode="patients"/>
+    </Platform.Wiring>
+
+    <!-- Platform.Link element. It binds the template with the actual widget's source code. -->
+    <Platform.Link>
+        <!-- XHTML element. It has the href attribute that links to the source code of the widget. -->
+        <!--                contenttype and cacheable attributes are optional -->
+        <XHTML href="index.html"/>
+
+    </Platform.Link>
+
+    <!-- Platform.Rendering element. It specifies the default width and height of the widget -->
+    <Platform.Rendering width="12" height="56"/>
+
+</Template>
