@@ -18,8 +18,8 @@ angular.module('eu.crismaproject.pilotE.controllers',
 
                     var patientId;
 
-                    if(patient) {
-                        patientId = patient.substr(patient.lastIndexOf('/'));
+                    if (patient) {
+                        patientId = patient.substr(patient.lastIndexOf('/') + 1);
                         console.log('patientId = ' + patientId);
 
                         ooi.getCapturePatients().get({patientId: patientId}).$promise.then(function (thePatient) {
