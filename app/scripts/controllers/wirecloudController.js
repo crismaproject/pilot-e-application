@@ -30,6 +30,7 @@ angular.module('eu.crismaproject.pilotE.controllers',
 
                 setPatients = function (patients) {
                     console.log('setPatientsL callback: ' + patients);
+                    //TBD
                 };
 
                 $scope.$watch('selectedPatient', function (n) {
@@ -38,11 +39,10 @@ angular.module('eu.crismaproject.pilotE.controllers',
                     if (n) {
                         MashupPlatform.wiring.pushEvent('getSelectedPatient', n.$self);
                     }
-                });
+                }, true);
                 $scope.$watch('patients', function (n) {
                     console.log('patients watch: ' + n);
-
-                    MashupPlatform.wiring.pushEvent('getPatients', n);
+                    //TBD
                 });
 
                 MashupPlatform.wiring.registerCallback('setSelectedPatient', setSelectedPatient);
