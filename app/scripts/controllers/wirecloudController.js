@@ -11,31 +11,42 @@ angular.module('eu.crismaproject.pilotE.controllers',
             function ($scope, ooi) {
                 'use strict';
 
-                var getSelectedPatientL, setSelectedPatientL, setPatientsL;
+                var setSelectedPatient, setPatients;
 
-                setSelectedPatientL = function () {
-                    console.log('setSelectedPatientL callback');
+                setSelectedPatient = function (patient) {
+                    console.log('setSelectedPatient callback: ' + patient);
+
+                    var patientId;
+
+                    if(patient) {
+                        patientId = patient.substr(patient.lastIndexOf('/'));
+                        console.log('patientId = ' + patientId);
+
+                        ooi.getCapturePatients().get({patientId: patientId}).$promise.then(function (thePatient) {
+                            $scope.selectedPatient = thePatient;
+                        });
+                    }
                 };
 
-                setPatientsL = function () {
-                    console.log('setPatientsL callback');
+                setPatients = function (patients) {
+                    console.log('setPatientsL callback: ' + patients);
                 };
 
                 $scope.$watch('selectedPatient', function (n) {
                     console.log('selectedPatient watch: ' + n);
-                    MashupPlatform.widget.log('selectedPatient watch', MashupPlatform.log.INFO);
 
-                    MashupPlatform.wiring.pushEvent('getSelectedPatient', 'bla');
+                    if (n) {
+                        MashupPlatform.wiring.pushEvent('getSelectedPatient', n.$self);
+                    }
                 });
                 $scope.$watch('patients', function (n) {
                     console.log('patients watch: ' + n);
-                    MashupPlatform.widget.log('patients watch', MashupPlatform.log.INFO);
 
-                    MashupPlatform.wiring.pushEvent('getPatients', $scope.patients);
+                    MashupPlatform.wiring.pushEvent('getPatients', n);
                 });
 
-                MashupPlatform.wiring.registerCallback('setSelectedPatient', getSelectedPatientL);
-                MashupPlatform.wiring.registerCallback('setPatients', setPatientsL);
+                MashupPlatform.wiring.registerCallback('setSelectedPatient', setSelectedPatient);
+                MashupPlatform.wiring.registerCallback('setPatients', setPatients);
 
                 // initially load the patients
                 $scope.patients = ooi.getCapturePatients().query();
