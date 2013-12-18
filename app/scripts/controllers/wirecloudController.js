@@ -31,7 +31,9 @@ angular.module('eu.crismaproject.pilotE.controllers',
                     console.log('selectedPatient watch: ' + n);
 
                     if (n) {
-                        MashupPlatform.wiring.pushEvent('getSelectedPatient', n.$self);
+                        n.$save().then(function (data) {
+                            MashupPlatform.wiring.pushEvent('getSelectedPatient', data.$self);
+                        });
                     }
                 };
 
