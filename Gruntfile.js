@@ -12,6 +12,7 @@ module.exports = function (grunt) {
   require('time-grunt')(grunt);
   
   grunt.loadNpmTasks('grunt-ssh');
+  grunt.loadNpmTasks('grunt-contrib-compress');
 
   grunt.initConfig({
     yeoman: {
@@ -94,7 +95,8 @@ module.exports = function (grunt) {
           src: [
             '.tmp',
             '<%= yeoman.dist %>/*',
-            '!<%= yeoman.dist %>/.git*'
+            '!<%= yeoman.dist %>/.git*',
+	    '*.wgt'
           ]
         }]
       },
@@ -232,7 +234,8 @@ module.exports = function (grunt) {
             'img/{,*/}*.{gif,webp}',
             'styles/fonts/*',
             'template/**/*',
-            'templates/**/*'
+            'templates/**/*',
+	    'config.xml'
           ]
         }, {
           expand: true,
@@ -312,6 +315,26 @@ module.exports = function (grunt) {
           createDirectories: true
         }
       }
+    },
+    compress: {
+	main: {
+	    options: {
+		mode: 'zip',
+		archive: 'detail-patient-widget-min.wgt'
+	    },
+	    files: [
+		{expand: true, src: '**/*', cwd: 'dist'}
+	    ]
+	},
+	nomin: {
+	    options: {
+		mode: 'zip',
+		archive: 'detail-patient-widget.wgt'
+	    },
+	    files: [
+		{expand: true, src: '**/*', cwd: 'app'}
+	    ]
+	}
     }
   });
 
@@ -355,7 +378,8 @@ module.exports = function (grunt) {
   grunt.registerTask('default', [
     'jshint',
     'test',
-    'build'
+    'build',
+    'compress:main'
   ]);
 
   grunt.registerTask('deploy', [
