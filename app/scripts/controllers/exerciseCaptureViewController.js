@@ -1,7 +1,16 @@
-/* 
- * To change this license header, choose License Headers in Project Properties.
- * To change this template file, choose Tools | Templates
- * and open the template in the editor.
- */
+angular.module(
+    'eu.crismaproject.pilotE.controllers'
+).controller(
+    'exerciseCaptureViewController', 
+    [
+        'DEBUG',
+        function(DEBUG) {
+            'use strict';
 
-
+            if (DEBUG) {
+                console.log('initialising exercise capture view controller');
+            }
+      
+        }
+    ]
+);

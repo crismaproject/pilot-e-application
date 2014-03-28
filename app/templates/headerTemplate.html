@@ -1,16 +1,19 @@
-<!DOCTYPE html>
-<!--
-To change this license header, choose License Headers in Project Properties.
-To change this template file, choose Tools | Templates
-and open the template in the editor.
--->
-<html>
-    <head>
-        <title>TODO supply a title</title>
-        <meta charset="UTF-8">
-        <meta name="viewport" content="width=device-width, initial-scale=1.0">
-    </head>
-    <body>
-        <div>TODO write content</div>
-    </body>
-</html>
+<header>
+    <div class="navbar navbar-fixed-top headersettings" role="navigation">
+        <div class="container-fluid">
+            <span class="pull-left">
+                <a href="http://www.crismaproject.eu/"><img src="img/eu_crisma_logo.png" class="logo crisma-logo"></a>
+            </span>
+            <span class="btn-group">
+                <button type="button" 
+                        class="btn btn-primary" 
+                        ng-repeat="value in radioModel.values" 
+                        ng-model="radioModel.selected" 
+                        btn-radio="value.route">{{value.displayName}}</button>
+            </span>
+            <span class="pull-right">
+                <a href="http://www.drk.de/"><img src="img/DRK_Logo2.svg" class="logo drk-logo"></a>
+            </span>
+        </div>
+    </div>
+</header>

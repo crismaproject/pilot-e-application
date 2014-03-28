@@ -17,6 +17,7 @@
         
         <!-- build:css(.tmp) styles/main.css -->
         <link rel="stylesheet" href="styles/main.css">
+        <link rel="stylesheet" href="styles/headerDirective.css">
         <link rel="stylesheet" href="styles/masterPatientDirective.css">
         <link rel="stylesheet" href="styles/detailPatientDirective.css">
         <!-- endbuild -->
@@ -34,16 +35,7 @@
         <!-- Add your site or application content here -->
         <div class="container" ng-view></div>
 
-        <!-- Google Analytics: change UA-XXXXX-X to be your site's ID -->
-        <!--script>
-          (function(i,s,o,g,r,a,m){i['GoogleAnalyticsObject']=r;i[r]=i[r]||function(){
-          (i[r].q=i[r].q||[]).push(arguments)},i[r].l=1*new Date();a=s.createElement(o),
-          m=s.getElementsByTagName(o)[0];a.async=1;a.src=g;m.parentNode.insertBefore(a,m)
-          })(window,document,'script','//www.google-analytics.com/analytics.js','ga');
-   
-          ga('create', 'UA-XXXXX-X');
-          ga('send', 'pageview');
-       </script-->
+        <head-nav/>
 
         <script src="bower_components/jquery/jquery.js"></script>
         <script src="bower_components/angular/angular.js"></script>
@@ -58,16 +50,24 @@
 
         <!-- build:js({.tmp,app}) scripts/scripts.js -->
         <script src="scripts/app.js"></script>
+        <script src="scripts/configuration.js"></script>
+        <!-- controllers -->
         <script src="scripts/controllers/initialiserController.js"></script>
+        <script src="scripts/controllers/analysisViewController.js"></script>
         <script src="scripts/controllers/captureViewController.js"></script>
+        <script src="scripts/controllers/exerciseCaptureViewController.js"></script>
+        <script src="scripts/controllers/exerciseDebriefingViewController.js"></script>
+        <script src="scripts/controllers/headerDirectiveController.js"></script>
         <script src="scripts/controllers/masterPatientDirectiveController.js"></script>
         <script src="scripts/controllers/detailPatientDirectiveController.js"></script>
+        <!-- directives -->
         <script src="scripts/directives/initialiserDirective.js"></script>
+        <script src="scripts/directives/headerDirective.js"></script>
         <script src="scripts/directives/masterPatientDirective.js"></script>
         <script src="scripts/directives/detailPatientDirective.js"></script>
+        <!-- services -->
         <script src="scripts/services/initialiserService.js"></script>
         <script src="scripts/services/ooiService.js"></script>
-        <script src="scripts/configuration.js"></script>
         <!-- endbuild -->
     </body>
 </html>
