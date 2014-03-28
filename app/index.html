@@ -18,6 +18,7 @@
         <!-- build:css(.tmp) styles/main.css -->
         <link rel="stylesheet" href="styles/main.css">
         <link rel="stylesheet" href="styles/headerDirective.css">
+        <link rel="stylesheet" href="styles/exerciseNavDirective.css">
         <link rel="stylesheet" href="styles/masterPatientDirective.css">
         <link rel="stylesheet" href="styles/detailPatientDirective.css">
         <!-- endbuild -->
@@ -32,10 +33,13 @@
           <script src="bower_components/json3/lib/json3.min.js"></script>
         <![endif]-->
 
-        <!-- Add your site or application content here -->
+        <head-nav></head-nav>
+        <exercise-nav></exercise-nav>
+
         <div class="container" ng-view></div>
 
-        <head-nav/>
+            
+        
 
         <script src="bower_components/jquery/jquery.js"></script>
         <script src="bower_components/angular/angular.js"></script>
@@ -58,11 +62,13 @@
         <script src="scripts/controllers/exerciseCaptureViewController.js"></script>
         <script src="scripts/controllers/exerciseDebriefingViewController.js"></script>
         <script src="scripts/controllers/headerDirectiveController.js"></script>
+        <script src="scripts/controllers/exerciseNavDirectiveController.js"></script>
         <script src="scripts/controllers/masterPatientDirectiveController.js"></script>
         <script src="scripts/controllers/detailPatientDirectiveController.js"></script>
         <!-- directives -->
         <script src="scripts/directives/initialiserDirective.js"></script>
         <script src="scripts/directives/headerDirective.js"></script>
+        <script src="scripts/directives/exerciseNavDirective.js"></script>
         <script src="scripts/directives/masterPatientDirective.js"></script>
         <script src="scripts/directives/detailPatientDirective.js"></script>
         <!-- services -->
