@@ -20,14 +20,27 @@
             </ul>
             <form class="navbar-form navbar-left" role="search">
                 <div class="form-group">
-                    <input type="text" class="form-control" placeholder="Search">
+                    <input type="text" class="form-control" placeholder="Search" ng-model="wsName">
                 </div>
-                <button type="submit" class="btn btn-default">Submit</button>
+                <button type="button" 
+                        ng-class="{disabled: (location.path().indexOf('/analysis') === 0 || !activeWorldstate)}"  
+                        ng-click="createNewWorldstate()"
+                        class="btn btn-default no-focus-outline"
+                        data-tooltip-placement="bottom" 
+                        data-tooltip="Creates a new worldstate using the active worldstate as parent">
+                    <span class="glyphicon glyphicon-plus"></span>
+                </button>
             </form>
 
             <ul class="nav navbar-nav">
-                <li ng-show="location.path().indexOf('/exercise') === 0"><p class="navbar-text">Active Worldstate: {{activeWorldstate|| '&lt;choose active Worldstate&gt;'}}</p></li>
-                <li ng-class="{active: dropdownVisible}" ng-mouseenter="dropdownVisible = true" ng-mouseleave="dropdownVisible = false" class="dropdown" ng-show="location.path().indexOf('/analysis') === 0">
+                <li ng-show="location.path().indexOf('/exercise') === 0">
+                    <p class="navbar-text">Active Worldstate: {{activeWorldstate|| '&lt;choose active Worldstate&gt;'}}</p>
+                </li>
+                <li ng-class="{active: dropdownVisible}" 
+                    ng-mouseenter="dropdownVisible = true" 
+                    ng-mouseleave="dropdownVisible = false" 
+                    ng-show="location.path().indexOf('/analysis') === 0"
+                    class="dropdown" >
                     <a class="dropdown-toggle">Selected Worldstates <span class="caret"></span></a>
                     <ul class="dropdown-menu">
                         <li ng-repeat="worldstate in selectedWorldstates"><a>{{worldstate.name}}</a></li>
@@ -36,25 +49,4 @@
             </ul>
         </div><!-- /.navbar-collapse -->
     </div><!-- /.container-fluid -->
-
-
-    <!--<header>
-        <div class="navbar navbar-fixed-top headersettings" role="navigation">
-            <div class="container-fluid">
-                <span class="pull-left">
-                    <a href="http://www.crismaproject.eu/"><img src="img/eu_crisma_logo.png" class="logo crisma-logo"></a>
-                </span>
-                <span class="btn-group">
-                    <button type="button" 
-                            class="btn btn-primary" 
-                            ng-repeat="value in radioModel.values" 
-                            ng-model="radioModel.selected" 
-                            btn-radio="value.route">{{value.displayName}}</button>
-                </span>
-                <span class="pull-right">
-                    <a href="http://www.drk.de/"><img src="img/DRK_Logo2.svg" class="logo drk-logo"></a>
-                </span>
-            </div>
-        </div>
-    </header>-->
 </nav>

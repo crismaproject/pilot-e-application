@@ -14,3 +14,7 @@
 .dropdown:hover .dropdown-menu {
     display: block;
 }
+
+.no-focus-outline:focus {
+    outline: none;
+}
