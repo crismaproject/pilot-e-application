@@ -14,12 +14,8 @@ angular.module(
                 console.log('initialising header directive controller');
             }
             
-            $scope.radioModel = {
-                values: [{route: 'exercise', displayName:'Exercise'}, {route: 'analysis', displayName:'Analysis'}],
-                selected: 'exercise'
-            };
-            $scope.$watch('radioModel.selected', function(n){
-                $location.path('/' + n);
-            });
+            $scope.location = $location;
+            $scope.dropdownVisible = false;
+            $scope.selectedWorldstates = [{name:'<no Worldstate selected>'}];
         }
     ]);

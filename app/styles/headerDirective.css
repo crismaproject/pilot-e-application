@@ -10,3 +10,7 @@
 .crisma-logo {
     margin-top: 5px;
 }
+
+.dropdown:hover .dropdown-menu {
+    display: block;
+}

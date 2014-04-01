@@ -1,14 +1,17 @@
-<div class="fixed-center-left slide-show" ng-show="isVisible()">
-    <div>
-        Exercise Master Data
-    </div>
-    <div>
-        Exercise Capture
-    </div>
-    <div>
-        Exercise Debriefing
-    </div>
-    <div>
-        Exercise Simulation
-    </div>
-</div>
+<nav class="navbar-default">
+    <ul class="fixed-center-left slide-show nav navbar-nav nav-pills nav-stacked" ng-show="isVisible()">
+        <!-- NOTE: the tooltips cause the visualisation to slightly "dance" :) -->
+        <li class="disabled" data-tooltip-placement="right" data-tooltip="Exercise Master Data">
+            <a href="/exercise/masterdata"><span class="glyphicon glyphicon-cog"></span></a>
+        </li>
+        <li ng-class="{active: location.path().indexOf('/exercise/capture') === 0}" data-tooltip-placement="right" data-tooltip="Exercise Capture">
+            <a href="#/exercise/capture"><span class="glyphicon glyphicon-pencil"></span></a>
+        </li>
+        <li ng-class="{active: location.path().indexOf('/exercise/debriefing') === 0}" data-tooltip-placement="right" data-tooltip="Exercise Debriefing">
+            <a href="#/exercise/debriefing"><span class="glyphicon glyphicon-stats"></span></a>
+        </li>
+        <li class="disabled" data-tooltip-placement="right" data-tooltip="Exercise Simulation">
+            <a href="/exercise/simulation"><span class="glyphicon glyphicon-play-circle"></span></a>
+        </li>
+    </ul>
+</nav>

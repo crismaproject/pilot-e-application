@@ -10,10 +10,6 @@ angular.module(
     'use strict';
 
     $routeProvider
-        .when('/', {
-            templateUrl: 'views/main.html',
-            controller: 'captureViewController'
-        })
         .when('/exercise', {
             redirectTo: '/exercise/debriefing'
         })

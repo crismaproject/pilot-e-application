@@ -5,9 +5,8 @@ angular.module(
     [
         '$scope',
         '$location',
-        'eu.crismaproject.pilotE.services.OoI',
         'DEBUG',
-        function ($scope, $location, ooi, DEBUG) {
+        function ($scope, $location, DEBUG) {
             'use strict';
 
             if (DEBUG) {
@@ -16,6 +15,10 @@ angular.module(
             
             $scope.isVisible = function () {
                 return $location.path().indexOf('exercise') === 1;
+            };
+            
+            $scope.goto = function (path) {
+                $location.path(path);
             };
         }
     ]);
