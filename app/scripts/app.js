@@ -25,6 +25,10 @@ angular.module(
             templateUrl: 'views/analysis.html',
             controller: 'analysisViewController'
         })
+//        .when('/createWs', {
+//            templateUrl: 'views/analysis.html',
+//            controller: 'cws'
+//        })
         .otherwise({
             redirectTo: '/exercise/debriefing'
         });

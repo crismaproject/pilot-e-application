@@ -9,11 +9,11 @@
 }
 
 .slide-show.ng-hide-add, .slide-show.ng-hide-remove {
-    -webkit-transition:all 0.5s ease 0s;
-    -moz-transition:all 0.5s ease 0s;
-    -ms-transition:all 0.5s ease 0s;
-    -o-transition:all 0.5s ease 0s;
-    transition:all 0.5s ease 0s;
+    -webkit-transition:all 0.15s ease 0s;
+    -moz-transition:all 0.1s ease 0s;
+    -ms-transition:all 0.1s ease 0s;
+    -o-transition:all 0.1s ease 0s;
+    transition:all 0.1s ease 0s;
     display:block!important;
 }
 
@@ -25,4 +25,14 @@
 .slide-show.ng-hide-add, 
 .slide-show.ng-hide-remove.ng-hide-remove-active {
     left: 0px;
+}
+
+.fixed-center-left-sub {
+    position: absolute;
+    width: 50px;
+    height: 200px;
+    top: 50%;
+    left: 0%;
+    margin-top: -100px;
+    margin-left: 50px;
 }
