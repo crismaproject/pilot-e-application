@@ -82,7 +82,7 @@ angular.module(
 
                 if (item) {
                     dai = item.datadescriptor.defaultaccessinfo;
-                    res = $resource(dai);
+                    res = $resource(dai, {id: '@id'}, { 'get': {method:'GET'}, 'save': {method:'PUT'}});
                     $scope.apiurl = dai.substr(0, dai.indexOf('icmm_api') + 8);
                     $scope.exercise = res.get({id: item.actualaccessinfo});
                     $scope.exercise.$promise.then(function () {
@@ -203,7 +203,7 @@ angular.module(
                                         }
                                     }
 
-//                                    $scope.exercise.save({id: id});
+//                                    $scope.exercise.$save();
 
                                     // save current state and create the dataslot without self and id
                                     angularTools.safeApply($scope, function () {
