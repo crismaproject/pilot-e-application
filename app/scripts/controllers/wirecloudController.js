@@ -154,22 +154,23 @@ angular.module(
                             });
 
                             dialog.result.then(function () {
-                                var cm, createSpatialCoverage, i, j, pat;
-                                console.log('ok');
+                                var cm, createSpatialCoverage, dataitem, getMaxTimestamp, i, j, pat;
 
                                 // currently we have to take care of the ids ourselves
                                 $q.all(
-                                    $scope.getNextId('/CRISMA.exercises'),
-                                    $scope.getNextId('/CRISMA.capturePatients'),
-                                    $scope.getNextId('/CRISMA.preTriages'),
-                                    $scope.getNextId('/CRISMA.triages'),
-                                    $scope.getNextId('/CRISMA.consciousness'),
-                                    $scope.getNextId('/CRISMA.respirations'),
-                                    $scope.getNextId('/CRISMA.pulses'),
-                                    $scope.getNextId('/CRISMA.bloodpressures'),
-                                    $scope.getNextId('/CRISMA.positions'),
-                                    $scope.getNextId('/CRISMA.warmthpreservations'),
-                                    $scope.getNextId('/CRISMA.attendances')
+                                    [
+                                        $scope.getNextId('/CRISMA.exercises'),
+                                        $scope.getNextId('/CRISMA.capturePatients'),
+                                        $scope.getNextId('/CRISMA.preTriages'),
+                                        $scope.getNextId('/CRISMA.triages'),
+                                        $scope.getNextId('/CRISMA.consciousness'),
+                                        $scope.getNextId('/CRISMA.respirations'),
+                                        $scope.getNextId('/CRISMA.pulses'),
+                                        $scope.getNextId('/CRISMA.bloodpressures'),
+                                        $scope.getNextId('/CRISMA.positions'),
+                                        $scope.getNextId('/CRISMA.warmthpreservations'),
+                                        $scope.getNextId('/CRISMA.attendances')
+                                    ]
                                 ).then(function (ids) {
                                     $scope.exercise.$self = '/CRISMA.exercises/' + ids[0];
                                     $scope.exercise.id = ids[0];
@@ -241,12 +242,39 @@ angular.module(
                                         return ewkt;
                                     };
 
-                                    mashupPlatform.wiring.pushEvent('getDataitem', JSON.stringify({
+                                    getMaxTimestamp = function (exercise) {
+                                        var cur, getMax, i, patient;
+
+                                        getMax = function (date1, date2) {
+                                            if (date1 > date2) {
+                                                return date1;
+                                            } else {
+                                                return date2;
+                                            }
+                                        };
+
+                                        cur = new Date(exercise.patients[0].transportation_timestamp);
+                                        for (i = 0; i < exercise.patients.length; ++i) {
+                                            patient = exercise.patients[i];
+                                            cur = getMax(new Date(patient.transportation_timestamp), cur);
+                                            cur = getMax(new Date(patient.treatment_timestamp), cur);
+                                            cur = getMax(new Date(patient.preTriage.timestamp), cur);
+                                            cur = getMax(new Date(patient.triage.timestamp), cur);
+                                        }
+
+                                        for (i = 0; i < exercise.tacticalAreas.length; ++i) {
+                                            cur = getMax(new Date(exercise.tacticalAreas[i].time), cur);
+                                        }
+
+                                        return cur.toISOString();
+                                    };
+
+                                    dataitem = {
                                         'name': 'Exercise Data',
                                         'description': 'Data relevant for the exercise',
                                         'lastmodified': new Date().toISOString(),
-                                        'temporalcoveragefrom': '', // get first capture
-                                        'temporalcoverageto': '', // get last capture
+                                        'temporalcoveragefrom': $scope.exercise.incidentTime,
+                                        'temporalcoverageto': getMaxTimestamp($scope.exercise),
                                         'spatialcoverage': createSpatialCoverage($scope.exercise),
                                         'datadescriptor': {
                                             '$ref': '/CRISMA.datadescriptors/2'
@@ -256,7 +284,13 @@ angular.module(
                                         'categories': [{
                                             '$ref': '/CRISMA.categories/5'
                                         }]
-                                    }));
+                                    };
+
+                                    if (DEBUG) {
+                                        console.log("created dataitem: " + JSON.stringify(dataitem));
+                                    }
+
+                                    mashupPlatform.wiring.pushEvent('getDataitem', JSON.stringify(dataitem));
                                 });
                             }, function () {
                                 mashupPlatform.wiring.pushEvent('isEditing', 'true');
