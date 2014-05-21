@@ -8,8 +8,9 @@ angular.module(
         '$q',
         '$resource',
         'de.cismet.commons.angular.angularTools.AngularTools',
+        'eu.crismaproject.pilotE.services.GeoTools',
         'DEBUG',
-        function ($scope, $modal, $q, $resource, angularTools, DEBUG) {
+        function ($scope, $modal, $q, $resource, angularTools, geoTools, DEBUG) {
             'use strict';
 
             var dialog, initScope, mashupPlatform;
@@ -81,7 +82,7 @@ angular.module(
 
                 if (item) {
                     dai = item.datadescriptor.defaultaccessinfo;
-                    res = $resource(dai);
+                    res = $resource(dai, {id: '@id'}, { 'get': {method:'GET'}, 'save': {method:'PUT'}});
                     $scope.apiurl = dai.substr(0, dai.indexOf('icmm_api') + 8);
                     $scope.exercise = res.get({id: item.actualaccessinfo});
                     $scope.exercise.$promise.then(function () {
@@ -141,7 +142,7 @@ angular.module(
                 mashupPlatform.wiring.registerCallback('setEditing', function (nuu) {
 
                     if (nuu && nuu.toLowerCase() === 'true' && $scope.worldstate !== null) {
-                        angularTools.safeApply($scope, function() {
+                        angularTools.safeApply($scope, function () {
                             $scope.editing = true;
                         });
                     } else {
@@ -153,22 +154,23 @@ angular.module(
                             });
 
                             dialog.result.then(function () {
-                                var cm, i, j, pat;
-                                console.log('ok');
+                                var cm, createSpatialCoverage, dataitem, getMaxTimestamp, i, j, pat;
 
                                 // currently we have to take care of the ids ourselves
                                 $q.all(
-                                    $scope.getNextId('/CRISMA.exercises'),
-                                    $scope.getNextId('/CRISMA.capturePatients'),
-                                    $scope.getNextId('/CRISMA.preTriages'),
-                                    $scope.getNextId('/CRISMA.triages'),
-                                    $scope.getNextId('/CRISMA.consciousness'),
-                                    $scope.getNextId('/CRISMA.respirations'),
-                                    $scope.getNextId('/CRISMA.pulses'),
-                                    $scope.getNextId('/CRISMA.bloodpressures'),
-                                    $scope.getNextId('/CRISMA.positions'),
-                                    $scope.getNextId('/CRISMA.warmthpreservations'),
-                                    $scope.getNextId('/CRISMA.attendances')
+                                    [
+                                        $scope.getNextId('/CRISMA.exercises'),
+                                        $scope.getNextId('/CRISMA.capturePatients'),
+                                        $scope.getNextId('/CRISMA.preTriages'),
+                                        $scope.getNextId('/CRISMA.triages'),
+                                        $scope.getNextId('/CRISMA.consciousness'),
+                                        $scope.getNextId('/CRISMA.respirations'),
+                                        $scope.getNextId('/CRISMA.pulses'),
+                                        $scope.getNextId('/CRISMA.bloodpressures'),
+                                        $scope.getNextId('/CRISMA.positions'),
+                                        $scope.getNextId('/CRISMA.warmthpreservations'),
+                                        $scope.getNextId('/CRISMA.attendances')
+                                    ]
                                 ).then(function (ids) {
                                     $scope.exercise.$self = '/CRISMA.exercises/' + ids[0];
                                     $scope.exercise.id = ids[0];
@@ -201,19 +203,79 @@ angular.module(
                                         }
                                     }
 
-//                                    $scope.exercise.save({id: id});
+//                                    $scope.exercise.$save();
 
                                     // save current state and create the dataslot without self and id
-                                    angularTools.safeApply($scope, function() {
+                                    angularTools.safeApply($scope, function () {
                                         $scope.editing = false;
                                     });
-                                    mashupPlatform.wiring.pushEvent('getDataitem', JSON.stringify({
+
+                                    createSpatialCoverage = function (exercise) {
+                                        var convexHull, ewkt, geojson, i, indexof, points;
+
+                                        points = [];
+                                        ewkt = exercise.location;
+                                        indexof = ewkt.indexOf(';');
+                                        // assume 4326 point
+                                        geojson = Terraformer.WKT.parse(indexof > 0 ? ewkt.substr(indexof + 1) : ewkt);
+                                        points[0] = new google.maps.LatLng(
+                                            geojson.coordinates[0],
+                                            geojson.coordinates[1]
+                                        );
+
+                                        for (i = 0; i < exercise.tacticalAreas.length; ++i) {
+                                            geojson = exercise.tacticalAreas[i];
+                                            points[i + 1] = new google.maps.LatLng(
+                                                geojson.coordinates[0],
+                                                geojson.coordinates[1]
+                                            );
+                                        }
+
+                                        convexHull = geoTools.createConvexHull(points);
+
+                                        ewkt = 'SRID=4326; POLYGON ((';
+                                        for (i = 0; i < convexHull.length; ++i) {
+                                            ewkt += convexHull[i].lng() + ' ' + convexHull[i].lat() + ', ';
+                                        }
+                                        ewkt += convexHull[0].lng() + ' ' + convexHull[0].lat() + '))';
+
+                                        return ewkt;
+                                    };
+
+                                    getMaxTimestamp = function (exercise) {
+                                        var cur, getMax, i, patient;
+
+                                        getMax = function (date1, date2) {
+                                            if (date1 > date2) {
+                                                return date1;
+                                            } else {
+                                                return date2;
+                                            }
+                                        };
+
+                                        cur = new Date(exercise.patients[0].transportation_timestamp);
+                                        for (i = 0; i < exercise.patients.length; ++i) {
+                                            patient = exercise.patients[i];
+                                            cur = getMax(new Date(patient.transportation_timestamp), cur);
+                                            cur = getMax(new Date(patient.treatment_timestamp), cur);
+                                            cur = getMax(new Date(patient.preTriage.timestamp), cur);
+                                            cur = getMax(new Date(patient.triage.timestamp), cur);
+                                        }
+
+                                        for (i = 0; i < exercise.tacticalAreas.length; ++i) {
+                                            cur = getMax(new Date(exercise.tacticalAreas[i].time), cur);
+                                        }
+
+                                        return cur.toISOString();
+                                    };
+
+                                    dataitem = {
                                         'name': 'Exercise Data',
                                         'description': 'Data relevant for the exercise',
                                         'lastmodified': new Date().toISOString(),
-                                        'temporalcoveragefrom': '', // get first capture
-                                        'temporalcoverageto': '', // get last capture
-                                        'spatialcoverage': '', // get centroid from tactical areas
+                                        'temporalcoveragefrom': $scope.exercise.incidentTime,
+                                        'temporalcoverageto': getMaxTimestamp($scope.exercise),
+                                        'spatialcoverage': createSpatialCoverage($scope.exercise),
                                         'datadescriptor': {
                                             '$ref': '/CRISMA.datadescriptors/2'
                                         },
@@ -222,10 +284,15 @@ angular.module(
                                         'categories': [{
                                             '$ref': '/CRISMA.categories/5'
                                         }]
-                                    }));
+                                    };
+
+                                    if (DEBUG) {
+                                        console.log("created dataitem: " + JSON.stringify(dataitem));
+                                    }
+
+                                    mashupPlatform.wiring.pushEvent('getDataitem', JSON.stringify(dataitem));
                                 });
                             }, function () {
-                                console.log('cancel');
                                 mashupPlatform.wiring.pushEvent('isEditing', 'true');
                             });
                         }
@@ -249,7 +316,7 @@ angular.module(
                         });
 
                         dialog.result.then(function () {
-                            angularTools.safeApply($scope, function() {
+                            angularTools.safeApply($scope, function () {
                                 $scope.editing = false;
                             });
                             $scope.worldstate = JSON.parse(ws);
