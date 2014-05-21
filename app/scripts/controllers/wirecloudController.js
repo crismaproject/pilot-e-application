@@ -8,8 +8,9 @@ angular.module(
         '$q',
         '$resource',
         'de.cismet.commons.angular.angularTools.AngularTools',
+        'eu.crismaproject.pilotE.services.GeoTools',
         'DEBUG',
-        function ($scope, $modal, $q, $resource, angularTools, DEBUG) {
+        function ($scope, $modal, $q, $resource, angularTools, geoTools, DEBUG) {
             'use strict';
 
             var dialog, initScope, mashupPlatform;
@@ -141,7 +142,7 @@ angular.module(
                 mashupPlatform.wiring.registerCallback('setEditing', function (nuu) {
 
                     if (nuu && nuu.toLowerCase() === 'true' && $scope.worldstate !== null) {
-                        angularTools.safeApply($scope, function() {
+                        angularTools.safeApply($scope, function () {
                             $scope.editing = true;
                         });
                     } else {
@@ -153,7 +154,7 @@ angular.module(
                             });
 
                             dialog.result.then(function () {
-                                var cm, i, j, pat;
+                                var cm, createSpatialCoverage, i, j, pat;
                                 console.log('ok');
 
                                 // currently we have to take care of the ids ourselves
@@ -204,16 +205,49 @@ angular.module(
 //                                    $scope.exercise.save({id: id});
 
                                     // save current state and create the dataslot without self and id
-                                    angularTools.safeApply($scope, function() {
+                                    angularTools.safeApply($scope, function () {
                                         $scope.editing = false;
                                     });
+
+                                    createSpatialCoverage = function (exercise) {
+                                        var convexHull, ewkt, geojson, i, indexof, points;
+
+                                        points = [];
+                                        ewkt = exercise.location;
+                                        indexof = ewkt.indexOf(';');
+                                        // assume 4326 point
+                                        geojson = Terraformer.WKT.parse(indexof > 0 ? ewkt.substr(indexof + 1) : ewkt);
+                                        points[0] = new google.maps.LatLng(
+                                            geojson.coordinates[0],
+                                            geojson.coordinates[1]
+                                        );
+
+                                        for (i = 0; i < exercise.tacticalAreas.length; ++i) {
+                                            geojson = exercise.tacticalAreas[i];
+                                            points[i + 1] = new google.maps.LatLng(
+                                                geojson.coordinates[0],
+                                                geojson.coordinates[1]
+                                            );
+                                        }
+
+                                        convexHull = geoTools.createConvexHull(points);
+
+                                        ewkt = 'SRID=4326; POLYGON ((';
+                                        for (i = 0; i < convexHull.length; ++i) {
+                                            ewkt += convexHull[i].lng() + ' ' + convexHull[i].lat() + ', ';
+                                        }
+                                        ewkt += convexHull[0].lng() + ' ' + convexHull[0].lat() + '))';
+
+                                        return ewkt;
+                                    };
+
                                     mashupPlatform.wiring.pushEvent('getDataitem', JSON.stringify({
                                         'name': 'Exercise Data',
                                         'description': 'Data relevant for the exercise',
                                         'lastmodified': new Date().toISOString(),
                                         'temporalcoveragefrom': '', // get first capture
                                         'temporalcoverageto': '', // get last capture
-                                        'spatialcoverage': '', // get centroid from tactical areas
+                                        'spatialcoverage': createSpatialCoverage($scope.exercise),
                                         'datadescriptor': {
                                             '$ref': '/CRISMA.datadescriptors/2'
                                         },
@@ -225,7 +259,6 @@ angular.module(
                                     }));
                                 });
                             }, function () {
-                                console.log('cancel');
                                 mashupPlatform.wiring.pushEvent('isEditing', 'true');
                             });
                         }
@@ -249,7 +282,7 @@ angular.module(
                         });
 
                         dialog.result.then(function () {
-                            angularTools.safeApply($scope, function() {
+                            angularTools.safeApply($scope, function () {
                                 $scope.editing = false;
                             });
                             $scope.worldstate = JSON.parse(ws);
