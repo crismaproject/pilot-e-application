@@ -9,7 +9,7 @@ angular.module('eu.crismaproject.pilotE.controllers')
             'DEBUG',
             function ($scope, $q, $filter, NgTableParams, ooi, DEBUG) {
                 'use strict';
-                
+
                 if (DEBUG) {
                     console.log('initialising master alerts requests directive controller');
                 }
@@ -21,24 +21,26 @@ angular.module('eu.crismaproject.pilotE.controllers')
                         sorting: { name: 'asc' }
                     },
                     {
-                        total: $scope.rescueMeans ? $scope.rescueMeans.length : 0,
+                        total: $scope.alertsRequests ? $scope.alertsRequests.length : 0,
                         $scope: {$data: {}},
                         getData: function ($defer, params) {
-                            var resolvedMeans, i;
+                            var resolvedAlertsRequests, i;
 
                             // we have to load every rescue means to ensure proper paging/sorting
-                            resolvedMeans = [];
-                            
-                            if ($scope.rescueMeans) {
-                                for (i = 0; i < $scope.rescueMeans.length; ++i) {
-                                    resolvedMeans[i] = ooi.getRescueMeans().get({meansId: $scope.rescueMeans[i].id}).$promise;
+                            resolvedAlertsRequests = [];
+
+                            if ($scope.alertsRequests) {
+                                for (i = 0; i < $scope.alertsRequests.length; ++i) {
+                                    resolvedAlertsRequests[i] = ooi.getAlertsRequests().get(
+                                        {alertsRequestsId: $scope.alertsRequests[i].id}
+                                    ).$promise;
                                 }
 
-                                $q.all(resolvedMeans).then(function (theMeans) {
+                                $q.all(resolvedAlertsRequests).then(function (theAlertsRequests) {
                                     var ordered;
 
-                                    ordered = params.filter() ? $filter('filter')(theMeans, params.filter()) : theMeans;
-                                    ordered = params.sorting() ? $filter('orderBy')(ordered, params.orderBy()) : theMeans;
+                                    ordered = params.filter() ? $filter('filter')(theAlertsRequests, params.filter()) : theAlertsRequests;
+                                    ordered = params.sorting() ? $filter('orderBy')(ordered, params.orderBy()) : theAlertsRequests;
 
                                     params.total(ordered.length);
                                     $defer.resolve(ordered.slice(
@@ -53,13 +55,13 @@ angular.module('eu.crismaproject.pilotE.controllers')
                     }
                 );
 
-                $scope.$watch('rescueMeans.length', function () {
+                $scope.$watch('alertsRequests.length', function () {
                     $scope.tableParams.reload();
                 });
 
-                $scope.selectedRescueMeans = null;
+                $scope.selectedAlertRequest = null;
 
-                $scope.setSelected = function (means) {
-                    $scope.selectedRescueMeans = means;
+                $scope.setSelected = function (alertRequest) {
+                    $scope.selectedAlertRequest = alertRequest;
                 };
             }]);

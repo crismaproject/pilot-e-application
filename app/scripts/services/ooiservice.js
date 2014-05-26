@@ -11,7 +11,7 @@ angular.module(
             'use strict';
 
             var getCapturePatients,
-                getRescueMeans,
+                getAlertsRequests,
                 getMaxCareMeasures,
                 getClassifications,
                 getAverageRating,
@@ -77,8 +77,9 @@ angular.module(
                         'delete': {method: 'DELETE', cache: true}
                     });
             };
-            getRescueMeans = function () {
-                return $resource(OOI_API + '/CRISMA.rescueMeans/:meansId', {meansId: '@id', deduplicate: true},
+            getAlertsRequests = function () {
+                return $resource(OOI_API + '/CRISMA.alertsRequests/:alertsRequestsId',
+                    {alertsRequestsId: '@id', deduplicate: true},
                     {
                         'get':    {method: 'GET', cache: true},
                         'save':   {method: 'PUT', cache: true},
@@ -198,10 +199,10 @@ angular.module(
                     clear : clear
                 };
             };
-            
+
             return {
                 getCapturePatients : getCapturePatients,
-                getRescueMeans : getRescueMeans,
+                getAlertsRequests : getAlertsRequests,
                 getMaxCareMeasures : getMaxCareMeasures,
                 getClassifications : getClassifications,
                 getAverageRating : getAverageRating,

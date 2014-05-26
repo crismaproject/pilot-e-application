@@ -23,7 +23,7 @@ angular.module(
                 $scope.editing = false;
                 $scope.worldstate = null;
                 $scope.patients = null;
-                $scope.selectedRescueMeans = null;
+                $scope.selectedAlertRequest = null;
                 $scope.exercise = null;
                 $scope.apiurl = null;
                 $scope.allTacticalAreas = [

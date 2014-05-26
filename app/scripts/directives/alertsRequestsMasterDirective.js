@@ -6,8 +6,8 @@ angular.module(
         'use strict';
 
         var scope = {
-                rescueMeans: '=',
-                selectedRescueMeans: '='
+                alertsRequests: '=',
+                selectedAlertRequest: '='
             };
 
         return {
