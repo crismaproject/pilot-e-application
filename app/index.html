@@ -67,7 +67,7 @@
                                 <site-detail-widget 
                                     areas="exercise.tacticalAreas"
                                     all-areas="allTacticalAreas"
-                                    editing="editing"
+                                    editing="true"
                                     selected-coordinate="selectedCoordinate">
                                 </site-detail-widget>
                             </div>
@@ -85,6 +85,10 @@
                             </div>
                             <div class='col-lg-4'>
                                 <div class="margintop10"></div>
+                                <alerts-requests-details-widget 
+                                    selected-alert-request="selectedAlertRequest"
+                                    editing="true">
+                                </alerts-requests-details-widget>
                             </div>
                         </div>
                     </div>
@@ -129,12 +133,14 @@
         <script src="scripts/controllers/siteMapDirectiveController.js"></script>
         <script src="scripts/controllers/siteDetailsDirectiveController.js"></script>
         <script src="scripts/controllers/alertsRequestsMasterDirectiveController.js"></script>
+        <script src="scripts/controllers/alertsRequestsDetailsDirectiveController.js"></script>
         <script src="scripts/directives/initialiserDirective.js"></script>
         <script src="scripts/directives/masterPatientDirective.js"></script>
         <script src="scripts/directives/detailPatientDirective.js"></script>
         <script src="scripts/directives/siteMapDirective.js"></script>
         <script src="scripts/directives/siteDetailsDirective.js"></script>
         <script src="scripts/directives/alertsRequestsMasterDirective.js"></script>
+        <script src="scripts/directives/alertsRequestsDetailsDirective.js"></script>
         <script src="scripts/services/initialiserService.js"></script>
         <script src="scripts/services/ooiservice.js"></script>
         <script src="scripts/services/geoToolsService.js"></script>
