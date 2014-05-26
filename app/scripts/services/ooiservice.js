@@ -11,6 +11,7 @@ angular.module(
             'use strict';
 
             var getCapturePatients,
+                getRescueMeans,
                 getMaxCareMeasures,
                 getClassifications,
                 getAverageRating,
@@ -59,6 +60,28 @@ angular.module(
 
                             return patient;
                         }},
+                        'query':  {method: 'GET', isArray: true, transformResponse: function (data) {
+                            // we strip the ids of the objects only
+                            var col, res, i;
+
+                            col = JSON.parse(data).$collection;
+                            res = [];
+
+                            for (i = 0; i < col.length; ++i) {
+                                res.push({'id': parseInt(col[i].$ref.substr(col[i].$ref.lastIndexOf('/') + 1), 10)});
+                            }
+
+                            return res;
+                        }},
+                        'remove': {method: 'DELETE', cache: true},
+                        'delete': {method: 'DELETE', cache: true}
+                    });
+            };
+            getRescueMeans = function () {
+                return $resource(OOI_API + '/CRISMA.rescueMeans/:meansId', {meansId: '@id', deduplicate: true},
+                    {
+                        'get':    {method: 'GET', cache: true},
+                        'save':   {method: 'PUT', cache: true},
                         'query':  {method: 'GET', isArray: true, transformResponse: function (data) {
                             // we strip the ids of the objects only
                             var col, res, i;
@@ -178,6 +201,7 @@ angular.module(
             
             return {
                 getCapturePatients : getCapturePatients,
+                getRescueMeans : getRescueMeans,
                 getMaxCareMeasures : getMaxCareMeasures,
                 getClassifications : getClassifications,
                 getAverageRating : getAverageRating,

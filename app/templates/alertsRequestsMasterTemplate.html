@@ -1,0 +1,17 @@
+<div>
+    <table data-ng-table="tableParams" template-pagination="masterPatientDirectiveTablePager" show-filter="true" class="table ng-table-responsive">
+        <tbody>
+            <tr data-ng-repeat="means in $data" class="hoverrow ng-class:{'rowselected': means.id === selectedRescueMeans.id};" data-ng-click="setSelected(means)">
+                <td data-title="'Time'" sortable="time">
+                    {{means.time}}
+                </td>
+                <td data-title="'Request'">
+                    {{means.abbrevRequest}}
+                </td>
+                <td data-title="'Alert'" sortable="alert">
+                    {{means.alert}}
+                </td>
+            </tr>
+        </tbody>
+    </table>    
+</div>

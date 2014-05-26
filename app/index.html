@@ -74,7 +74,21 @@
                         </div>
                     </div>
                 </tab>
-                <tab heading='Alerts & Requests'></tab>
+                <tab heading='Alerts & Requests'>
+                    <div class="container-fluid">
+                        <div class="row">
+                            <div class='col-lg-8'>
+                                <alerts-requests-master-widget 
+                                    rescue-means="exercise.alertsRequests"
+                                    selected-rescue-means="selectedRescueMeans">
+                                </alerts-requests-master-widget>
+                            </div>
+                            <div class='col-lg-4'>
+                                <div class="margintop10"></div>
+                            </div>
+                        </div>
+                    </div>
+                </tab>
             </tabset>
         </div>
 
@@ -114,11 +128,13 @@
         <script src="scripts/controllers/detailPatientDirectiveController.js"></script>
         <script src="scripts/controllers/siteMapDirectiveController.js"></script>
         <script src="scripts/controllers/siteDetailsDirectiveController.js"></script>
+        <script src="scripts/controllers/alertsRequestsMasterDirectiveController.js"></script>
         <script src="scripts/directives/initialiserDirective.js"></script>
         <script src="scripts/directives/masterPatientDirective.js"></script>
         <script src="scripts/directives/detailPatientDirective.js"></script>
         <script src="scripts/directives/siteMapDirective.js"></script>
         <script src="scripts/directives/siteDetailsDirective.js"></script>
+        <script src="scripts/directives/alertsRequestsMasterDirective.js"></script>
         <script src="scripts/services/initialiserService.js"></script>
         <script src="scripts/services/ooiservice.js"></script>
         <script src="scripts/services/geoToolsService.js"></script>
