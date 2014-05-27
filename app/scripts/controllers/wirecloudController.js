@@ -132,17 +132,31 @@ angular.module(
                 return def.promise;
             };
             $scope.addAlertRequest = function () {
-                $scope.getNextId('/CRISMA.alertsRequests').then(function (id) {
+                if(!$scope.nextAlertsRequestsId) {
+                    $scope.getNextId('/CRISMA.alertsRequests').then(function (id) {
+                        $scope.nextAlertsRequestsId = id;
+                        $scope.exercise.alertsRequests.push(
+                            {
+                                '$self': '/CRISMA.alertsRequests/' + id,
+                                'id': id,
+                                'time': new Date().toISOString(),
+                                'alert': '',
+                                'rescueMeans': []
+                            }
+                        );
+                    });
+                } else {
+                    $scope.nextAlertsRequestsId++;
                     $scope.exercise.alertsRequests.push(
                         {
-                            '$self': '/CRISMA.alertsRequests/' + id,
-                            'id': id,
+                            '$self': '/CRISMA.alertsRequests/' + $scope.nextAlertsRequestsId,
+                            'id': $scope.nextAlertsRequestsId,
                             'time': new Date().toISOString(),
                             'alert': '',
                             'rescueMeans': []
                         }
                     );
-                });
+                }
             };
 
             if (typeof MashupPlatform === 'undefined') {

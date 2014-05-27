@@ -17,7 +17,7 @@ angular.module('eu.crismaproject.pilotE.controllers')
                     {
                         page: 1,
                         count: 10,
-                        sorting: { name: 'asc' }
+                        sorting: { time: 'asc' }
                     },
                     {
                         total: $scope.alertsRequests ? $scope.alertsRequests.length : 0,
