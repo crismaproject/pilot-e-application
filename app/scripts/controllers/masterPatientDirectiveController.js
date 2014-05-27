@@ -14,10 +14,6 @@ angular.module('eu.crismaproject.pilotE.controllers')
                     console.log('initialising master patient directive controller');
                 }
 
-//                if (!$scope.patients) {
-//                    throw 'IllegalStateException: patients not provided by directive user';
-//                }
-
                 $scope.tableParams = new NgTableParams(
                     {
                         page: 1,
@@ -28,29 +24,17 @@ angular.module('eu.crismaproject.pilotE.controllers')
                         total: $scope.patients ? $scope.patients.length : 0,
                         $scope: {$data: {}},
                         getData: function ($defer, params) {
-                            var resolvedPatients, i;
+                            var ordered;
 
-                            // we have to load every patient to ensure proper paging/sorting
-                            resolvedPatients = [];
-                            
-                            if($scope.patients) {
-
-                            for (i = 0; i < $scope.patients.length; ++i) {
-                                resolvedPatients[i] = ooi.getCapturePatients().get({patientId: $scope.patients[i].id}).$promise;
-                            }
-
-                            $q.all(resolvedPatients).then(function (thePatients) {
-                                var ordered;
-
-                                ordered = params.filter() ? $filter('filter')(thePatients, params.filter()) : thePatients;
-                                ordered = params.sorting() ? $filter('orderBy')(ordered, params.orderBy()) : thePatients;
+                            if ($scope.patients) {
+                                ordered = params.filter() ? $filter('filter')($scope.patients, params.filter()) : $scope.patients;
+                                ordered = params.sorting() ? $filter('orderBy')(ordered, params.orderBy()) : $scope.patients;
 
                                 params.total(ordered.length);
                                 $defer.resolve(ordered.slice(
                                     (params.page() - 1) * params.count(),
                                     params.page() * params.count()
                                 ));
-                            });
                             } else {
                                 $defer.resolve([]);
                             }

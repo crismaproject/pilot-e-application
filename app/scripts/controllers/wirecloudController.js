@@ -6,11 +6,11 @@ angular.module(
         '$scope',
         '$modal',
         '$q',
-        '$resource',
+        'eu.crismaproject.pilotE.services.OoI',
         'de.cismet.commons.angular.angularTools.AngularTools',
         'eu.crismaproject.pilotE.services.GeoTools',
         'DEBUG',
-        function ($scope, $modal, $q, $resource, angularTools, geoTools, DEBUG) {
+        function ($scope, $modal, $q, ooi, angularTools, geoTools, DEBUG) {
             'use strict';
 
             var dialog, initScope, mashupPlatform;
@@ -18,6 +18,10 @@ angular.module(
             if (DEBUG) {
                 console.log('initialising wirecloud controller');
             }
+
+            $scope.toggleWCEditing = function (editing) {
+                MashupPlatform.wiring.pushEvent('setEditing', 'false');
+            };
 
             initScope = function () {
                 $scope.editing = false;
@@ -83,7 +87,7 @@ angular.module(
 
                 if (item) {
                     dai = item.datadescriptor.defaultaccessinfo;
-                    res = $resource(dai, {id: '@id'}, { 'get': {method:'GET'}, 'save': {method:'PUT'}});
+                    res = ooi.exercises(dai);
                     $scope.apiurl = dai.substr(0, dai.indexOf('icmm_api') + 8);
                     $scope.exercise = res.get({id: item.actualaccessinfo});
                     $scope.exercise.$promise.then(function () {
@@ -95,68 +99,17 @@ angular.module(
                 }
 
             };
-            $scope.getNextId = function (classkey) {
-                var def, Resource, objects;
-                def = $q.defer();
-                Resource = $resource($scope.apiurl + classkey, {limit: '999999999'},
-                    {
-                        'query': {method: 'GET', isArray: true, transformResponse: function (data) {
-                            // we strip the ids of the objects only
-                            var col, res, i;
 
-                            col = JSON.parse(data).$collection;
-                            res = [];
-
-                            for (i = 0; i < col.length; ++i) {
-                                res.push(col[i]);
-                            }
-
-                            return res;
-                        }}
-                    });
-                objects = Resource.query();
-                objects.$promise.then(function (data) {
-                    var i, id, maxId;
-
-                    maxId = 0;
-
-                    for (i = 0; i < data.length; ++i) {
-                        id = parseInt(data[i].$ref.substr(data[i].$ref.lastIndexOf('/') + 1), 10);
-                        if (id > maxId) {
-                            maxId = id;
-                        }
-                    }
-                    def.resolve(maxId + 1);
-                });
-
-                return def.promise;
-            };
             $scope.addAlertRequest = function () {
-                var newAlert;
-                
-                newAlert = function(id) {
-                    var ar;
+                var ar;
 
-                    ar = {
-                        '$self': '/CRISMA.alertsRequests/' + id,
-                        'id': id,
-                        'time': new Date().toISOString(),
-                        'alert': '',
-                        'rescueMeans': []
-                    };
-                    $scope.exercise.alertsRequests.push(ar);
-                    $scope.selectedAlertRequest = ar;
-                }
-
-                if(!$scope.nextAlertsRequestsId) {
-                    $scope.getNextId('/CRISMA.alertsRequests').then(function (id) {
-                        $scope.nextAlertsRequestsId = id;
-                        newAlert(id);
-                    });
-                } else {
-                    $scope.nextAlertsRequestsId++;
-                    newAlert($scope.nextAlertsRequestsId);
-                }
+                ar = {
+                    'time': new Date().toISOString(),
+                    'alert': '',
+                    'rescueMeans': []
+                };
+                $scope.exercise.alertsRequests.push(ar);
+                $scope.selectedAlertRequest = ar;
             };
 
             if (typeof MashupPlatform === 'undefined') {
@@ -182,22 +135,25 @@ angular.module(
                             });
 
                             dialog.result.then(function () {
-                                var cm, createSpatialCoverage, dataitem, getMaxTimestamp, i, j, pat;
+                                var ar, cm, createSpatialCoverage, dataitem, getMaxTimestamp, i, j, pat;
 
                                 // currently we have to take care of the ids ourselves
                                 $q.all(
                                     [
-                                        $scope.getNextId('/CRISMA.exercises'),
-                                        $scope.getNextId('/CRISMA.capturePatients'),
-                                        $scope.getNextId('/CRISMA.preTriages'),
-                                        $scope.getNextId('/CRISMA.triages'),
-                                        $scope.getNextId('/CRISMA.consciousness'),
-                                        $scope.getNextId('/CRISMA.respirations'),
-                                        $scope.getNextId('/CRISMA.pulses'),
-                                        $scope.getNextId('/CRISMA.bloodpressures'),
-                                        $scope.getNextId('/CRISMA.positions'),
-                                        $scope.getNextId('/CRISMA.warmthpreservations'),
-                                        $scope.getNextId('/CRISMA.attendances')
+                                        ooi.getNextId($scope.apiurl, '/CRISMA.exercises'),
+                                        ooi.getNextId($scope.apiurl, '/CRISMA.capturePatients'),
+                                        ooi.getNextId($scope.apiurl, '/CRISMA.preTriages'),
+                                        ooi.getNextId($scope.apiurl, '/CRISMA.triages'),
+                                        ooi.getNextId($scope.apiurl, '/CRISMA.consciousness'),
+                                        ooi.getNextId($scope.apiurl, '/CRISMA.respirations'),
+                                        ooi.getNextId($scope.apiurl, '/CRISMA.pulses'),
+                                        ooi.getNextId($scope.apiurl, '/CRISMA.bloodpressures'),
+                                        ooi.getNextId($scope.apiurl, '/CRISMA.positions'),
+                                        ooi.getNextId($scope.apiurl, '/CRISMA.warmthpreservations'),
+                                        ooi.getNextId($scope.apiurl, '/CRISMA.attendances'),
+                                        ooi.getNextId($scope.apiurl, '/CRISMA.tacticalAreas'),
+                                        ooi.getNextId($scope.apiurl, '/CRISMA.alertsRequests'),
+                                        ooi.getNextId($scope.apiurl, '/CRISMA.rescueMeans')
                                     ]
                                 ).then(function (ids) {
                                     $scope.exercise.$self = '/CRISMA.exercises/' + ids[0];
@@ -231,7 +187,19 @@ angular.module(
                                         }
                                     }
 
-//                                    $scope.exercise.$save();
+                                    for (i = 0; i < $scope.exercise.tacticalAreas.length; ++i) {
+                                        $scope.exercise.tacticalAreas[i].$self = '/CRISMA.tacticalAreas/' + ids[11]++;
+                                    }
+
+                                    for (i = 0; i < $scope.exercise.alertsRequests.length; ++i) {
+                                        ar = $scope.exercise.alertsRequests[i];
+                                        ar.$self = '/CRISMA.alertsRequests/' + ids[12]++;
+                                        for (j = 0; j < ar.rescueMeans.length; ++j) {
+                                            ar.rescueMeans[j].$self = '/CRISMA.rescueMeans/' + ids[13]++;
+                                        }
+                                    }
+
+                                    $scope.exercise.$save();
 
                                     // save current state and create the dataslot without self and id
                                     angularTools.safeApply($scope, function () {
@@ -292,6 +260,10 @@ angular.module(
 
                                         for (i = 0; i < exercise.tacticalAreas.length; ++i) {
                                             cur = getMax(new Date(exercise.tacticalAreas[i].time), cur);
+                                        }
+
+                                        for (i = 0; i < exercise.alertsRequests.length; ++i) {
+                                            cur = getMax(new Date(exercise.alertsRequests[i].time), cur);
                                         }
 
                                         return cur.toISOString();

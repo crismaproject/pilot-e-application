@@ -2,7 +2,7 @@
     <table data-ng-table="tableParams" template-pagination="masterPatientDirectiveTablePager" show-filter="true" class="table ng-table-responsive">
         <tbody>
             <tr data-ng-repeat="alertRequest in $data"
-                class="hoverrow ng-class:{'rowselected': alertRequest.id === selectedAlertRequest.id};"
+                class="hoverrow ng-class:{'rowselected': alertRequest === selectedAlertRequest};"
                 data-ng-click="setSelected(alertRequest)"
                 ng-mouseenter="hovering = true"
                 ng-mouseleave="hovering = false">
