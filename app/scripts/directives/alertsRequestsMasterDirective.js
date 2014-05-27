@@ -7,7 +7,8 @@ angular.module(
 
         var scope = {
                 alertsRequests: '=',
-                selectedAlertRequest: '='
+                selectedAlertRequest: '=',
+                editing: '='
             };
 
         return {

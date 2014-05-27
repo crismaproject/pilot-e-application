@@ -68,7 +68,7 @@
                                 <site-detail-widget 
                                     areas="exercise.tacticalAreas"
                                     all-areas="allTacticalAreas"
-                                    editing="true"
+                                    editing="editing"
                                     selected-coordinate="selectedCoordinate">
                                 </site-detail-widget>
                             </div>
@@ -78,8 +78,8 @@
                 <tab select="alertsRequestsVisible=true" deselect="alertsRequestsVisible=false">
                     <tab-heading>
                         <span>Alerts & Requests</span>
-                        <span ng-show='alertsRequestsVisible'>&nbsp;</span>
-                        <button ng-show='alertsRequestsVisible'
+                        <span ng-show='alertsRequestsVisible && editing'>&nbsp;</span>
+                        <button ng-show='alertsRequestsVisible && editing'
                                 type="button"
                                 class="btn btn-success btn-xs" 
                                 ng-click='addAlertRequest()'>
@@ -91,14 +91,15 @@
                             <div class='col-lg-8'>
                                 <alerts-requests-master-widget 
                                     alerts-requests="exercise.alertsRequests"
-                                    selected-alert-request="selectedAlertRequest">
+                                    selected-alert-request="selectedAlertRequest"
+                                    editing="editing">
                                 </alerts-requests-master-widget>
                             </div>
                             <div class='col-lg-4'>
                                 <div class="margintop10"></div>
                                 <alerts-requests-details-widget 
                                     selected-alert-request="selectedAlertRequest"
-                                    editing="true">
+                                    editing="editing">
                                 </alerts-requests-details-widget>
                             </div>
                         </div>

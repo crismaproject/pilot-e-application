@@ -12,11 +12,14 @@
                 <td class='requests' data-title="'Request'">
                     {{alertRequest.abbrevRequests}}
                 </td>
-                <td class='alerts' data-title="'Alert'" sortable="'alert'" filter='{"alert": "text"}'>
+                <!-- height set so that there will be no height changes when the button is added 
+                    (only works as long as the button still fits and wont overflow to the next line 
+                -->
+                <td class='alerts' data-title="'Alert'" sortable="'alert'" filter='{"alert": "text"}'  style="height: 39px;">
                     {{alertRequest.alert}}
                     <button type='button' 
                             class='btn btn-xs btn-link pull-right'
-                            ng-show="hovering"
+                            ng-show="hovering && editing"
                             ng-click="removeAlertRequest($index)">
                         <span class="glyphicon glyphicon-remove-circle"></span>
                     </button>
