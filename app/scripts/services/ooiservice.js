@@ -11,11 +11,13 @@ angular.module(
             'use strict';
 
             var getCapturePatients,
+                getAlertsRequests,
                 getMaxCareMeasures,
                 getClassifications,
                 getAverageRating,
                 getAverageRatingString,
                 getRatedMeasuresCount,
+                getAbbreviatedRequests,
                 getQueue,
                 queueMap;
 
@@ -59,6 +61,29 @@ angular.module(
 
                             return patient;
                         }},
+                        'query':  {method: 'GET', isArray: true, transformResponse: function (data) {
+                            // we strip the ids of the objects only
+                            var col, res, i;
+
+                            col = JSON.parse(data).$collection;
+                            res = [];
+
+                            for (i = 0; i < col.length; ++i) {
+                                res.push({'id': parseInt(col[i].$ref.substr(col[i].$ref.lastIndexOf('/') + 1), 10)});
+                            }
+
+                            return res;
+                        }},
+                        'remove': {method: 'DELETE', cache: true},
+                        'delete': {method: 'DELETE', cache: true}
+                    });
+            };
+            getAlertsRequests = function () {
+                return $resource(OOI_API + '/CRISMA.alertsRequests/:alertsRequestsId',
+                    {alertsRequestsId: '@id', deduplicate: true},
+                    {
+                        'get':    {method: 'GET', cache: true},
+                        'save':   {method: 'PUT', cache: true},
                         'query':  {method: 'GET', isArray: true, transformResponse: function (data) {
                             // we strip the ids of the objects only
                             var col, res, i;
@@ -142,6 +167,24 @@ angular.module(
 
                 return '';
             };
+            
+            getAbbreviatedRequests = function (alertRequest) {
+                var i, s;
+
+                if (alertRequest
+                        && alertRequest.rescueMeans
+                        && alertRequest.rescueMeans.length > 0) {
+                    s = '';
+                    for (i = 0; i < alertRequest.rescueMeans.length; ++i) {
+                        s += alertRequest.rescueMeans[i].type + ' x '
+                            + alertRequest.rescueMeans[i].quantity + ', ';
+                    }
+
+                    return s.substr(0, s.length - 2);
+                } else {
+                    return  '';
+                }
+            };
 
             queueMap = {};
 
@@ -175,14 +218,16 @@ angular.module(
                     clear : clear
                 };
             };
-            
+
             return {
                 getCapturePatients : getCapturePatients,
+                getAlertsRequests : getAlertsRequests,
                 getMaxCareMeasures : getMaxCareMeasures,
                 getClassifications : getClassifications,
                 getAverageRating : getAverageRating,
                 getAverageRatingString : getAverageRatingString,
                 getRatedMeasuresCount : getRatedMeasuresCount,
+                getAbbreviatedRequests : getAbbreviatedRequests,
                 getQueue : getQueue
             };
         }

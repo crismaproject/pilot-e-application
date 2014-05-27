@@ -23,6 +23,7 @@ angular.module(
                 $scope.editing = false;
                 $scope.worldstate = null;
                 $scope.patients = null;
+                $scope.selectedAlertRequest = null;
                 $scope.exercise = null;
                 $scope.apiurl = null;
                 $scope.allTacticalAreas = [
@@ -129,6 +130,33 @@ angular.module(
                 });
 
                 return def.promise;
+            };
+            $scope.addAlertRequest = function () {
+                var newAlert;
+                
+                newAlert = function(id) {
+                    var ar;
+
+                    ar = {
+                        '$self': '/CRISMA.alertsRequests/' + id,
+                        'id': id,
+                        'time': new Date().toISOString(),
+                        'alert': '',
+                        'rescueMeans': []
+                    };
+                    $scope.exercise.alertsRequests.push(ar);
+                    $scope.selectedAlertRequest = ar;
+                }
+
+                if(!$scope.nextAlertsRequestsId) {
+                    $scope.getNextId('/CRISMA.alertsRequests').then(function (id) {
+                        $scope.nextAlertsRequestsId = id;
+                        newAlert(id);
+                    });
+                } else {
+                    $scope.nextAlertsRequestsId++;
+                    newAlert($scope.nextAlertsRequestsId);
+                }
             };
 
             if (typeof MashupPlatform === 'undefined') {

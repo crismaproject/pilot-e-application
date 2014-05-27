@@ -3,11 +3,11 @@
     width: 50px;
 }
 
-.ng-table .patientrow:hover {
+.ng-table .hoverrow:hover {
     background-color: #D2E0E6;
 }
 
-.ng-table .patientrowselected {
+.ng-table .rowselected {
     background-color: rgba(0, 50, 108, 0.3);
 }
 

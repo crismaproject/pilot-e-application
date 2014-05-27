@@ -1,7 +1,7 @@
 <div id="master-patient-widget">
     <table data-ng-table="tableParams" template-pagination="masterPatientDirectiveTablePager" show-filter="true" class="table ng-table-responsive">
         <tbody>
-            <tr data-ng-repeat="patient in $data" class="patientrow ng-class:{'patientrowselected': patient.id === selectedPatient.id};" data-ng-click="setSelected(patient)">
+            <tr data-ng-repeat="patient in $data" class="hoverrow ng-class:{'rowselected': patient.id === selectedPatient.id};" data-ng-click="setSelected(patient)">
                 <td data-title="'ID'" sortable="id">
                     {{patient.id}}
                 </td>

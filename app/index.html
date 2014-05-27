@@ -21,6 +21,7 @@
         <link rel="stylesheet" href="styles/detailPatientDirective.css">
         <link rel="stylesheet" href="styles/siteMapDirective.css">
         <link rel="stylesheet" href="styles/siteDetailsDirective.css">
+        <link rel="stylesheet" href="styles/alertsRequestsMasterDirective.css">
         <!-- endbuild -->
     </head>
     <body ng-app="eu.crismaproject.pilotE">
@@ -74,7 +75,36 @@
                         </div>
                     </div>
                 </tab>
-                <tab heading='Alerts & Requests'></tab>
+                <tab select="alertsRequestsVisible=true" deselect="alertsRequestsVisible=false">
+                    <tab-heading>
+                        <span>Alerts & Requests</span>
+                        <span ng-show='alertsRequestsVisible && editing'>&nbsp;</span>
+                        <button ng-show='alertsRequestsVisible && editing'
+                                type="button"
+                                class="btn btn-success btn-xs" 
+                                ng-click='addAlertRequest()'>
+                            <span class='glyphicon glyphicon-plus'></span>
+                        </button>
+                    </tab-heading>
+                    <div class="container-fluid">
+                        <div class="row">
+                            <div class='col-lg-8'>
+                                <alerts-requests-master-widget 
+                                    alerts-requests="exercise.alertsRequests"
+                                    selected-alert-request="selectedAlertRequest"
+                                    editing="editing">
+                                </alerts-requests-master-widget>
+                            </div>
+                            <div class='col-lg-4'>
+                                <div class="margintop10"></div>
+                                <alerts-requests-details-widget 
+                                    selected-alert-request="selectedAlertRequest"
+                                    editing="editing">
+                                </alerts-requests-details-widget>
+                            </div>
+                        </div>
+                    </div>
+                </tab>
             </tabset>
         </div>
 
@@ -114,11 +144,15 @@
         <script src="scripts/controllers/detailPatientDirectiveController.js"></script>
         <script src="scripts/controllers/siteMapDirectiveController.js"></script>
         <script src="scripts/controllers/siteDetailsDirectiveController.js"></script>
+        <script src="scripts/controllers/alertsRequestsMasterDirectiveController.js"></script>
+        <script src="scripts/controllers/alertsRequestsDetailsDirectiveController.js"></script>
         <script src="scripts/directives/initialiserDirective.js"></script>
         <script src="scripts/directives/masterPatientDirective.js"></script>
         <script src="scripts/directives/detailPatientDirective.js"></script>
         <script src="scripts/directives/siteMapDirective.js"></script>
         <script src="scripts/directives/siteDetailsDirective.js"></script>
+        <script src="scripts/directives/alertsRequestsMasterDirective.js"></script>
+        <script src="scripts/directives/alertsRequestsDetailsDirective.js"></script>
         <script src="scripts/services/initialiserService.js"></script>
         <script src="scripts/services/ooiservice.js"></script>
         <script src="scripts/services/geoToolsService.js"></script>
