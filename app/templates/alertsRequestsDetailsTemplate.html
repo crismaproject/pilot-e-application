@@ -1,145 +1,141 @@
-<div collapse="availableAreas.length === 0">
-    <div ng-show='editing' class='well'>
-        <div class="container-fluid">
-            <div class="row">
-                <div class='col-lg-3'>
-                    <!-- hack to have the text centered vertically, actually we don't really know the height oO -->
-                    <span style="height: 34px; display: table-cell; vertical-align: middle;">When:</span>
-                </div>
-                <div class='col-lg-9'>
-                    <form name="timepickerForm" class="form-inline timepicker" role="form">
-                        <div class="form-group" ng-class="{'has-error': timepickerForm.time.$invalid}">
-                            <input 
-                                class="form-control"
-                                size="5"
-                                ng-model="selectedAlertRequest.time" 
-                                name="time"
-                                bs-timepicker 
-                                type="text">
-                            <span class='glyphicon glyphicon-time' style="position: absolute; padding: 9px 58px; pointer-events: none;"></span>
-                        </div>
-                    </form>
-                </div>
-            </div>
-        </div>
-        <div class="container-fluid margintop10">
-            <div class="row">
-                <div class='col-lg-3'>
-                    <!-- hack to have the text centered vertically, actually we don't really know the height oO -->
-                    <span style="height: 149px; display: table-cell; vertical-align: middle;">Alert:</span>
-                </div>
-                <div class='col-lg-9' >
-                    <textarea class="form-control" rows="6" ng-model='selectedAlertRequest.alert'></textarea>
-                </div>
-            </div>
-        </div>
-    </div>
-    <div ng-show='editing' class='well'>
-        <div class="container-fluid">
-            <div class="row">
-                <div class='col-lg-3'>
-                    <!-- hack to have the text centered vertically, actually we don't really know the height oO -->
-                    <span style="height: 26px; display: table-cell; vertical-align: middle;">OAA:</span>
-                </div>
-                <select disabled class='col-lg-7' data-ui-select2="select2Options" data-ng-model="selectedOOAMeans" style="padding-right: 0px;">
-                    <option ng-repeat="means in allOAAMeans" value="{{means}}">{{means.type}}</option>
-                </select>
-                <div class='col-lg-2'>
-                    <!-- hack to have the text centered vertically, actually we don't really know the height oO -->
-                    <button disabled type="button" class="btn btn-xs btn-success pull-right" style="height: 26px;" ng-click='addFromOAA()'>
-                        <span class='glyphicon glyphicon-plus'></span>
-                    </button>
-                </div>
-            </div>
-        </div>
-        <hr>
-        <div class="container-fluid">
-            <div class="row">
-                <div class='col-lg-3'>
-                    <!-- hack to have the text centered vertically, actually we don't really know the height oO -->
-                    <span style="height: 26px; display: table-cell; vertical-align: middle;">Vehicle:</span>
-                </div>
-                <select class='col-lg-7' data-ui-select2="select2Options" data-ng-model="selectedRescueMeans" style="padding-right: 0px;">
-                    <option ng-repeat="means in allRescueMeans" value="{{means}}">{{means.name}}</option>
-                </select>
-                <div class='col-lg-2' >
-                    <!-- hack to have the text centered vertically, actually we don't really know the height oO -->
-                    <button ng-disabled="(quantity%1) !== 0 || quantity <= 0" type="button" class="btn btn-success btn-xs pull-right" style="height: 26px;" ng-click='addMeans()'>
-                        <span class='glyphicon glyphicon-plus'></span>
-                    </button>
-                </div>
-            </div>
-            <div class='row margintop10'>
-                <div class='col-lg-3'>
-                    <!-- hack to have the text centered vertically, actually we don't really know the height oO -->
-                    <span style="height: 34px; display: table-cell; vertical-align: middle;">Quantity:</span>
-                </div>
-                <div class="col-lg-7" ng-class="{'has-error': (quantity%1) !== 0 || quantity <= 0}" style="padding-right: 0px;">
-                    <input
-                        class="form-control has-error" 
-                        type="number"
-                        style="text-align: right"
-                        ng-model="quantity">
-                </div>
-                <div class='col-lg-1'>
-                </div>
-            </div>
-        </div>
-    </div>
-</div>
-<div>
-    <accordion close-others="false">
-        <accordion-group is-open="isopen" ng-repeat='area in areas'>
-            <accordion-heading>
-                <div class="container-fluid">
-                    <div class="row">
-                        <div class="col-lg-10">
-                            <span style="margin: 10px;"><img src="{{area.icon}}" alt=''/></span><span class="underline">{{area.name}}</span>
-                        </div>
-                        <div class="col-lg-2">
-                            <button type='button' class='btn btn-xs btn-link pull-right' ng-show="editing" ng-click="removeArea($index)">
-                                <span class="glyphicon glyphicon-remove-circle"></span>
-                            </button>
-                        </div>
-                    </div>
-                </div>
-            </accordion-heading>
+<div ng-show='selectedAlertRequest'>
+    <div>
+        <div ng-show='editing' class='well'>
             <div class="container-fluid">
                 <div class="row">
-                    <div class="col-lg-5">
-                        Created:
+                    <div class='col-lg-3'>
+                        <!-- hack to have the text centered vertically, actually we don't really know the height oO -->
+                        <span style="height: 34px; display: table-cell; vertical-align: middle;">When:</span>
                     </div>
-                    <div class="col-lg-7">
-                        {{area.time | date:'HH:mm'}}
-                        <span class='glyphicon glyphicon-time' style="margin-left: 3px;"></span>
+                    <div class='col-lg-9'>
+                        <form name="timepickerForm" class="form-inline timepicker" role="form">
+                            <div class="form-group" ng-class="{'has-error': timepickerForm.time.$invalid}">
+                                <input 
+                                    class="form-control"
+                                    size="5"
+                                    ng-model="selectedAlertRequest.time" 
+                                    name="time"
+                                    bs-timepicker 
+                                    type="text">
+                                <span class='glyphicon glyphicon-time' style="position: absolute; padding: 9px 58px; pointer-events: none;"></span>
+                            </div>
+                        </form>
                     </div>
                 </div>
-                <div class="row margintop10">
-                <div class='col-lg-5'>
-                    <b>Coordinates</b>
-                </div>
-                <div class='col-lg-7'>
+            </div>
+            <div class="container-fluid margintop10">
+                <div class="row">
+                    <div class='col-lg-3'>
+                        <!-- hack to have the text centered vertically, actually we don't really know the height oO -->
+                        <span style="height: 134px; display: table-cell; vertical-align: middle;">Alert:</span>
+                    </div>
+                    <div class='col-lg-9' >
+                        <textarea class="form-control" rows="6" ng-model='selectedAlertRequest.alert'></textarea>
+                    </div>
                 </div>
             </div>
-            <div class="row">
-                <div class='col-lg-5'>
-                    Latitude: 
-                </div>
-                <div class='col-lg-7'>
-                    {{area.coordinates[0]}}
-                    <span class='glyphicon glyphicon-globe' style="margin-left: 3px;"></span>
+        </div>
+        <div ng-show='editing' class='well'>
+            <div class="container-fluid">
+                <div class="row">
+                    <div class='col-lg-3'>
+                        <!-- hack to have the text centered vertically, actually we don't really know the height oO -->
+                        <span style="height: 26px; display: table-cell; vertical-align: middle;">OAA:</span>
+                    </div>
+                    <select disabled class='col-lg-7' data-ui-select2="select2Options" data-ng-model="selectedOOAMeans" style="padding-right: 0px;">
+                        <option ng-repeat="means in allOAAMeans" value="{{means}}">{{means.type}}</option>
+                    </select>
+                    <div class='col-lg-2'>
+                        <!-- hack to have the text centered vertically, actually we don't really know the height oO -->
+                        <button disabled type="button" class="btn btn-xs btn-success pull-right" style="height: 26px;" ng-click='addFromOAA()'>
+                            <span class='glyphicon glyphicon-plus'></span>
+                        </button>
+                    </div>
                 </div>
             </div>
-            <div class="row">
-                <div class='col-lg-5'>
-                    Longitude: 
+            <hr>
+            <div class="container-fluid">
+                <div class="row">
+                    <div class='col-lg-3'>
+                        <!-- hack to have the text centered vertically, actually we don't really know the height oO -->
+                        <span style="height: 26px; display: table-cell; vertical-align: middle;">Vehicle:</span>
+                    </div>
+                    <select class='col-lg-7' data-ui-select2="select2Options" data-ng-model="selectedRescueMeans" style="padding-right: 0px;">
+                        <option ng-repeat="means in allRescueMeans" value="{{means}}">{{means.type}}</option>
+                    </select>
+                    <div class='col-lg-2' >
+                        <!-- hack to have the text centered vertically, actually we don't really know the height oO -->
+                        <button ng-disabled="(quantity % 1) !== 0 || quantity <= 0" 
+                                type="button"
+                                class="btn btn-success btn-xs pull-right" 
+                                style="height: 26px;" 
+                                ng-click='addMeans()'>
+                            <span class='glyphicon glyphicon-plus'></span>
+                        </button>
+                    </div>
                 </div>
-                <div class='col-lg-7'>
-                    {{area.coordinates[1]}}
-                    <span class='glyphicon glyphicon-globe' style="margin-left: 3px;"></span>
+                <div class='row margintop10'>
+                    <div class='col-lg-3'>
+                        <!-- hack to have the text centered vertically, actually we don't really know the height oO -->
+                        <span style="height: 34px; display: table-cell; vertical-align: middle;">Quantity:</span>
+                    </div>
+                    <div class="col-lg-7" ng-class="{'has-error': (quantity % 1) !== 0 || quantity <= 0}" style="padding-right: 0px;">
+                        <input
+                            class="form-control has-error" 
+                            type="number"
+                            style="text-align: right"
+                            ng-model="quantity">
+                    </div>
+                    <div class='col-lg-1'>
+                    </div>
                 </div>
             </div>
-            </div>
-        </accordion-group>
-    </accordion>
+        </div>
+    </div>
+    <div>
+        <accordion close-others="false">
+            <accordion-group is-open="isopen" ng-repeat='means in selectedAlertRequest.rescueMeans'>
+                <accordion-heading>
+                    <div class="container-fluid">
+                        <div class="row">
+                            <div class="col-lg-10">
+                                <span style="margin: 10px;"><img src="{{means.icon}}" alt=''/></span><span class="underline">{{means.type}} x {{means.quantity}}</span>
+                            </div>
+                            <div class="col-lg-2">
+                                <button type='button' class='btn btn-xs btn-link pull-right' ng-show="editing" ng-click="removeMeans($index)">
+                                    <span class="glyphicon glyphicon-remove-circle"></span>
+                                </button>
+                            </div>
+                        </div>
+                    </div>
+                </accordion-heading>
+                <div class="container-fluid">
+                    <div class="row">
+                        <div class="col-lg-5">
+                            Type:
+                        </div>
+                        <div class="col-lg-7">
+                            {{means.type}}
+                        </div>
+                    </div>
+                    <div class="row">
+                        <div class='col-lg-5'>
+                            Name:
+                        </div>
+                        <div class='col-lg-7'>
+                            {{means.name}}
+                        </div>
+                    </div>
+                    <div class="row">
+                        <div class='col-lg-5'>
+                            Quantity:
+                        </div>
+                        <div class='col-lg-7'>
+                            {{means.quantity}}
+                        </div>
+                    </div>
+                </div>
+            </accordion-group>
+        </accordion>
+    </div>
 </div>
