@@ -182,7 +182,7 @@ angular.module(
 
                     return s.substr(0, s.length - 2);
                 } else {
-                    return  '<none>';
+                    return  '';
                 }
             };
 

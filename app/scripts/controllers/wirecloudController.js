@@ -132,30 +132,30 @@ angular.module(
                 return def.promise;
             };
             $scope.addAlertRequest = function () {
+                var newAlert;
+                
+                newAlert = function(id) {
+                    var ar;
+
+                    ar = {
+                        '$self': '/CRISMA.alertsRequests/' + id,
+                        'id': id,
+                        'time': new Date().toISOString(),
+                        'alert': '',
+                        'rescueMeans': []
+                    };
+                    $scope.exercise.alertsRequests.push(ar);
+                    $scope.selectedAlertRequest = ar;
+                }
+
                 if(!$scope.nextAlertsRequestsId) {
                     $scope.getNextId('/CRISMA.alertsRequests').then(function (id) {
                         $scope.nextAlertsRequestsId = id;
-                        $scope.exercise.alertsRequests.push(
-                            {
-                                '$self': '/CRISMA.alertsRequests/' + id,
-                                'id': id,
-                                'time': new Date().toISOString(),
-                                'alert': '',
-                                'rescueMeans': []
-                            }
-                        );
+                        newAlert(id);
                     });
                 } else {
                     $scope.nextAlertsRequestsId++;
-                    $scope.exercise.alertsRequests.push(
-                        {
-                            '$self': '/CRISMA.alertsRequests/' + $scope.nextAlertsRequestsId,
-                            'id': $scope.nextAlertsRequestsId,
-                            'time': new Date().toISOString(),
-                            'alert': '',
-                            'rescueMeans': []
-                        }
-                    );
+                    newAlert($scope.nextAlertsRequestsId);
                 }
             };
 
