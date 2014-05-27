@@ -47,7 +47,11 @@
                     </select>
                     <div class='col-lg-2'>
                         <!-- hack to have the text centered vertically, actually we don't really know the height oO -->
-                        <button disabled type="button" class="btn btn-xs btn-success pull-right" style="height: 26px;" ng-click='addFromOAA()'>
+                        <button disabled 
+                                type="button" 
+                                class="btn btn-xs btn-success pull-right"
+                                style="margin-top: 2px;" 
+                                ng-click='addFromOAA()'>
                             <span class='glyphicon glyphicon-plus'></span>
                         </button>
                     </div>
@@ -68,7 +72,7 @@
                         <button ng-disabled="(quantity % 1) !== 0 || quantity <= 0" 
                                 type="button"
                                 class="btn btn-success btn-xs pull-right" 
-                                style="height: 26px;" 
+                                style="margin-top: 2px;" 
                                 ng-click='addMeans()'>
                             <span class='glyphicon glyphicon-plus'></span>
                         </button>
