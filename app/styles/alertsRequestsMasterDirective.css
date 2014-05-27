@@ -1,0 +1,13 @@
+.ng-table .time {
+    width: 10%;
+}
+
+.ng-table .requests {
+    width: 45%;
+    text-align: left;
+}
+
+.ng-table .alerts {
+    width: 45%;
+    text-align: left;
+}

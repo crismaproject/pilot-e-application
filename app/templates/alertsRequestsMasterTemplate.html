@@ -1,15 +1,15 @@
 <div class="margintop10">
     <table data-ng-table="tableParams" template-pagination="masterPatientDirectiveTablePager" show-filter="true" class="table ng-table-responsive">
         <tbody>
-            <tr data-ng-repeat="means in $data" class="hoverrow ng-class:{'rowselected': means.id === selectedRescueMeans.id};" data-ng-click="setSelected(means)">
-                <td data-title="'Time'" sortable="time">
-                    {{means.time}}
+            <tr data-ng-repeat="alertRequest in $data" class="hoverrow ng-class:{'rowselected': alertRequest.id === selectedAlertRequest.id};" data-ng-click="setSelected(alertRequest)">
+                <td class="centered time" data-title="'Time'" sortable="time">
+                    {{alertRequest.time | date:'HH:mm'}}
                 </td>
-                <td data-title="'Request'">
-                    {{means.abbrevRequest}}
+                <td class='requests' data-title="'Request'">
+                    {{alertRequest.abbrevRequests}}
                 </td>
-                <td data-title="'Alert'" sortable="alert">
-                    {{means.alert}}
+                <td class='alerts' data-title="'Alert'" sortable="alert">
+                    {{alertRequest.alert}}
                 </td>
             </tr>
         </tbody>

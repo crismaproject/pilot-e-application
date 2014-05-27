@@ -131,6 +131,19 @@ angular.module(
 
                 return def.promise;
             };
+            $scope.addAlertRequest = function () {
+                $scope.getNextId('/CRISMA.alertsRequests').then(function (id) {
+                    $scope.exercise.alertsRequests.push(
+                        {
+                            '$self': '/CRISMA.alertsRequests/' + id,
+                            'id': id,
+                            'time': new Date().toISOString(),
+                            'alert': '',
+                            'rescueMeans': []
+                        }
+                    );
+                });
+            };
 
             if (typeof MashupPlatform === 'undefined') {
                 if (DEBUG) {

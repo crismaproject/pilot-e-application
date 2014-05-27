@@ -17,6 +17,7 @@ angular.module(
                 getAverageRating,
                 getAverageRatingString,
                 getRatedMeasuresCount,
+                getAbbreviatedRequests,
                 getQueue,
                 queueMap;
 
@@ -166,6 +167,24 @@ angular.module(
 
                 return '';
             };
+            
+            getAbbreviatedRequests = function (alertRequest) {
+                var i, s;
+
+                if (alertRequest
+                        && alertRequest.rescueMeans
+                        && alertRequest.rescueMeans.length > 0) {
+                    s = '';
+                    for (i = 0; i < alertRequest.rescueMeans.length; ++i) {
+                        s += alertRequest.rescueMeans[i].type + ' x '
+                            + alertRequest.rescueMeans[i].quantity + ', ';
+                    }
+
+                    return s.substr(0, s.length - 2);
+                } else {
+                    return  '<none>';
+                }
+            };
 
             queueMap = {};
 
@@ -208,6 +227,7 @@ angular.module(
                 getAverageRating : getAverageRating,
                 getAverageRatingString : getAverageRatingString,
                 getRatedMeasuresCount : getRatedMeasuresCount,
+                getAbbreviatedRequests : getAbbreviatedRequests,
                 getQueue : getQueue
             };
         }

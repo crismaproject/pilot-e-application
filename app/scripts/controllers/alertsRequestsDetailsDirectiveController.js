@@ -2,8 +2,9 @@ angular.module('eu.crismaproject.pilotE.controllers')
     .controller('eu.crismaproject.pilotE.controllers.alertsRequestsDetailsDirectiveController',
         [
             '$scope',
+            'eu.crismaproject.pilotE.services.OoI',
             'DEBUG',
-            function ($scope, DEBUG) {
+            function ($scope, ooi, DEBUG) {
                 'use strict';
 
                 var select2Format;
@@ -128,9 +129,16 @@ angular.module('eu.crismaproject.pilotE.controllers')
                         means.quantity = $scope.quantity;
                         $scope.selectedAlertRequest.rescueMeans.push(means);
                     }
+
+                    $scope.selectedAlertRequest.abbrevRequests = ooi.getAbbreviatedRequests(
+                        $scope.selectedAlertRequest
+                    );
                 };
 
                 $scope.removeMeans = function (index) {
                     $scope.selectedAlertRequest.rescueMeans.splice(index, 1);
+                    $scope.selectedAlertRequest.abbrevRequests = ooi.getAbbreviatedRequests(
+                        $scope.selectedAlertRequest
+                    );
                 };
             }]);

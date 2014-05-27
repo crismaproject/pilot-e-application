@@ -21,6 +21,7 @@
         <link rel="stylesheet" href="styles/detailPatientDirective.css">
         <link rel="stylesheet" href="styles/siteMapDirective.css">
         <link rel="stylesheet" href="styles/siteDetailsDirective.css">
+        <link rel="stylesheet" href="styles/alertsRequestsMasterDirective.css">
         <!-- endbuild -->
     </head>
     <body ng-app="eu.crismaproject.pilotE">
@@ -74,7 +75,17 @@
                         </div>
                     </div>
                 </tab>
-                <tab heading='Alerts & Requests'>
+                <tab select="alertsRequestsVisible=true" deselect="alertsRequestsVisible=false">
+                    <tab-heading>
+                        <span>Alerts & Requests</span>
+                        <span ng-show='alertsRequestsVisible'>&nbsp;</span>
+                        <button ng-show='alertsRequestsVisible'
+                                type="button"
+                                class="btn btn-success btn-xs" 
+                                ng-click='addAlertRequest()'>
+                            <span class='glyphicon glyphicon-plus'></span>
+                        </button>
+                    </tab-heading>
                     <div class="container-fluid">
                         <div class="row">
                             <div class='col-lg-8'>

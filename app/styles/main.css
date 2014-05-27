@@ -31,20 +31,6 @@ body {
     width: 1280px;
 }
 
-#master {
-    float: left;
-    margin: 20px;
-    margin-top: 80px;
-    width: 760px;
-}
-
-#detail {
-    float: right;
-    margin: 20px;
-    margin-top: 80px;
-    width: 440px;
-}
-
 .ex-header {
     margin-left: 10px;
 }

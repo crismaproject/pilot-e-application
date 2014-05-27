@@ -2,12 +2,11 @@ angular.module('eu.crismaproject.pilotE.controllers')
     .controller('eu.crismaproject.pilotE.controllers.alertsRequestsMasterDirectiveController',
         [
             '$scope',
-            '$q',
             '$filter',
             'ngTableParams',
             'eu.crismaproject.pilotE.services.OoI',
             'DEBUG',
-            function ($scope, $q, $filter, NgTableParams, ooi, DEBUG) {
+            function ($scope, $filter, NgTableParams, ooi, DEBUG) {
                 'use strict';
 
                 if (DEBUG) {
@@ -24,30 +23,17 @@ angular.module('eu.crismaproject.pilotE.controllers')
                         total: $scope.alertsRequests ? $scope.alertsRequests.length : 0,
                         $scope: {$data: {}},
                         getData: function ($defer, params) {
-                            var resolvedAlertsRequests, i;
-
-                            // we have to load every rescue means to ensure proper paging/sorting
-                            resolvedAlertsRequests = [];
+                            var ordered;
 
                             if ($scope.alertsRequests) {
-                                for (i = 0; i < $scope.alertsRequests.length; ++i) {
-                                    resolvedAlertsRequests[i] = ooi.getAlertsRequests().get(
-                                        {alertsRequestsId: $scope.alertsRequests[i].id}
-                                    ).$promise;
-                                }
+                                ordered = params.filter() ? $filter('filter')($scope.alertsRequests, params.filter()) : $scope.alertsRequests;
+                                ordered = params.sorting() ? $filter('orderBy')(ordered, params.orderBy()) : $scope.alertsRequests;
 
-                                $q.all(resolvedAlertsRequests).then(function (theAlertsRequests) {
-                                    var ordered;
-
-                                    ordered = params.filter() ? $filter('filter')(theAlertsRequests, params.filter()) : theAlertsRequests;
-                                    ordered = params.sorting() ? $filter('orderBy')(ordered, params.orderBy()) : theAlertsRequests;
-
-                                    params.total(ordered.length);
-                                    $defer.resolve(ordered.slice(
-                                        (params.page() - 1) * params.count(),
-                                        params.page() * params.count()
-                                    ));
-                                });
+                                params.total(ordered.length);
+                                $defer.resolve(ordered.slice(
+                                    (params.page() - 1) * params.count(),
+                                    params.page() * params.count()
+                                ));
                             } else {
                                 $defer.resolve([]);
                             }
@@ -56,6 +42,16 @@ angular.module('eu.crismaproject.pilotE.controllers')
                 );
 
                 $scope.$watch('alertsRequests.length', function () {
+                    var ar, i;
+                    
+                    if($scope.alertsRequests) {
+                        for(i = 0; i <  $scope.alertsRequests.length; ++i) {
+                            ar = $scope.alertsRequests[i];
+                            if (!ar.abbrevRequests) {
+                                ar.abbrevRequests = ooi.getAbbreviatedRequests(ar);
+                            }
+                        }
+                    }
                     $scope.tableParams.reload();
                 });
 
