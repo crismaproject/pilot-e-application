@@ -35,6 +35,8 @@
         <![endif]-->
 
         <div ng-controller="eu.crismaproject.pilotE.controllers.WirecloudController">
+            <button ng-click="editing=!editing">Editing toggle</button>
+            <button ng-click="toggleWCEditing(editing)">WC Editing toggle</button>
             <div class="ex-header"><h3>Exercise {{worldstate.name}}</h3></div>
             <tabset>
                 <tab heading='Patients'>
@@ -181,6 +183,11 @@
                     },
                     pushEvent: function (name, value) {
                         console.log("pushEvent: [name=" + name + "|value=" + value + "]");
+                        try {
+                            MashupPlatform[name](value);
+                        } catch(e) {
+                            
+                        }
                     }
                 }
             };

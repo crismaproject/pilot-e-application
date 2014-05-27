@@ -4,14 +4,14 @@ angular.module(
 ).factory(
     'eu.crismaproject.pilotE.services.OoI',
     [
-        'OOI_API',
+        '$q',
         '$resource',
         '$timeout',
-        function (OOI_API, $resource, $timeout) {
+        function ($q, $resource, $timeout) {
             'use strict';
 
-            var getCapturePatients,
-                getAlertsRequests,
+            var exercises,
+                getNextId,
                 getMaxCareMeasures,
                 getClassifications,
                 getAverageRating,
@@ -21,70 +21,108 @@ angular.module(
                 getQueue,
                 queueMap;
 
-            // TODO: implement proper ooi integration
-
-            getCapturePatients = function () {
-                return $resource(OOI_API + '/CRISMA.capturePatients/:patientId', {patientId: '@id', deduplicate: true},
+            exercises = function (api) {
+                return $resource(
+                    api,
                     {
-                        'get':    {method: 'GET', cache: true, transformResponse: function (data) {
-                            // we augment the patient with virtual properties
-                            var patient;
+                        id: '@id'
+                    },
+                    {
+                        'get': {
+                            method: 'GET',
+                            params: {
+                                deduplicate: true
+                            },
+                            cache: true,
+                            transformResponse: function (data) {
+                                var ar, exercise, i, patient;
 
-                            patient = JSON.parse(data);
-                            patient.ratedMeasuresCount = getRatedMeasuresCount(patient);
-                            patient.averageRating = getAverageRating(patient);
-                            patient.averageRatingString = getAverageRatingString(patient.averageRating);
-
-                            return patient;
-                        }},
-                        'save':   {method: 'PUT', cache: true, transformRequest: function (data) {
-                            // we remove the virtual properties from the patient again
-                            return JSON.stringify(data, function (k, v) {
-                                if (k === 'averageRating' || k === 'averageRatingString' || k === 'ratedMeasuresCount') {
-                                    return undefined;
+                                exercise = JSON.parse(data);
+                                // we augment serveral objects with virtual properties
+                                for (i = 0; i < exercise.patients.length; ++i) {
+                                    patient = exercise.patients[i];
+                                    patient.ratedMeasuresCount = getRatedMeasuresCount(patient);
+                                    patient.averageRating = getAverageRating(patient);
+                                    patient.averageRatingString = getAverageRatingString(patient.averageRating);
                                 }
 
-                                if (k.substring(0, 1) === '$' && !(k === '$self' || k === '$ref')) {
-                                    return undefined;
+                                for (i = 0; i < exercise.alertsRequests.length; ++i) {
+                                    ar = exercise.alertsRequests[i];
+                                    ar.abbrevRequests = getAbbreviatedRequests(ar);
                                 }
 
-                                return v;
-                            });
-                        }, transformResponse: function (data) {
-                            // we augment the patient with virtual properties again
-                            var patient;
-
-                            patient = JSON.parse(data);
-                            patient.ratedMeasuresCount = getRatedMeasuresCount(patient);
-                            patient.averageRating = getAverageRating(patient);
-                            patient.averageRatingString = getAverageRatingString(patient.averageRating);
-
-                            return patient;
-                        }},
-                        'query':  {method: 'GET', isArray: true, transformResponse: function (data) {
-                            // we strip the ids of the objects only
-                            var col, res, i;
-
-                            col = JSON.parse(data).$collection;
-                            res = [];
-
-                            for (i = 0; i < col.length; ++i) {
-                                res.push({'id': parseInt(col[i].$ref.substr(col[i].$ref.lastIndexOf('/') + 1), 10)});
+                                return exercise;
                             }
+                        },
+                        'save': {
+                            method: 'PUT',
+                            cache: true,
+                            transformRequest: function (data) {
+                                // we remove the virtual properties from the objects again
+                                return JSON.stringify(data, function (k, v) {
+                                    if (k === 'averageRating'
+                                            || k === 'averageRatingString'
+                                            || k === 'ratedMeasuresCount'
+                                            || k === 'abbrevRequests') {
+                                        return undefined;
+                                    }
 
-                            return res;
-                        }},
-                        'remove': {method: 'DELETE', cache: true},
-                        'delete': {method: 'DELETE', cache: true}
-                    });
+                                    // we have to take care of angular properties by ourselves
+                                    if (k.substring(0, 1) === '$' && !(k === '$self' || k === '$ref')) {
+                                        return undefined;
+                                    }
+
+                                    return v;
+                                });
+                            },
+                            transformResponse: function (data) {
+                                var ar, exercise, i, patient;
+
+                                exercise = JSON.parse(data);
+                                // we augment serveral objects with virtual properties
+                                for (i = 0; i < exercise.patients.length; ++i) {
+                                    patient = exercise.patients[i];
+                                    patient.ratedMeasuresCount = getRatedMeasuresCount(patient);
+                                    patient.averageRating = getAverageRating(patient);
+                                    patient.averageRatingString = getAverageRatingString(patient.averageRating);
+                                }
+
+                                for (i = 0; i < exercise.alertsRequests.length; ++i) {
+                                    ar = exercise.alertsRequests[i];
+                                    ar.abbrevRequests = getAbbreviatedRequests(ar);
+                                }
+
+                                return exercise;
+                            }
+                        },
+                        'query':  {
+                            method: 'GET',
+                            isArray: true,
+                            transformResponse: function (data) {
+                                // we strip the ids of the objects only
+                                var col, res, i;
+
+                                col = JSON.parse(data).$collection;
+                                res = [];
+
+                                for (i = 0; i < col.length; ++i) {
+                                    res.push({'id': parseInt(col[i].$ref.substr(col[i].$ref.lastIndexOf('/') + 1), 10)});
+                                }
+
+                                return res;
+                            }
+                        }
+                    }
+                );
             };
-            getAlertsRequests = function () {
-                return $resource(OOI_API + '/CRISMA.alertsRequests/:alertsRequestsId',
-                    {alertsRequestsId: '@id', deduplicate: true},
+            
+            
+            getNextId = function (apiurl, classkey) {
+                var def, Resource, objects;
+                def = $q.defer();
+                Resource = $resource(apiurl + classkey, {limit: '999999999'},
                     {
-                        'get':    {method: 'GET', cache: true},
-                        'save':   {method: 'PUT', cache: true},
-                        'query':  {method: 'GET', isArray: true, transformResponse: function (data) {
+                        'query': {method: 'GET', isArray: true, transformResponse: function (data) {
                             // we strip the ids of the objects only
                             var col, res, i;
 
@@ -92,14 +130,28 @@ angular.module(
                             res = [];
 
                             for (i = 0; i < col.length; ++i) {
-                                res.push({'id': parseInt(col[i].$ref.substr(col[i].$ref.lastIndexOf('/') + 1), 10)});
+                                res.push(col[i]);
                             }
 
                             return res;
-                        }},
-                        'remove': {method: 'DELETE', cache: true},
-                        'delete': {method: 'DELETE', cache: true}
+                        }}
                     });
+                objects = Resource.query();
+                objects.$promise.then(function (data) {
+                    var i, id, maxId;
+
+                    maxId = 0;
+
+                    for (i = 0; i < data.length; ++i) {
+                        id = parseInt(data[i].$ref.substr(data[i].$ref.lastIndexOf('/') + 1), 10);
+                        if (id > maxId) {
+                            maxId = id;
+                        }
+                    }
+                    def.resolve(maxId + 1);
+                });
+
+                return def.promise;
             };
 
             getMaxCareMeasures = function () {
@@ -167,7 +219,7 @@ angular.module(
 
                 return '';
             };
-            
+
             getAbbreviatedRequests = function (alertRequest) {
                 var i, s;
 
@@ -182,7 +234,7 @@ angular.module(
 
                     return s.substr(0, s.length - 2);
                 } else {
-                    return  '';
+                    return '';
                 }
             };
 
@@ -220,8 +272,8 @@ angular.module(
             };
 
             return {
-                getCapturePatients : getCapturePatients,
-                getAlertsRequests : getAlertsRequests,
+                exercises: exercises,
+                getNextId: getNextId,
                 getMaxCareMeasures : getMaxCareMeasures,
                 getClassifications : getClassifications,
                 getAverageRating : getAverageRating,
