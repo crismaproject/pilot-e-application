@@ -1,7 +1,11 @@
 <div class="margintop10">
     <table data-ng-table="tableParams" template-pagination="masterPatientDirectiveTablePager" show-filter="true" class="table ng-table-responsive">
         <tbody>
-            <tr data-ng-repeat="alertRequest in $data" class="hoverrow ng-class:{'rowselected': alertRequest.id === selectedAlertRequest.id};" data-ng-click="setSelected(alertRequest)">
+            <tr data-ng-repeat="alertRequest in $data"
+                class="hoverrow ng-class:{'rowselected': alertRequest.id === selectedAlertRequest.id};"
+                data-ng-click="setSelected(alertRequest)"
+                ng-mouseenter="hovering = true"
+                ng-mouseleave="hovering = false">
                 <td class="centered time" data-title="'Time'" sortable="'time'">
                     {{alertRequest.time | date:'HH:mm'}}
                 </td>
@@ -10,6 +14,12 @@
                 </td>
                 <td class='alerts' data-title="'Alert'" sortable="'alert'" filter='{"alert": "text"}'>
                     {{alertRequest.alert}}
+                    <button type='button' 
+                            class='btn btn-xs btn-link pull-right'
+                            ng-show="hovering"
+                            ng-click="removeAlertRequest($index)">
+                        <span class="glyphicon glyphicon-remove-circle"></span>
+                    </button>
                 </td>
             </tr>
         </tbody>

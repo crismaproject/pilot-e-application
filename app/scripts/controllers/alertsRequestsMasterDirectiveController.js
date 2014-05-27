@@ -60,4 +60,11 @@ angular.module('eu.crismaproject.pilotE.controllers')
                 $scope.setSelected = function (alertRequest) {
                     $scope.selectedAlertRequest = alertRequest;
                 };
+                
+                $scope.removeAlertRequest = function (index) {
+                    if ($scope.alertsRequests[index] === $scope.selectedAlertRequest) {
+                        $scope.selectedAlertRequest = null;
+                    }
+                    $scope.alertsRequests.splice(index, 1);
+                };
             }]);
