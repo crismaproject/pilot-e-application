@@ -154,8 +154,12 @@ angular.module(
                 return def.promise;
             };
 
-            getMaxCareMeasures = function () {
-                return 7;
+            getMaxCareMeasures = function (patient) {
+                if(patient && patient.correctTriage === 'T3') {
+                    return 6;
+                } else {
+                    return 7;
+                }
             };
 
             getClassifications = function () {
