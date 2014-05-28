@@ -19,14 +19,4 @@ angular.module('eu.crismaproject.pilotE.controllers')
                     $scope.patient.averageRatingString = ooi.getAverageRatingString($scope.patient.averageRating);
                 });
             }
-        ])
-    .controller('detailPatientDirectiveCareMeasureController',
-        [
-            '$scope',
-            function ($scope) {
-                'use strict';
-
-                $scope.$watch('cm.rating', function () {
-                    $scope.$emit('ratingChanged');
-                });
-            }]);
+        ]);

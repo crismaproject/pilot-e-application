@@ -2,10 +2,29 @@ detail-patient-widget .rating {
     width: 50px;
 }
 
-detail-patient-widget .responder {
-    width: 50px;
-}
-
 detail-patient-widget .defaultinsets {
     padding: 5px;
+}
+
+detail-patient-widget .col1 {
+    width: 160px;
+    text-align: left;
+}
+
+detail-patient-widget .col2 {
+    width: 110px;
+    text-align: right;
+}
+
+detail-patient-widget .sm-well {
+    margin-bottom: 5px;
+}
+
+detail-patient-widget .responder {
+    width: 84px;
+}
+
+detail-patient-widget .responder-container {
+    position: relative;
+    float: right;
 }
