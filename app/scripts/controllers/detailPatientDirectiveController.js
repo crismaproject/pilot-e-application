@@ -15,8 +15,6 @@ angular.module('eu.crismaproject.pilotE.controllers')
 
                 $scope.$on('ratingChanged', function () {
                     $scope.patient.ratedMeasuresCount = ooi.getRatedMeasuresCount($scope.patient);
-                    $scope.patient.averageRating = ooi.getAverageRating($scope.patient);
-                    $scope.patient.averageRatingString = ooi.getAverageRatingString($scope.patient.averageRating);
                 });
             }
         ]);

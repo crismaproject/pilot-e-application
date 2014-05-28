@@ -1,8 +1,3 @@
-.ng-table .averageRating {
-    float: left;
-    width: 50px;
-}
-
 .ng-table .hoverrow:hover {
     background-color: #D2E0E6;
 }

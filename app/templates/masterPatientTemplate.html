@@ -2,23 +2,23 @@
     <table data-ng-table="tableParams" template-pagination="masterPatientDirectiveTablePager" show-filter="true" class="table ng-table-responsive">
         <tbody>
             <tr data-ng-repeat="patient in $data" class="hoverrow ng-class:{'rowselected': patient.id === selectedPatient.id};" data-ng-click="setSelected(patient)">
-                <td data-title="'ID'" sortable="id">
+                <td data-title="'ID'" sortable="'id'">
                     {{patient.id}}
                 </td>
-                <td data-title="'Name'" sortable="name" filter="{'name': 'text'}">
+                <td data-title="'Name'" sortable="'name'" filter="{'name': 'text'}">
                     {{patient.name}}
                 </td>
-                <td data-title="'Correct'" class="centered">
+                <td data-title="'Correct'" sortable="'correctTriage'" class="centered">
                     <span class="triage ng-class:{'T1': patient.correctTriage === 'T1', 'T2': patient.correctTriage === 'T2', 'T3': patient.correctTriage === 'T3'};">
                         {{patient.correctTriage}}
                     </span>
                 </td>
-                <td data-title="'Pre-Triage'" class="centered">
+                <td data-title="'Pre-Triage'" sortable="'preTriage.classification'" class="centered">
                     <span class="triage ng-class:{'T1': patient.preTriage.classification === 'T1', 'T2': patient.preTriage.classification === 'T2', 'T3': patient.preTriage.classification === 'T3'};">
                         {{patient.preTriage.classification}}
                     </span>
                 </td>
-                <td data-title="'Triage'" class="centered">
+                <td data-title="'Triage'" sortable="'triage.classification'" class="centered">
                     <span class="triage ng-class:{'T1': patient.triage.classification === 'T1', 'T2': patient.triage.classification === 'T2', 'T3': patient.triage.classification === 'T3'};">
                         {{patient.triage.classification}}
                     </span>
@@ -26,13 +26,8 @@
                 <td data-title="'Care Measures'" class="centered">
                     {{patient.ratedMeasuresCount}} / {{maxCareMeasures(patient)}}
                 </td>
-                <td data-title="'Average Rating'">
-                    <span class="averageRating">
-                        {{patient.averageRating}}
-                    </span>
-                    <span >
-                        {{patient.averageRatingString}}
-                    </span>
+                <td data-title="'Evacuated'" sortable="'transportation_timestamp'" class="centered">
+                    {{patient.transportation_timestamp | date:'HH:mm'}}
                 </td>
             </tr>
         </tbody>
