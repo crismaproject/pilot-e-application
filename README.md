@@ -26,18 +26,25 @@ This is not the implementation of whole pilot e application anymore but only of 
             name="setEditing"
             type="text"
             label="Set Editing"
-            description="Toggle editing mode. If the provided value is 'true' the 
-                         widget will switch to editing mode. If the provided value is
-                         'false' and the widget is currently in editing mode the
-                         widget will probably stop editing: The user is asked if he
-                         wants to stop editing. If his answer is 'No' an 'isEditing'
-                         event with the value 'true' is issued. If his answer is
-                         'Yes' the current values will be pushed to the backend and a
-                         'getDataitem' event with a transient dataitem will be issued.
-                         This dataitem is not stored by the component (thus transient)
-                         and does not contain an 'id' or '$self' property as the
-                         widget does not know the origin of the worldstate and thus
-                         cannot fetch a proper id."
+            description="Toggle editing mode. If the provided value is 'true' the
+                         widget will display a modal dialog asking for initial data,
+                         such as exercise name (a.k.a. worldstate name), exercise 
+                         description (a.k.a. worldstate description) and incident time.
+                         If the user provides appropriate values and accepts his input
+                         (answer 'OK') the widget will switch to editing mode. If the
+                         user cancels entry of exercise data the widget does not enter
+                         editing mode and issues an 'isEditing' event with the value
+                         'false'.
+                         If the provided value is 'false' and the widget is currently
+                         in editing mode the widget will probably stop editing: The user
+                         is asked if he wants to stop editing. If his answer is 'No' an
+                         'isEditing' event with the value 'true' is issued. If his
+                         answer is 'Yes' the current values will be pushed to the
+                         backend and a 'getDataitem' event with a transient dataitem
+                         will be issued. This dataitem is not stored by the component
+                         (thus transient) and does not contain an 'id' or '$self' 
+                         property as the widget does not know the origin of the 
+                         worldstate and thus cannot fetch a proper id."
             friendcode="boolean"/>
         <OutputEndpoint
             name="getDataitem"
@@ -51,7 +58,21 @@ This is not the implementation of whole pilot e application anymore but only of 
             name="isEditing"
             type="text"
             label="Is in editing mode"
-            description="Event that is issued on varous occasions, see input endpoints"
+            description="Event that is issued on various occasions, see input endpoints"
             friendcode="boolean"/>
+        <OutputEndpoint
+            name="getWorldstateName"
+            type="text"
+            label="Get the new name of the worldstate"
+            description="Event that is issued if the editing mode is actually entered 
+                         (setEditing=true), see setEditing input endpoint"
+            friendcode="string"/>
+        <OutputEndpoint
+            name="getWorldstateDesc"
+            type="text"
+            label="Get the new description of the worldstate"
+            description="Event that is issued if the editing mode is actually entered 
+                         (setEditing=true), see setEditing input endpoint"
+            friendcode="string"/>
     </Platform.Wiring>
 ```
