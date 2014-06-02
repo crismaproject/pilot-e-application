@@ -19,8 +19,9 @@ angular.module(
                 console.log('initialising wirecloud controller');
             }
 
-            $scope.toggleWCEditing = function (editing) {
-                MashupPlatform.wiring.pushEvent('setEditing', 'false');
+            $scope.toggleWCEditing = function () {
+                $scope.wcEditing = !$scope.wcEditing;
+                MashupPlatform.wiring.pushEvent('setEditing', $scope.wcEditing.toString());
             };
 
             initScope = function () {
@@ -121,11 +122,25 @@ angular.module(
                 mashupPlatform = MashupPlatform;
 
                 mashupPlatform.wiring.registerCallback('setEditing', function (nuu) {
-
                     if (nuu && nuu.toLowerCase() === 'true' && $scope.worldstate !== null) {
-                        angularTools.safeApply($scope, function () {
-                            $scope.editing = true;
-                        });
+                        $scope.incidentTime = new Date().toISOString();
+                        $scope.wsName = $scope.worldstate.name;
+                        $scope.wsDesc = $scope.worldstate.description;
+                        
+                        dialog = $modal.open({
+                                templateUrl: 'templates/newExerciseModalTemplate.html',
+                                scope: $scope
+                            });
+
+                            dialog.result.then(function () {
+                                mashupPlatform.wiring.pushEvent('getWorldstateName', $scope.wsName);
+                                mashupPlatform.wiring.pushEvent('getWorldstateDesc', $scope.wsDesc);
+                                angularTools.safeApply($scope, function () {
+                                    $scope.editing = true;
+                                });
+                            }, function () {
+                                mashupPlatform.wiring.pushEvent('isEditing', 'false');
+                            });
                     } else {
                         if ($scope.editing) {
                             // modal dialog: veto finish editing

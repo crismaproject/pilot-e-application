@@ -79,6 +79,18 @@
             label="Is in editing mode"
             description="See https://github.com/crismaproject/pilot-e-application"
             friendcode="boolean"/>
+        <OutputEndpoint
+            name="getWorldstateName"
+            type="text"
+            label="Get the new name of the worldstate"
+            description="See https://github.com/crismaproject/pilot-e-application"
+            friendcode="string"/>
+        <OutputEndpoint
+            name="getWorldstateDesc"
+            type="text"
+            label="Get the new description of the worldstate"
+            description="See https://github.com/crismaproject/pilot-e-application"
+            friendcode="string"/>
     </Platform.Wiring>
 
     <!-- Platform.Link element. It binds the template with the actual widget's source code. -->
