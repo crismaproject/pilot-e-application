@@ -194,7 +194,7 @@
             
             window.setTimeout(function() {
                 console.log("push ws");
-                $.getJSON('http://crisma.cismet.de/pilotE/icmm_api/CRISMA.worldstates/1?omitNullValues=true&deduplicate=true', function (data) {
+                $.getJSON('http://crisma.cismet.de/pilotE/icmm_api/CRISMA.worldstates/2?omitNullValues=true&deduplicate=true', function (data) {
                     MashupPlatform.setWorldstate(JSON.stringify(data));
                 })
             }, 2000);
