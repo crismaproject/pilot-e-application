@@ -1,19 +1,19 @@
 <div ng-hide="!patient">
-    <div class="well">
+    <div class="well well-sm sm-well">
         <table>
             <thead>
                 <tr>
-                    <th colspan="2" class="text-left">Measures for {{patient.name}}, {{patient.forename}}</th>
+                    <th colspan='2' class="text-left">Measures for {{patient.name}}, {{patient.forename}}</th>
                 </tr>
             </thead>
             <tbody>
                 <tr class="defaultinsets">
-                    <td class="defaultinsets">Patient ID:</td>
-                    <td class="text-right defaultinsets">{{patient.id}}</td>
+                    <td class="col1 defaultinsets">Patient ID:</td>
+                    <td class="col2 defaultinsets">{{patient.id}}</td>
                 </tr>
                 <tr>
-                    <td class="defaultinsets">Correct Classification:</td>
-                    <td class="text-right defaultinsets">
+                    <td class="col1 defaultinsets">Correct Classification:</td>
+                    <td class="col2 defaultinsets">
                         <span class="triage ng-class:{'T1': patient.correctTriage === 'T1', 'T2': patient.correctTriage === 'T2', 'T3': patient.correctTriage === 'T3'};">
                             {{patient.correctTriage}}
                         </span>
@@ -22,109 +22,170 @@
             </tbody>
         </table>
     </div>
-    <div class="well">
+    <div class="well well-sm sm-well">
         <table>
             <thead>
                 <tr>
-                    <th colspan="2" class="text-left">Pre-Triage</th>
+                    <th colspan='2' class="text-left">Boundary times</th>
                 </tr>
             </thead>
             <tbody>
-                <tr>
-                    <td class="defaultinsets">Classification:</td>
-                    <td class="text-right defaultinsets">
-                         <triage-select ng-show="editing" selected-triage="patient.preTriage.classification"></triage-select>
-                         <span ng-show="!editing" class="triage ng-class:{'T1': patient.preTriage.classification === 'T1', 'T2': patient.preTriage.classification === 'T2', 'T3': patient.preTriage.classification === 'T3'};">{{patient.preTriage.classification}}</span>
-                    </td>
-                </tr>
-                <tr>
-                    <td class="defaultinsets">When:</td>
-                    <td class="text-right defaultinsets">
+                <tr class="defaultinsets">
+                    <td  class="col1 defaultinsets">Located:</td>
+                    <td class="col2 defaultinsets">
                         <div style="position: relative">
-                            <form ng-show="editing" name="timepickerForm2" class="form-inline timepicker" role="form">
-                                <div class="form-group" ng-class="{'has-error': timepickerForm2.time.$invalid}">
+                            <form ng-show="editing" name="timepickerForm5" class="form-inline timepicker" role="form">
+                                <div class="form-group" ng-class="{'has-error': timepickerForm5.time.$invalid}">
                                     <input 
                                         class="form-control"
                                         size="5"
-                                        ng-model="patient.preTriage.timestamp" 
+                                        ng-model="patient.located_timestamp" 
                                         name="time"
                                         bs-timepicker 
                                         type="text">
                                     <span class='glyphicon glyphicon-time' style="position: absolute; padding: 9px; margin-left: -37px; pointer-events: none;"></span>
                                 </div>
                             </form>
-                            <span ng-show="!editing" >{{patient.preTriage.timestamp | date:'HH:mm' }}</span>
+                            <span ng-show="!editing" >{{patient.located| date:'HH:mm' }}</span>
                             <span ng-show="!editing" class='glyphicon glyphicon-time' style="margin-left: 3px;"></span>
                         </div>
                     </td>
                 </tr>
                 <tr>
-                    <td class="defaultinsets">Responder ID:</td>
-                    <td class="text-right defaultinsets">
-                        <input ng-show="editing" ng-model="patient.preTriage.treatedBy" class="responder">
-                        <span ng-show="!editing" class="responder">{{patient.preTriage.treatedBy}}</span>
-                    </td>
-                </tr>
-            </tbody>
-        </table>
-    </div>
-    <div class="well">
-        <table>
-            <thead>
-                <tr>
-                    <th colspan="2" class="text-left">Triage</th>
-                </tr>
-            </thead>
-            <tbody>
-                <tr>
-                    <td class="defaultinsets">Classification:</td>
-                    <td class="text-right defaultinsets">
-                         <triage-select ng-show="editing" selected-triage="patient.triage.classification"></triage-select>
-                         <span ng-show="!editing" class="triage ng-class:{'T1': patient.triage.classification === 'T1', 'T2': patient.triage.classification === 'T2', 'T3': patient.triage.classification === 'T3'};">{{patient.triage.classification}}</span>
-                    </td>
-                </tr>
-                <tr>
-                    <td class="defaultinsets">When:</td>
-                    <td class="text-right defaultinsets">
+                    <td class="col1 defaultinsets">Evacuated:</td>
+                    <td class="col2 defaultinsets">
                         <div style="position: relative">
-                            <form ng-show="editing" name="timepickerForm3" class="form-inline timepicker" role="form">
-                                <div class="form-group" ng-class="{'has-error': timepickerForm3.time.$invalid}">
+                            <form ng-show="editing" name="timepickerForm6" class="form-inline timepicker" role="form">
+                                <div class="form-group" ng-class="{'has-error': timepickerForm6.time.$invalid}">
                                     <input 
                                         class="form-control"
                                         size="5"
-                                        ng-model="patient.triage.timestamp" 
+                                        ng-model="patient.transportation_timestamp" 
                                         name="time"
                                         bs-timepicker 
                                         type="text">
                                     <span class='glyphicon glyphicon-time' style="position: absolute; padding: 9px; margin-left: -37px; pointer-events: none;"></span>
                                 </div>
                             </form>
-                            <span ng-show="!editing" >{{patient.triage.timestamp | date:'HH:mm' }}</span>
+                            <span ng-show="!editing" >{{patient.transportation_timestamp| date:'HH:mm' }}</span>
                             <span ng-show="!editing" class='glyphicon glyphicon-time' style="margin-left: 3px;"></span>
                         </div>
-                    </td>
-                </tr>
-                <tr>
-                    <td class="defaultinsets">Responder ID:</td>
-                    <td class="text-right defaultinsets">
-                        <input ng-show="editing" ng-model="patient.triage.treatedBy" class="responder">
-                        <span ng-show="!editing" class="responder">{{patient.triage.treatedBy}}</span>
                     </td>
                 </tr>
             </tbody>
         </table>
     </div>
-    <div class="well">
+    <div class="well well-sm sm-well">
         <table>
             <thead>
                 <tr>
-                    <th colspan="3" class="text-left defaultinsets">Care Measures</th>
+                    <th colspan='2' class="text-left">Pre-Triage</th>
                 </tr>
             </thead>
             <tbody>
                 <tr>
-                    <td colspan="2" class="defaultinsets">Treatment begin:</td>
-                    <td class="text-right defaultinsets">
+                    <td class="col1 defaultinsets">Classification:</td>
+                    <td class="col2 defaultinsets">
+            <triage-select ng-show="editing" selected-triage="patient.preTriage.classification"></triage-select>
+            <span ng-show="!editing" class="triage ng-class:{'T1': patient.preTriage.classification === 'T1', 'T2': patient.preTriage.classification === 'T2', 'T3': patient.preTriage.classification === 'T3'};">{{patient.preTriage.classification}}</span>
+            </td>
+            </tr>
+            <tr>
+                <td class="col1 defaultinsets">When:</td>
+                <td class="col2 defaultinsets">
+                    <div style="position: relative">
+                        <form ng-show="editing" name="timepickerForm2" class="form-inline timepicker" role="form">
+                            <div class="form-group" ng-class="{'has-error': timepickerForm2.time.$invalid}">
+                                <input 
+                                    class="form-control"
+                                    size="5"
+                                    ng-model="patient.preTriage.timestamp" 
+                                    name="time"
+                                    bs-timepicker 
+                                    type="text">
+                                <span class='glyphicon glyphicon-time' style="position: absolute; padding: 9px; margin-left: -37px; pointer-events: none;"></span>
+                            </div>
+                        </form>
+                        <span ng-show="!editing" >{{patient.preTriage.timestamp| date:'HH:mm' }}</span>
+                        <span ng-show="!editing" class='glyphicon glyphicon-time' style="margin-left: 3px;"></span>
+                    </div>
+                </td>
+            </tr>
+            <tr>
+                <td class="col1 defaultinsets">Responder ID:</td>
+                <td class="col2 defaultinsets">
+                    <div ng-show="editing" class="responder-container">
+                        <input ng-model="patient.preTriage.treatedBy" class="form-control responder">
+                        <span class='glyphicon glyphicon-user' style="position: absolute; padding: 9px; margin-left: -37px; pointer-events: none;"></span>
+                    </div>
+                    <span ng-show="!editing" class="">{{patient.preTriage.treatedBy}}</span>
+                    <span ng-show="!editing" class='glyphicon glyphicon-user' style="margin-left: 3px;"></span>
+                </td>
+            </tr>
+            </tbody>
+        </table>
+    </div>
+    <div class="well well-sm sm-well">
+        <table>
+            <thead>
+                <tr>
+                    <th colspan='2' class="text-left">Triage</th>
+                </tr>
+            </thead>
+            <tbody>
+                <tr>
+                    <td class="col1 defaultinsets">Classification:</td>
+                    <td class="col2 defaultinsets">
+            <triage-select ng-show="editing" selected-triage="patient.triage.classification"></triage-select>
+            <span ng-show="!editing" class="triage ng-class:{'T1': patient.triage.classification === 'T1', 'T2': patient.triage.classification === 'T2', 'T3': patient.triage.classification === 'T3'};">{{patient.triage.classification}}</span>
+            </td>
+            </tr>
+            <tr>
+                <td class="col1 defaultinsets">When:</td>
+                <td class="col2 defaultinsets">
+                    <div style="position: relative">
+                        <form ng-show="editing" name="timepickerForm3" class="form-inline timepicker" role="form">
+                            <div class="form-group" ng-class="{'has-error': timepickerForm3.time.$invalid}">
+                                <input 
+                                    class="form-control"
+                                    size="5"
+                                    ng-model="patient.triage.timestamp" 
+                                    name="time"
+                                    bs-timepicker 
+                                    type="text">
+                                <span class='glyphicon glyphicon-time' style="position: absolute; padding: 9px; margin-left: -37px; pointer-events: none;"></span>
+                            </div>
+                        </form>
+                        <span ng-show="!editing" >{{patient.triage.timestamp| date:'HH:mm' }}</span>
+                        <span ng-show="!editing" class='glyphicon glyphicon-time' style="margin-left: 3px;"></span>
+                    </div>
+                </td>
+            </tr>
+            <tr>
+                <td class="col1 defaultinsets">Responder ID:</td>
+                <td class="col2 defaultinsets">
+                    <div ng-show="editing" class="responder-container">
+                        <input ng-model="patient.triage.treatedBy" class="form-control responder">
+                        <span class='glyphicon glyphicon-user' style="position: absolute; padding: 9px; margin-left: -37px; pointer-events: none;"></span>
+                    </div>
+                    <span ng-show="!editing" class="">{{patient.triage.treatedBy}}</span>
+                    <span ng-show="!editing" class='glyphicon glyphicon-user' style="margin-left: 3px;"></span>
+                </td>
+            </tr>
+            </tbody>
+        </table>
+    </div>
+    <div class="well well-sm">
+        <table>
+            <thead>
+                <tr>
+                    <th colspan='2' class="text-left defaultinsets">Care Measures</th>
+                </tr>
+            </thead>
+            <tbody>
+                <tr>
+                    <td class="col1 defaultinsets">Treatment begin:</td>
+                    <td class="col2 defaultinsets">
                         <div style="position: relative">
                             <form ng-show="editing" name="timepickerForm4" class="form-inline timepicker" role="form">
                                 <div class="form-group" ng-class="{'has-error': timepickerForm4.time.$invalid}">
@@ -138,31 +199,27 @@
                                     <span class='glyphicon glyphicon-time' style="position: absolute; padding: 9px; margin-left: -37px; pointer-events: none;"></span>
                                 </div>
                             </form>
-                            <span ng-show="!editing" >{{patient.treatment_timestamp | date:'HH:mm' }}</span>
+                            <span ng-show="!editing" >{{patient.treatment_timestamp| date:'HH:mm' }}</span>
                             <span ng-show="!editing" class='glyphicon glyphicon-time' style="margin-left: 3px;"></span>
                         </div>
                     </td>
                 </tr>
-                <tr>
-                    <td class="text-center defaultinsets"></td>
-                    <td class="text-center defaultinsets"><i>R. Id</i></td>
-                    <td class="text-center defaultinsets"><i>Rating</i></td>
+                <tr style="border-bottom: 1px solid #adadad">
+                    <td class="col1 defaultinsets">Responder ID:</td>
+                    <td class="col2 defaultinsets">
+                        <div ng-show="editing" class="responder-container">
+                            <input ng-model="patient.treatment_by" class="form-control responder">
+                            <span class='glyphicon glyphicon-user' style="position: absolute; padding: 9px; margin-left: -37px; pointer-events: none;"></span>
+                        </div>
+                        <span ng-show="!editing" class="">{{patient.treatment_by}}</span>
+                        <span ng-show="!editing" class='glyphicon glyphicon-user' style="margin-left: 3px;"></span>
+                    </td>
                 </tr>
                 <!-- assumes care measures available -->
-                <tr data-ng-repeat="cm in patient.careMeasures | orderBy:'measure'" ng-controller="detailPatientDirectiveCareMeasureController">
-                    <td class="defaultinsets">{{cm.measure}}:</td>
-                    <td class="text-right defaultinsets">
-                        <input ng-show="editing" ng-model="cm.treatedBy" class="responder">
-                        <span ng-show="!editing" class="responder">{{cm.treatedBy}}</span>
-                    </td>
-                    <td class="text-right defaultinsets">
-                        <select ng-show="editing" ng-model="cm.rating" class="rating">
-                            <option value=""></option>
-                            <option value="1">1</option>
-                            <option value="3">3</option>
-                            <option value="6">6</option>
-                        </select>
-                        <span ng-show="!editing" class="rating">{{cm.rating}}</span>
+                <tr data-ng-repeat="cm in patient.careMeasures| orderBy:'measure'">
+                    <td class="col1 defaultinsets">{{cm.measure}}:</td>
+                    <td class="col2 defaultinsets">
+                        <input ng-disabled="!editing" class='checkbox' type="checkbox" ng-model="cm.value" style="margin-left: 60px">
                     </td>
                 </tr>
             </tbody>

@@ -14,8 +14,6 @@ angular.module(
                 getNextId,
                 getMaxCareMeasures,
                 getClassifications,
-                getAverageRating,
-                getAverageRatingString,
                 getRatedMeasuresCount,
                 getAbbreviatedRequests,
                 getQueue,
@@ -42,8 +40,6 @@ angular.module(
                                 for (i = 0; i < exercise.patients.length; ++i) {
                                     patient = exercise.patients[i];
                                     patient.ratedMeasuresCount = getRatedMeasuresCount(patient);
-                                    patient.averageRating = getAverageRating(patient);
-                                    patient.averageRatingString = getAverageRatingString(patient.averageRating);
                                 }
 
                                 for (i = 0; i < exercise.alertsRequests.length; ++i) {
@@ -60,10 +56,7 @@ angular.module(
                             transformRequest: function (data) {
                                 // we remove the virtual properties from the objects again
                                 return JSON.stringify(data, function (k, v) {
-                                    if (k === 'averageRating'
-                                            || k === 'averageRatingString'
-                                            || k === 'ratedMeasuresCount'
-                                            || k === 'abbrevRequests') {
+                                    if (k === 'ratedMeasuresCount' || k === 'abbrevRequests') {
                                         return undefined;
                                     }
 
@@ -83,8 +76,6 @@ angular.module(
                                 for (i = 0; i < exercise.patients.length; ++i) {
                                     patient = exercise.patients[i];
                                     patient.ratedMeasuresCount = getRatedMeasuresCount(patient);
-                                    patient.averageRating = getAverageRating(patient);
-                                    patient.averageRatingString = getAverageRatingString(patient.averageRating);
                                 }
 
                                 for (i = 0; i < exercise.alertsRequests.length; ++i) {
@@ -154,8 +145,12 @@ angular.module(
                 return def.promise;
             };
 
-            getMaxCareMeasures = function () {
-                return 7;
+            getMaxCareMeasures = function (patient) {
+                if(patient && patient.correctTriage === 'T3') {
+                    return 6;
+                } else {
+                    return 7;
+                }
             };
 
             getClassifications = function () {
@@ -164,60 +159,17 @@ angular.module(
                 ];
             };
 
-            getAverageRating = function (patient) {
-                var i, numerator, denominator;
-
-                if (patient.careMeasures.length !== getMaxCareMeasures()) {
-                    throw 'IllegalArgumentException: not all care measures specified';
-                }
-
-                numerator = 0;
-                denominator = 0;
-                for (i = 0; i < patient.careMeasures.length; ++i) {
-                    if (patient.careMeasures[i].rating) {
-                        denominator++;
-                        numerator += parseInt(patient.careMeasures[i].rating, 10);
-                    }
-                }
-
-                return denominator > 0 ? Math.round((numerator / denominator) * 100) / 100 : null;
-            };
-
             getRatedMeasuresCount = function (patient) {
                 var i, count;
 
-                if (patient.careMeasures.length !== getMaxCareMeasures()) {
-                    throw 'IllegalArgumentException: not all care measures specified';
-                }
-
                 count = 0;
                 for (i = 0; i < patient.careMeasures.length; ++i) {
-                    if (patient.careMeasures[i].rating) {
+                    if (patient.careMeasures[i].value) {
                         count++;
                     }
                 }
 
                 return count;
-            };
-
-            getAverageRatingString = function (rating) {
-                if (!rating) {
-                    return '';
-                }
-
-                if (rating <= 1.5) {
-                    return '++';
-                } else if (rating <= 2.5) {
-                    return '+';
-                } else if (rating <= 3.5) {
-                    return '0';
-                } else if (rating <= 4.5) {
-                    return '-';
-                } else if (rating <= 6) {
-                    return '--';
-                }
-
-                return '';
             };
 
             getAbbreviatedRequests = function (alertRequest) {
@@ -276,8 +228,6 @@ angular.module(
                 getNextId: getNextId,
                 getMaxCareMeasures : getMaxCareMeasures,
                 getClassifications : getClassifications,
-                getAverageRating : getAverageRating,
-                getAverageRatingString : getAverageRatingString,
                 getRatedMeasuresCount : getRatedMeasuresCount,
                 getAbbreviatedRequests : getAbbreviatedRequests,
                 getQueue : getQueue
