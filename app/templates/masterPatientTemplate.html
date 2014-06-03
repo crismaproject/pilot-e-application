@@ -1,7 +1,11 @@
 <div id="master-patient-widget">
     <table data-ng-table="tableParams" template-pagination="masterPatientDirectiveTablePager" show-filter="true" class="table ng-table-responsive">
         <tbody>
-            <tr data-ng-repeat="patient in $data" class="hoverrow ng-class:{'rowselected': patient.id === selectedPatient.id};" data-ng-click="setSelected(patient)">
+            <tr data-ng-repeat="patient in $data" 
+                class="hoverrow ng-class:{'rowselected': patient.id === selectedPatient.id};"
+                data-ng-click="setSelected(patient)"
+                ng-mouseenter="hovering = true"
+                ng-mouseleave="hovering = false">
                 <td data-title="'ID'" sortable="'id'">
                     {{patient.id}}
                 </td>
@@ -28,6 +32,13 @@
                 </td>
                 <td data-title="'Evacuated'" sortable="'transportation_timestamp'" class="centered">
                     {{patient.transportation_timestamp | date:'HH:mm'}}
+                    <button type='button' 
+                            class='btn btn-xs btn-link pull-right'
+                            style="position: absolute; right: 20px;"
+                            ng-show="hovering && editing"
+                            ng-click="removePatient(patient)">
+                        <span class="glyphicon glyphicon-remove-circle"></span>
+                    </button>
                 </td>
             </tr>
         </tbody>

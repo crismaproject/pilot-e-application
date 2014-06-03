@@ -3,7 +3,17 @@
         <table>
             <thead>
                 <tr>
-                    <th colspan='2' class="text-left">Measures for {{patient.name}}, {{patient.forename}}</th>
+                    <th ng-show="editing" colspan='2' class="text-left">
+                        Measures for
+                        <input ng-model="patient.name"
+                               class="form-control"
+                               placeholder="Enter name">
+                        <input ng-model="patient.forename"
+                               class="form-control margintop10" 
+                               style="margin-bottom: 10px;"
+                               placeholder="Enter forename">
+                    </th>
+                    <th ng-show="!editing" colspan='2' class="text-left">Measures for {{patient.name}}, {{patient.forename}}</th>
                 </tr>
             </thead>
             <tbody>
@@ -14,7 +24,8 @@
                 <tr>
                     <td class="col1 defaultinsets">Correct Classification:</td>
                     <td class="col2 defaultinsets">
-                        <span class="triage ng-class:{'T1': patient.correctTriage === 'T1', 'T2': patient.correctTriage === 'T2', 'T3': patient.correctTriage === 'T3'};">
+                        <triage-select ng-show="editing" selected-triage="patient.correctTriage"></triage-select>
+                        <span ng-show="!editing" class="triage ng-class:{'T1': patient.correctTriage === 'T1', 'T2': patient.correctTriage === 'T2', 'T3': patient.correctTriage === 'T3'};">
                             {{patient.correctTriage}}
                         </span>
                     </td>
@@ -46,7 +57,7 @@
                                     <span class='glyphicon glyphicon-time' style="position: absolute; padding: 9px; margin-left: -37px; pointer-events: none;"></span>
                                 </div>
                             </form>
-                            <span ng-show="!editing" >{{patient.located| date:'HH:mm' }}</span>
+                            <span ng-show="!editing" >{{patient.located_timestamp | date:'HH:mm' }}</span>
                             <span ng-show="!editing" class='glyphicon glyphicon-time' style="margin-left: 3px;"></span>
                         </div>
                     </td>

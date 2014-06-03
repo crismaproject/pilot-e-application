@@ -27,8 +27,8 @@ angular.module(
             initScope = function () {
                 $scope.editing = false;
                 $scope.worldstate = null;
-                $scope.patients = null;
                 $scope.selectedAlertRequest = null;
+                $scope.model = {};
                 $scope.exercise = null;
                 $scope.apiurl = null;
                 $scope.allTacticalAreas = [
@@ -91,14 +91,74 @@ angular.module(
                     res = ooi.exercises(dai);
                     $scope.apiurl = dai.substr(0, dai.indexOf('icmm_api') + 8);
                     $scope.exercise = res.get({id: item.actualaccessinfo});
-                    $scope.exercise.$promise.then(function () {
-                        $scope.patients = $scope.exercise.patients;
-                    });
                 } else {
                     initScope();
                     throw 'the worldstate has to have a proper exercise_data dataitem';
                 }
 
+            };
+
+            $scope.addPatient = function () {
+                var id, now, p;
+
+                id = $scope.model.getNextPatientId();
+                now = new Date().toISOString();
+                p = {
+                    '$self': '/CRISMA.capturePatients/' + id,
+                    'id': id,
+                    'name': '',
+                    'forename': '',
+                    'correctTriage': null,
+                    'located_timestamp': now,
+                    'treatment_timestamp': now,
+                    'transportation_timestamp': now,
+                    // virtual property
+                    'ratedMeasuresCount': 0,
+                    'preTriage': {
+                        'classification': null,
+                        'timestamp': now,
+                        'treatedBy': null
+                    },
+                    'triage': {
+                        'classification': null,
+                        'timestamp': now,
+                        'treatedBy': null
+                    },
+                    'careMeasures': [
+                        {
+                            'measure': 'Ventilation',
+                            'value': false
+                        },
+                        {
+                            'measure': 'Consciousness',
+                            'value': false
+                        },
+                        {
+                            'measure': 'Hemorrhage',
+                            'value': false
+                        },
+                        {
+                            'measure': 'Position',
+                            'value': false
+                        },
+                        {
+                            'measure': 'Warmth preservation',
+                            'value': false
+                        },
+                        {
+                            'measure': 'Attendance',
+                            'value': false
+                        },
+                        {
+                            'measure': 'Supplemental Oxygen',
+                            'value': false
+                        }
+                    ]
+                };
+                angularTools.safeApply($scope, function () {
+                    $scope.exercise.patients.push(p);
+                    $scope.model.selectedPatient = p;
+                });
             };
 
             $scope.addAlertRequest = function () {
@@ -126,21 +186,59 @@ angular.module(
                         $scope.incidentTime = new Date().toISOString();
                         $scope.wsName = $scope.worldstate.name;
                         $scope.wsDesc = $scope.worldstate.description;
-                        
-                        dialog = $modal.open({
-                                templateUrl: 'templates/newExerciseModalTemplate.html',
-                                scope: $scope
-                            });
 
-                            dialog.result.then(function () {
-                                mashupPlatform.wiring.pushEvent('getWorldstateName', $scope.wsName);
-                                mashupPlatform.wiring.pushEvent('getWorldstateDesc', $scope.wsDesc);
+                        dialog = $modal.open({
+                            templateUrl: 'templates/newExerciseModalTemplate.html',
+                            scope: $scope
+                        });
+
+                        dialog.result.then(function () {
+                            var p;
+
+                            mashupPlatform.wiring.pushEvent('getWorldstateName', $scope.wsName);
+                            mashupPlatform.wiring.pushEvent('getWorldstateDesc', $scope.wsDesc);
+
+                            p = $.extend(true, [], $scope.exercise.patients);
+                            ooi.getNextId($scope.apiurl, '/CRISMA.capturePatients').then(function (id) {
+                                var currP, i, pid, maxId, selP;
+
+                                maxId = id - 1;
+                                $scope.model.getNextPatientId = function () {
+                                    return ++maxId;
+                                };
+
+                                for (i = 0; i < p.length; ++i) {
+                                    pid = $scope.model.getNextPatientId();
+                                    p[i].$self = '/CRISMA.capturePatients/' + pid;
+                                    p[i].id = pid;
+                                }
+
+                                $scope.exercise.patients = p;
+                                $scope.exercise.alertsRequests = [];
+                                $scope.exercise.tacticalAreas = [];
+
+                                // preserve selection
+                                selP = null;
+                                if ($scope.model.selectedPatient) {
+                                    selP = $scope.model.selectedPatient;
+                                    for (i = 0; i < $scope.exercise.patients.length; ++i) {
+                                        currP = $scope.exercise.patients[i];
+                                        if (currP.name === selP.name && currP.forename === selP.forename) {
+                                            selP = currP;
+
+                                            break;
+                                        }
+                                    }
+                                }
+
                                 angularTools.safeApply($scope, function () {
+                                    $scope.model.selectedPatient = selP;
                                     $scope.editing = true;
                                 });
-                            }, function () {
-                                mashupPlatform.wiring.pushEvent('isEditing', 'false');
                             });
+                        }, function () {
+                            mashupPlatform.wiring.pushEvent('isEditing', 'false');
+                        });
                     } else {
                         if ($scope.editing) {
                             // modal dialog: veto finish editing
@@ -150,67 +248,42 @@ angular.module(
                             });
 
                             dialog.result.then(function () {
-                                var ar, cm, createSpatialCoverage, dataitem, getMaxTimestamp, i, j, pat;
-
-                                // currently we have to take care of the ids ourselves
+                                // currently we have to take care of the ids ourselves, but not for patients
+                                // which is done on init
                                 $q.all(
                                     [
                                         ooi.getNextId($scope.apiurl, '/CRISMA.exercises'),
-                                        ooi.getNextId($scope.apiurl, '/CRISMA.capturePatients'),
                                         ooi.getNextId($scope.apiurl, '/CRISMA.preTriages'),
                                         ooi.getNextId($scope.apiurl, '/CRISMA.triages'),
-                                        ooi.getNextId($scope.apiurl, '/CRISMA.consciousness'),
-                                        ooi.getNextId($scope.apiurl, '/CRISMA.respirations'),
-                                        ooi.getNextId($scope.apiurl, '/CRISMA.pulses'),
-                                        ooi.getNextId($scope.apiurl, '/CRISMA.bloodpressures'),
-                                        ooi.getNextId($scope.apiurl, '/CRISMA.positions'),
-                                        ooi.getNextId($scope.apiurl, '/CRISMA.warmthpreservations'),
-                                        ooi.getNextId($scope.apiurl, '/CRISMA.attendances'),
+                                        ooi.getNextId($scope.apiurl, '/CRISMA.careMeasures'),
                                         ooi.getNextId($scope.apiurl, '/CRISMA.tacticalAreas'),
                                         ooi.getNextId($scope.apiurl, '/CRISMA.alertsRequests'),
                                         ooi.getNextId($scope.apiurl, '/CRISMA.rescueMeans')
                                     ]
                                 ).then(function (ids) {
+                                    var ar, createSpatialCoverage, dataitem, getMaxTimestamp, i, j, pat;
+
                                     $scope.exercise.$self = '/CRISMA.exercises/' + ids[0];
                                     $scope.exercise.id = ids[0];
 
                                     for (i = 0; i < $scope.exercise.patients.length; ++i) {
-                                        ids[1] += i;
                                         pat = $scope.exercise.patients[i];
-                                        pat.id = ids[1];
-                                        pat.$self = '/CRISMA.capturePatients/' + ids[1];
-
-                                        pat.preTriage.$self = '/CRISMA.preTriages/' + ids[2]++;
-                                        pat.triage.$self = '/CRISMA.triages/' + ids[3]++;
-                                        for (j = 0; j < pat.careMeasures; ++j) {
-                                            cm = pat.careMeasures[j];
-                                            if (cm.measure === 'Consciousness') {
-                                                cm.self = '/CRISMA.consciousness/' + ids[4]++;
-                                            } else if (cm.measure === 'Respiration') {
-                                                cm.self = '/CRISMA.respirations/' + ids[5]++;
-                                            } else if (cm.measure === 'Pulse') {
-                                                cm.self = '/CRISMA.pulses/' + ids[6]++;
-                                            } else if (cm.measure === 'Blood pressure') {
-                                                cm.self = '/CRISMA.bloodpressures/' + ids[7]++;
-                                            } else if (cm.measure === 'Position') {
-                                                cm.self = '/CRISMA.positions/' + ids[8]++;
-                                            } else if (cm.measure === 'Warmth preservation') {
-                                                cm.self = '/CRISMA.warmthpreservations/' + ids[9]++;
-                                            } else if (cm.measure === 'Attendance') {
-                                                cm.self = '/CRISMA.attendances/' + ids[10]++;
-                                            }
+                                        pat.preTriage.$self = '/CRISMA.preTriages/' + ids[1]++;
+                                        pat.triage.$self = '/CRISMA.triages/' + ids[2]++;
+                                        for (j = 0; j < pat.careMeasures.length; ++j) {
+                                            pat.careMeasures[j].$self = '/CRISMA.careMeasures/' + ids[3]++;
                                         }
                                     }
 
                                     for (i = 0; i < $scope.exercise.tacticalAreas.length; ++i) {
-                                        $scope.exercise.tacticalAreas[i].$self = '/CRISMA.tacticalAreas/' + ids[11]++;
+                                        $scope.exercise.tacticalAreas[i].$self = '/CRISMA.tacticalAreas/' + ids[4]++;
                                     }
 
                                     for (i = 0; i < $scope.exercise.alertsRequests.length; ++i) {
                                         ar = $scope.exercise.alertsRequests[i];
-                                        ar.$self = '/CRISMA.alertsRequests/' + ids[12]++;
+                                        ar.$self = '/CRISMA.alertsRequests/' + ids[5]++;
                                         for (j = 0; j < ar.rescueMeans.length; ++j) {
-                                            ar.rescueMeans[j].$self = '/CRISMA.rescueMeans/' + ids[13]++;
+                                            ar.rescueMeans[j].$self = '/CRISMA.rescueMeans/' + ids[6]++;
                                         }
                                     }
 

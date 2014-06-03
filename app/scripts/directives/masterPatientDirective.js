@@ -7,7 +7,8 @@ angular.module(
 
         var scope = {
                 patients: '=',
-                selectedPatient: '='
+                selectedPatient: '=',
+                editing: '='
             };
 
         return {

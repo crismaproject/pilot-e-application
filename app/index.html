@@ -39,15 +39,28 @@
             <button ng-click="toggleWCEditing(editing)">WC Editing toggle</button>
             <div class="ex-header"><h3>Exercise {{worldstate.name}}</h3></div>
             <tabset>
-                <tab heading='Patients'>
+                <tab select="patientsVisible=true" deselect="patientsVisible=false">
+                    <tab-heading>
+                        <span>Patients</span>
+                        <span ng-show='patientsVisible && editing'>&nbsp;</span>
+                        <button ng-show='patientsVisible && editing'
+                                type="button"
+                                class="btn btn-success btn-xs" 
+                                ng-click='addPatient()'>
+                            <span class='glyphicon glyphicon-plus'></span>
+                        </button>
+                    </tab-heading>
                     <div class="margintop10"></div>
                     <div class="container-fluid">
                         <div class="row">
                             <div class='col-lg-8'>
-                                <master-patient-widget patients="patients" selected-patient="selectedPatient"></master-patient-widget>
+                                <master-patient-widget patients="exercise.patients"
+                                                       selected-patient="model.selectedPatient"
+                                                       editing="editing">
+                                </master-patient-widget>
                             </div>
                             <div class='col-lg-4'>
-                                <detail-patient-widget patient="selectedPatient" editing="editing"></detail-patient-widget>
+                                <detail-patient-widget patient="model.selectedPatient" editing="editing"></detail-patient-widget>
                             </div>
                         </div>
                     </div>
@@ -194,7 +207,7 @@
             
             window.setTimeout(function() {
                 console.log("push ws");
-                $.getJSON('http://crisma.cismet.de/pilotE/icmm_api/CRISMA.worldstates/2?omitNullValues=true&deduplicate=true', function (data) {
+                $.getJSON('http://crisma.cismet.de/pilotE/icmm_api/CRISMA.worldstates/3?omitNullValues=true&deduplicate=true', function (data) {
                     MashupPlatform.setWorldstate(JSON.stringify(data));
                 })
             }, 2000);
