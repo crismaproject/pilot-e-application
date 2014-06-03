@@ -4,12 +4,11 @@ angular.module(
     'masterPatientDirectiveController',
     [
         '$scope',
-        '$q',
         '$filter',
         'ngTableParams',
         'eu.crismaproject.pilotE.services.OoI',
         'DEBUG',
-        function ($scope, $q, $filter, NgTableParams, ooi, DEBUG) {
+        function ($scope, $filter, NgTableParams, ooi, DEBUG) {
             'use strict';
 
             if (DEBUG) {
@@ -44,7 +43,11 @@ angular.module(
                 }
             );
 
-            $scope.$watch('patients.length', function () {
+            $scope.$watch('patients.length', function (n, o) {
+                // this ensures that newly created patients without a name are actually visible
+                if (n > o) {
+                    $scope.tableParams.sorting('name', 'asc');
+                }
                 $scope.tableParams.reload();
             });
 

@@ -28,6 +28,7 @@ angular.module(
                 $scope.editing = false;
                 $scope.worldstate = null;
                 $scope.selectedAlertRequest = null;
+                $scope.model = {};
                 $scope.exercise = null;
                 $scope.apiurl = null;
                 $scope.allTacticalAreas = [
@@ -97,6 +98,71 @@ angular.module(
 
             };
 
+            $scope.addPatient = function () {
+                // FIXME: store nextid for patients
+                ooi.getNextId($scope.apiurl, '/CRISMA.capturePatients').then(function (id) {
+                    var now, p;
+
+                    now = new Date().toISOString();
+                    p = {
+                        '$self': '/CRISMA.capturePatients/' + id,
+                        'id': id,
+                        'name': '',
+                        'forename': '',
+                        'correctTriage': null,
+                        'located_timestamp': now,
+                        'treatment_timestamp': now,
+                        'transportation_timestamp': now,
+                        // virtual property
+                        'ratedMeasuresCount': 0,
+                        'preTriage': {
+                            'classification': null,
+                            'timestamp': now,
+                            'treatedBy': null
+                        },
+                        'triage': {
+                            'classification': null,
+                            'timestamp': now,
+                            'treatedBy': null
+                        },
+                        'careMeasures': [
+                            {
+                                'measure': 'Ventilation',
+                                'value': false
+                            },
+                            {
+                                'measure': 'Consciousness',
+                                'value': false
+                            },
+                            {
+                                'measure': 'Hemorrhage',
+                                'value': false
+                            },
+                            {
+                                'measure': 'Position',
+                                'value': false
+                            },
+                            {
+                                'measure': 'Warmth preservation',
+                                'value': false
+                            },
+                            {
+                                'measure': 'Attendance',
+                                'value': false
+                            },
+                            {
+                                'measure': 'Supplemental Oxygen',
+                                'value': false
+                            }
+                        ]
+                    };
+                    angularTools.safeApply($scope, function () {
+                        $scope.exercise.patients.push(p);
+                        $scope.model.selectedPatient = p;
+                    });
+                });
+            };
+
             $scope.addAlertRequest = function () {
                 var ar;
 
@@ -122,21 +188,21 @@ angular.module(
                         $scope.incidentTime = new Date().toISOString();
                         $scope.wsName = $scope.worldstate.name;
                         $scope.wsDesc = $scope.worldstate.description;
-                        
-                        dialog = $modal.open({
-                                templateUrl: 'templates/newExerciseModalTemplate.html',
-                                scope: $scope
-                            });
 
-                            dialog.result.then(function () {
-                                mashupPlatform.wiring.pushEvent('getWorldstateName', $scope.wsName);
-                                mashupPlatform.wiring.pushEvent('getWorldstateDesc', $scope.wsDesc);
-                                angularTools.safeApply($scope, function () {
-                                    $scope.editing = true;
-                                });
-                            }, function () {
-                                mashupPlatform.wiring.pushEvent('isEditing', 'false');
+                        dialog = $modal.open({
+                            templateUrl: 'templates/newExerciseModalTemplate.html',
+                            scope: $scope
+                        });
+
+                        dialog.result.then(function () {
+                            mashupPlatform.wiring.pushEvent('getWorldstateName', $scope.wsName);
+                            mashupPlatform.wiring.pushEvent('getWorldstateDesc', $scope.wsDesc);
+                            angularTools.safeApply($scope, function () {
+                                $scope.editing = true;
                             });
+                        }, function () {
+                            mashupPlatform.wiring.pushEvent('isEditing', 'false');
+                        });
                     } else {
                         if ($scope.editing) {
                             // modal dialog: veto finish editing
