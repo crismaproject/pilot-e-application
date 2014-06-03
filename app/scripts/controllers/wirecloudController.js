@@ -27,7 +27,6 @@ angular.module(
             initScope = function () {
                 $scope.editing = false;
                 $scope.worldstate = null;
-                $scope.patients = null;
                 $scope.selectedAlertRequest = null;
                 $scope.exercise = null;
                 $scope.apiurl = null;
@@ -91,9 +90,6 @@ angular.module(
                     res = ooi.exercises(dai);
                     $scope.apiurl = dai.substr(0, dai.indexOf('icmm_api') + 8);
                     $scope.exercise = res.get({id: item.actualaccessinfo});
-                    $scope.exercise.$promise.then(function () {
-                        $scope.patients = $scope.exercise.patients;
-                    });
                 } else {
                     initScope();
                     throw 'the worldstate has to have a proper exercise_data dataitem';
