@@ -43,16 +43,21 @@ angular.module(
                 }
             );
 
-            $scope.$watch('patients.length', function (n, o) {
+            $scope.$watchCollection('patients', function (n) {
                 // this ensures that newly created patients without a name are actually visible
-                if (n > o) {
-                    $scope.tableParams.sorting('name', 'asc');
+                // why is n.length === o.length --> https://github.com/angular/angular.js/issues/2621
+                if (n) {
+                    if (n.length > $scope.patientsCount) {
+                        $scope.tableParams.sorting('name', 'asc');
+                    }
+                    $scope.patientsCount = n.length;
                 }
                 $scope.tableParams.reload();
             });
 
             $scope.maxCareMeasures = ooi.getMaxCareMeasures;
             $scope.selectedPatient = null;
+            $scope.patientsCount = null;
 
             $scope.setSelected = function (patient) {
                 $scope.selectedPatient = patient;

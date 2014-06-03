@@ -99,67 +99,65 @@ angular.module(
             };
 
             $scope.addPatient = function () {
-                // FIXME: store nextid for patients
-                ooi.getNextId($scope.apiurl, '/CRISMA.capturePatients').then(function (id) {
-                    var now, p;
+                var id, now, p;
 
-                    now = new Date().toISOString();
-                    p = {
-                        '$self': '/CRISMA.capturePatients/' + id,
-                        'id': id,
-                        'name': '',
-                        'forename': '',
-                        'correctTriage': null,
-                        'located_timestamp': now,
-                        'treatment_timestamp': now,
-                        'transportation_timestamp': now,
-                        // virtual property
-                        'ratedMeasuresCount': 0,
-                        'preTriage': {
-                            'classification': null,
-                            'timestamp': now,
-                            'treatedBy': null
+                id = $scope.model.getNextPatientId();
+                now = new Date().toISOString();
+                p = {
+                    '$self': '/CRISMA.capturePatients/' + id,
+                    'id': id,
+                    'name': '',
+                    'forename': '',
+                    'correctTriage': null,
+                    'located_timestamp': now,
+                    'treatment_timestamp': now,
+                    'transportation_timestamp': now,
+                    // virtual property
+                    'ratedMeasuresCount': 0,
+                    'preTriage': {
+                        'classification': null,
+                        'timestamp': now,
+                        'treatedBy': null
+                    },
+                    'triage': {
+                        'classification': null,
+                        'timestamp': now,
+                        'treatedBy': null
+                    },
+                    'careMeasures': [
+                        {
+                            'measure': 'Ventilation',
+                            'value': false
                         },
-                        'triage': {
-                            'classification': null,
-                            'timestamp': now,
-                            'treatedBy': null
+                        {
+                            'measure': 'Consciousness',
+                            'value': false
                         },
-                        'careMeasures': [
-                            {
-                                'measure': 'Ventilation',
-                                'value': false
-                            },
-                            {
-                                'measure': 'Consciousness',
-                                'value': false
-                            },
-                            {
-                                'measure': 'Hemorrhage',
-                                'value': false
-                            },
-                            {
-                                'measure': 'Position',
-                                'value': false
-                            },
-                            {
-                                'measure': 'Warmth preservation',
-                                'value': false
-                            },
-                            {
-                                'measure': 'Attendance',
-                                'value': false
-                            },
-                            {
-                                'measure': 'Supplemental Oxygen',
-                                'value': false
-                            }
-                        ]
-                    };
-                    angularTools.safeApply($scope, function () {
-                        $scope.exercise.patients.push(p);
-                        $scope.model.selectedPatient = p;
-                    });
+                        {
+                            'measure': 'Hemorrhage',
+                            'value': false
+                        },
+                        {
+                            'measure': 'Position',
+                            'value': false
+                        },
+                        {
+                            'measure': 'Warmth preservation',
+                            'value': false
+                        },
+                        {
+                            'measure': 'Attendance',
+                            'value': false
+                        },
+                        {
+                            'measure': 'Supplemental Oxygen',
+                            'value': false
+                        }
+                    ]
+                };
+                angularTools.safeApply($scope, function () {
+                    $scope.exercise.patients.push(p);
+                    $scope.model.selectedPatient = p;
                 });
             };
 
@@ -195,10 +193,31 @@ angular.module(
                         });
 
                         dialog.result.then(function () {
+                            var p;
+
                             mashupPlatform.wiring.pushEvent('getWorldstateName', $scope.wsName);
                             mashupPlatform.wiring.pushEvent('getWorldstateDesc', $scope.wsDesc);
-                            angularTools.safeApply($scope, function () {
-                                $scope.editing = true;
+
+                            p = $.extend(true, [], $scope.exercise.patients);
+                            ooi.getNextId($scope.apiurl, '/CRISMA.capturePatients').then(function (id) {
+                                var i, pid, maxId;
+
+                                maxId = id - 1;
+                                $scope.model.getNextPatientId = function () {
+                                    return ++maxId;
+                                };
+
+                                for (i = 0; i < p.length; ++i) {
+                                    pid = $scope.model.getNextPatientId();
+                                    p[i].$self = '/CRISMA.capturePatients/' + pid;
+                                    p[i].id = pid;
+                                }
+
+                                $scope.exercise.patients = p;
+
+                                angularTools.safeApply($scope, function () {
+                                    $scope.editing = true;
+                                });
                             });
                         }, function () {
                             mashupPlatform.wiring.pushEvent('isEditing', 'false');
@@ -212,67 +231,42 @@ angular.module(
                             });
 
                             dialog.result.then(function () {
-                                var ar, cm, createSpatialCoverage, dataitem, getMaxTimestamp, i, j, pat;
-
-                                // currently we have to take care of the ids ourselves
+                                // currently we have to take care of the ids ourselves, but not for patients
+                                // which is done on init
                                 $q.all(
                                     [
                                         ooi.getNextId($scope.apiurl, '/CRISMA.exercises'),
-                                        ooi.getNextId($scope.apiurl, '/CRISMA.capturePatients'),
                                         ooi.getNextId($scope.apiurl, '/CRISMA.preTriages'),
                                         ooi.getNextId($scope.apiurl, '/CRISMA.triages'),
-                                        ooi.getNextId($scope.apiurl, '/CRISMA.consciousness'),
-                                        ooi.getNextId($scope.apiurl, '/CRISMA.respirations'),
-                                        ooi.getNextId($scope.apiurl, '/CRISMA.pulses'),
-                                        ooi.getNextId($scope.apiurl, '/CRISMA.bloodpressures'),
-                                        ooi.getNextId($scope.apiurl, '/CRISMA.positions'),
-                                        ooi.getNextId($scope.apiurl, '/CRISMA.warmthpreservations'),
-                                        ooi.getNextId($scope.apiurl, '/CRISMA.attendances'),
+                                        ooi.getNextId($scope.apiurl, '/CRISMA.careMeasures'),
                                         ooi.getNextId($scope.apiurl, '/CRISMA.tacticalAreas'),
                                         ooi.getNextId($scope.apiurl, '/CRISMA.alertsRequests'),
                                         ooi.getNextId($scope.apiurl, '/CRISMA.rescueMeans')
                                     ]
                                 ).then(function (ids) {
+                                    var ar, createSpatialCoverage, dataitem, getMaxTimestamp, i, j, pat;
+
                                     $scope.exercise.$self = '/CRISMA.exercises/' + ids[0];
                                     $scope.exercise.id = ids[0];
 
                                     for (i = 0; i < $scope.exercise.patients.length; ++i) {
-                                        ids[1] += i;
                                         pat = $scope.exercise.patients[i];
-                                        pat.id = ids[1];
-                                        pat.$self = '/CRISMA.capturePatients/' + ids[1];
-
-                                        pat.preTriage.$self = '/CRISMA.preTriages/' + ids[2]++;
-                                        pat.triage.$self = '/CRISMA.triages/' + ids[3]++;
-                                        for (j = 0; j < pat.careMeasures; ++j) {
-                                            cm = pat.careMeasures[j];
-                                            if (cm.measure === 'Consciousness') {
-                                                cm.self = '/CRISMA.consciousness/' + ids[4]++;
-                                            } else if (cm.measure === 'Respiration') {
-                                                cm.self = '/CRISMA.respirations/' + ids[5]++;
-                                            } else if (cm.measure === 'Pulse') {
-                                                cm.self = '/CRISMA.pulses/' + ids[6]++;
-                                            } else if (cm.measure === 'Blood pressure') {
-                                                cm.self = '/CRISMA.bloodpressures/' + ids[7]++;
-                                            } else if (cm.measure === 'Position') {
-                                                cm.self = '/CRISMA.positions/' + ids[8]++;
-                                            } else if (cm.measure === 'Warmth preservation') {
-                                                cm.self = '/CRISMA.warmthpreservations/' + ids[9]++;
-                                            } else if (cm.measure === 'Attendance') {
-                                                cm.self = '/CRISMA.attendances/' + ids[10]++;
-                                            }
+                                        pat.preTriage.$self = '/CRISMA.preTriages/' + ids[1]++;
+                                        pat.triage.$self = '/CRISMA.triages/' + ids[2]++;
+                                        for (j = 0; j < pat.careMeasures.length; ++j) {
+                                            pat.careMeasures[j].$self = '/CRISMA.careMeasures/' + ids[3]++;
                                         }
                                     }
 
                                     for (i = 0; i < $scope.exercise.tacticalAreas.length; ++i) {
-                                        $scope.exercise.tacticalAreas[i].$self = '/CRISMA.tacticalAreas/' + ids[11]++;
+                                        $scope.exercise.tacticalAreas[i].$self = '/CRISMA.tacticalAreas/' + ids[4]++;
                                     }
 
                                     for (i = 0; i < $scope.exercise.alertsRequests.length; ++i) {
                                         ar = $scope.exercise.alertsRequests[i];
-                                        ar.$self = '/CRISMA.alertsRequests/' + ids[12]++;
+                                        ar.$self = '/CRISMA.alertsRequests/' + ids[5]++;
                                         for (j = 0; j < ar.rescueMeans.length; ++j) {
-                                            ar.rescueMeans[j].$self = '/CRISMA.rescueMeans/' + ids[13]++;
+                                            ar.rescueMeans[j].$self = '/CRISMA.rescueMeans/' + ids[6]++;
                                         }
                                     }
 
