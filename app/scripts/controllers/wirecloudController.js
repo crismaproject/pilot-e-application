@@ -200,7 +200,7 @@ angular.module(
 
                             p = $.extend(true, [], $scope.exercise.patients);
                             ooi.getNextId($scope.apiurl, '/CRISMA.capturePatients').then(function (id) {
-                                var i, pid, maxId;
+                                var currP, i, pid, maxId, selP;
 
                                 maxId = id - 1;
                                 $scope.model.getNextPatientId = function () {
@@ -215,7 +215,22 @@ angular.module(
 
                                 $scope.exercise.patients = p;
 
+                                // preserve selection
+                                selP = null;
+                                if ($scope.model.selectedPatient) {
+                                    selP = $scope.model.selectedPatient;
+                                    for (i = 0; i < $scope.exercise.patients.length; ++i) {
+                                        currP = $scope.exercise.patients[i];
+                                        if (currP.name === selP.name && currP.forename === selP.forename) {
+                                            selP = currP;
+
+                                            break;
+                                        }
+                                    }
+                                }
+
                                 angularTools.safeApply($scope, function () {
+                                    $scope.model.selectedPatient = selP;
                                     $scope.editing = true;
                                 });
                             });
