@@ -214,6 +214,8 @@ angular.module(
                                 }
 
                                 $scope.exercise.patients = p;
+                                $scope.exercise.alertsRequests = [];
+                                $scope.exercise.tacticalAreas = [];
 
                                 // preserve selection
                                 selP = null;
