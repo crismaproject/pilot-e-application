@@ -208,6 +208,7 @@ angular.module(
                 mashupPlatform.wiring.registerCallback('setEditing', function (nuu) {
                     if (nuu && nuu.toLowerCase() === 'true' && $scope.worldstate !== null) {
                         $scope.incidentTime = new Date().toISOString();
+                        $scope.referenceTime = new Date().toISOString();
                         $scope.wsName = $scope.worldstate.name;
                         $scope.wsDesc = $scope.worldstate.description;
 
@@ -235,6 +236,7 @@ angular.module(
                                 }
 
                                 $scope.exercise.incidentTime = $scope.incidentTime;
+                                $scope.exercise.referenceTime = $scope.referenceTime;
                                 $scope.exercise.patients = newPatients;
                                 $scope.exercise.alertsRequests = [];
                                 $scope.exercise.tacticalAreas = [];
