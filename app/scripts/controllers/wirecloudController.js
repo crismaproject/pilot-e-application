@@ -71,7 +71,8 @@ angular.module(
                 if (DEBUG) {
                     console.log('parse dataitem and fetch patients');
                 }
-
+                
+                $scope.model.wsName = $scope.worldstate.name;
                 items = $scope.worldstate.worldstatedata;
                 if (items) {
                     for (i = 0; i < items.length && !item; ++i) {
@@ -209,7 +210,7 @@ angular.module(
                     if (nuu && nuu.toLowerCase() === 'true' && $scope.worldstate !== null) {
                         $scope.incidentTime = new Date().toISOString();
                         $scope.referenceTime = new Date().toISOString();
-                        $scope.wsName = $scope.worldstate.name;
+                        $scope.model.wsName = $scope.worldstate.name;
                         $scope.wsDesc = $scope.worldstate.description;
 
                         dialog = $modal.open({
@@ -218,7 +219,7 @@ angular.module(
                         });
 
                         dialog.result.then(function () {
-                            mashupPlatform.wiring.pushEvent('getWorldstateName', $scope.wsName);
+                            mashupPlatform.wiring.pushEvent('getWorldstateName', $scope.model.wsName);
                             mashupPlatform.wiring.pushEvent('getWorldstateDesc', $scope.wsDesc);
 
                             ooi.getNextId($scope.apiurl, '/CRISMA.capturePatients').then(function (id) {
