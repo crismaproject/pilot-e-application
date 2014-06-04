@@ -24,7 +24,7 @@
                 <span style="height: 34px; display: table-cell; vertical-align: middle;">Incident time:</span>
             </div>
             <div class="col-lg-9">
-                <form name="timepickerIncidentForm" class="form-inline timepicker" role="form">
+                <form name="timepickerIncidentForm" class="form-inline timepicker pull-right" role="form">
                     <div class="form-group" ng-class="{'has-error': timepickerIncidentForm.date.$invalid}">
                         <input 
                             class="form-control"
@@ -42,6 +42,27 @@
                             class="form-control"
                             size="5"
                             ng-model="incidentTime"
+                            placeholder="Time"
+                            name="time"
+                            bs-timepicker 
+                            type="text">
+                        <span class='glyphicon glyphicon-time' style="position: absolute; padding: 9px 58px; pointer-events: none;"></span>
+                    </div>
+                </form>
+            </div>
+        </div>
+        <div class="row margintop10">
+            <div class="col-lg-3">
+                <span style="height: 34px; display: table-cell; vertical-align: middle;">Reference time:</span>
+            </div>
+            <div class="col-lg-9">
+                <form name="timepickerIncidentForm" class="form-inline timepicker pull-right" role="form">
+                    <div class="form-group" ng-class="{'has-error': timepickerReferenceForm.time.$invalid}">
+                        <input
+                            ng-disabled="timepickerReferenceForm.date.$invalid"
+                            class="form-control"
+                            size="5"
+                            ng-model="referenceTime"
                             placeholder="Time"
                             name="time"
                             bs-timepicker 
