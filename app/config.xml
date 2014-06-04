@@ -11,7 +11,7 @@
         <Name>pilot-e-capture-widget</Name>
         <!-- Version: Current widget version number-->
         <!-- we include a build # to prevent caching by wirecloud -->
-        <Version>0.1.0.3</Version>
+        <Version>1.0-beta-1</Version>
         <!-- DisplayName: Name shown in the UI of the widget -->
         <DisplayName>CRISMA Pilot E Capture Widget</DisplayName>
         <!-- Author: Widget developer(s) -->
@@ -19,7 +19,7 @@
         <!-- Mail: Developer's email address -->
         <Mail>martin.scholl@cismet.de</Mail>
         <!-- Description: Full widget description to be shown in the catalogue -->
-        <Description>This widget implements the Pilot E capute views</Description>
+        <Description>This widget implements the Pilot E capture views</Description>
         <!-- Absolute or template-relative path to the image shown in the catalogue -->
         <ImageURI>images/preview.png</ImageURI>
         <!-- Absolute or template-relative path to the image to be used in smartphones -->
@@ -35,18 +35,6 @@
             type="text" 
             description="Toggle debug mode" 
             label="DEBUG toggle" default="true"/>
-<!--        <Preference 
-            name="CRISMA_DOMAIN" 
-            type="text" 
-            description="The CRISMA domain this widget lives in" 
-            label="CRISMA domain" 
-            default="CRISMA"/>
-        <Preference 
-            name="CRISMA_ICMM_API" 
-            type="text" 
-            description="The URL to the ICMM API instance" 
-            label="CRISMA ICMM API" 
-            default="http://crisma.cismet.de/pilotE/icmm_api"/>-->
     </Platform.Preferences>
 
     <!-- Platform.StateProperties element. It defines user preferences -->
@@ -103,5 +91,4 @@
 
     <!-- Platform.Rendering element. It specifies the default width and height of the widget -->
     <Platform.Rendering width="15" height="50"/>
-
 </Template>
