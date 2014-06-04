@@ -334,8 +334,7 @@ angular.module(
                                         }
                                     }
 
-                                    console.log(JSON.stringify($scope.exercise));
-//                                    $scope.exercise.$save();
+                                    $scope.exercise.$save();
 
                                     // save current state and create the dataslot without self and id
                                     angularTools.safeApply($scope, function () {
