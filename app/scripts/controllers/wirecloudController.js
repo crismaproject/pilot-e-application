@@ -98,30 +98,29 @@ angular.module(
 
             };
 
-            $scope.addPatient = function () {
-                var id, now, p;
+            $scope.model.createPatient = function (name, forename, correctTriage) {
+                var id, p;
 
                 id = $scope.model.getNextPatientId();
-                now = new Date().toISOString();
                 p = {
                     '$self': '/CRISMA.capturePatients/' + id,
                     'id': id,
-                    'name': '',
-                    'forename': '',
-                    'correctTriage': null,
-                    'located_timestamp': now,
-                    'treatment_timestamp': now,
-                    'transportation_timestamp': now,
+                    'name': name,
+                    'forename': forename,
+                    'correctTriage': correctTriage,
+                    'located_timestamp': null,
+                    'treatment_timestamp': null,
+                    'transportation_timestamp': null,
                     // virtual property
                     'ratedMeasuresCount': 0,
                     'preTriage': {
                         'classification': null,
-                        'timestamp': now,
+                        'timestamp': null,
                         'treatedBy': null
                     },
                     'triage': {
                         'classification': null,
-                        'timestamp': now,
+                        'timestamp': null,
                         'treatedBy': null
                     },
                     'careMeasures': [
@@ -155,6 +154,31 @@ angular.module(
                         }
                     ]
                 };
+
+                return p;
+            };
+
+            $scope.model.correctDate = function (dateIso, toCorrectIso) {
+                var date, toCorrect;
+
+                if (toCorrectIso) {
+                    date = new Date(dateIso);
+                    toCorrect = new Date(toCorrectIso);
+
+                    toCorrect.setDate(date.getDate());
+                    toCorrect.setMonth(date.getMonth());
+                    toCorrect.setFullYear(date.getFullYear());
+                } else {
+                    toCorrect = null;
+                }
+
+                return toCorrect;
+            };
+
+            $scope.addPatient = function () {
+                var p;
+
+                p = $scope.model.createPatient('', '', null);
                 angularTools.safeApply($scope, function () {
                     $scope.exercise.patients.push(p);
                     $scope.model.selectedPatient = p;
@@ -193,27 +217,25 @@ angular.module(
                         });
 
                         dialog.result.then(function () {
-                            var p;
-
                             mashupPlatform.wiring.pushEvent('getWorldstateName', $scope.wsName);
                             mashupPlatform.wiring.pushEvent('getWorldstateDesc', $scope.wsDesc);
 
-                            p = $.extend(true, [], $scope.exercise.patients);
                             ooi.getNextId($scope.apiurl, '/CRISMA.capturePatients').then(function (id) {
-                                var currP, i, pid, maxId, selP;
+                                var currP, i, newPatients, maxId, p, selP;
 
                                 maxId = id - 1;
                                 $scope.model.getNextPatientId = function () {
                                     return ++maxId;
                                 };
 
-                                for (i = 0; i < p.length; ++i) {
-                                    pid = $scope.model.getNextPatientId();
-                                    p[i].$self = '/CRISMA.capturePatients/' + pid;
-                                    p[i].id = pid;
+                                newPatients = [];
+                                for (i = 0; i < $scope.exercise.patients.length; ++i) {
+                                    p = $scope.exercise.patients[i];
+                                    newPatients.push($scope.model.createPatient(p.name, p.forename, p.correctTriage));
                                 }
 
-                                $scope.exercise.patients = p;
+                                $scope.exercise.incidentTime = $scope.incidentTime;
+                                $scope.exercise.patients = newPatients;
                                 $scope.exercise.alertsRequests = [];
                                 $scope.exercise.tacticalAreas = [];
 
@@ -273,6 +295,28 @@ angular.module(
                                         for (j = 0; j < pat.careMeasures.length; ++j) {
                                             pat.careMeasures[j].$self = '/CRISMA.careMeasures/' + ids[3]++;
                                         }
+
+                                        // set dates relative to incident time
+                                        pat.located_timestamp = $scope.model.correctDate(
+                                            $scope.exercise.incidentTime,
+                                            pat.located_timestamp
+                                        );
+                                        pat.transportation_timestamp = $scope.model.correctDate(
+                                            $scope.exercise.incidentTime,
+                                            pat.transportation_timestamp
+                                        );
+                                        pat.treatment_timestamp = $scope.model.correctDate(
+                                            $scope.exercise.incidentTime,
+                                            pat.treatment_timestamp
+                                        );
+                                        pat.preTriage.timestamp = $scope.model.correctDate(
+                                            $scope.exercise.incidentTime,
+                                            pat.preTriage.timestamp
+                                        );
+                                        pat.triage.timestamp = $scope.model.correctDate(
+                                            $scope.exercise.incidentTime,
+                                            pat.triage.timestamp
+                                        );
                                     }
 
                                     for (i = 0; i < $scope.exercise.tacticalAreas.length; ++i) {
@@ -287,7 +331,8 @@ angular.module(
                                         }
                                     }
 
-                                    $scope.exercise.$save();
+                                    console.log(JSON.stringify($scope.exercise));
+//                                    $scope.exercise.$save();
 
                                     // save current state and create the dataslot without self and id
                                     angularTools.safeApply($scope, function () {
