@@ -37,7 +37,7 @@
         <div ng-controller="eu.crismaproject.pilotE.controllers.WirecloudController">
             <button ng-click="editing=!editing">Editing toggle</button>
             <button ng-click="toggleWCEditing(editing)">WC Editing toggle</button>
-            <div class="ex-header"><h3>Exercise {{worldstate.name}}</h3></div>
+            <div class="ex-header"><h3>Exercise {{model.wsName}}</h3></div>
             <tabset>
                 <tab select="patientsVisible=true" deselect="patientsVisible=false">
                     <tab-heading>
