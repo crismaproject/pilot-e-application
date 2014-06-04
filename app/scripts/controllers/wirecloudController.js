@@ -375,7 +375,7 @@ angular.module(
                                     };
 
                                     if (DEBUG) {
-                                        console.log("created dataitem: " + JSON.stringify(dataitem));
+                                        console.log('created dataitem: ' + JSON.stringify(dataitem));
                                     }
 
                                     mashupPlatform.wiring.pushEvent('getDataitem', JSON.stringify(dataitem));

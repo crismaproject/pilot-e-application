@@ -106,8 +106,7 @@ angular.module(
                     }
                 );
             };
-            
-            
+
             getNextId = function (apiurl, classkey) {
                 var def, Resource, objects;
                 def = $q.defer();
@@ -146,7 +145,7 @@ angular.module(
             };
 
             getMaxCareMeasures = function (patient) {
-                if(patient && patient.correctTriage === 'T3') {
+                if (patient && patient.correctTriage === 'T3') {
                     return 6;
                 } else {
                     return 7;
@@ -175,13 +174,13 @@ angular.module(
             getAbbreviatedRequests = function (alertRequest) {
                 var i, s;
 
-                if (alertRequest
-                        && alertRequest.rescueMeans
-                        && alertRequest.rescueMeans.length > 0) {
+                if (alertRequest &&
+                        alertRequest.rescueMeans &&
+                        alertRequest.rescueMeans.length > 0) {
                     s = '';
                     for (i = 0; i < alertRequest.rescueMeans.length; ++i) {
-                        s += alertRequest.rescueMeans[i].type + ' x '
-                            + alertRequest.rescueMeans[i].quantity + ', ';
+                        s += alertRequest.rescueMeans[i].type + ' x ' +
+                            alertRequest.rescueMeans[i].quantity + ', ';
                     }
 
                     return s.substr(0, s.length - 2);

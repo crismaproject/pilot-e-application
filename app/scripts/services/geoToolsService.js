@@ -40,8 +40,8 @@ angular.module(
                 };
 
                 isLeft = function (P0, P1, P2) {
-                    return (P1.lng() - P0.lng()) * (P2.lat() - P0.lat())
-                        - (P2.lng() - P0.lng()) * (P1.lat() - P0.lat());
+                    return (P1.lng() - P0.lng()) * (P2.lat() - P0.lat()) -
+                        (P2.lng() - P0.lng()) * (P1.lat() - P0.lat());
                 };
 
                 //===================================================================
