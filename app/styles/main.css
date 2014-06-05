@@ -44,11 +44,24 @@ body {
     width: 84px !important;
 }
 
+.dateinput {
+    width: 120px !important;
+}
+
 .timefix {
     padding-bottom: 9px;
     padding-top: 9px;
     -webkit-padding-start: 58px;
     -webkit-padding-end: 58px;
+    -moz-margin-start: -26px;
+    -moz-margin-end: -26px;
+}
+
+.datefix {
+    padding-bottom: 9px;
+    padding-top: 9px;
+    -webkit-padding-start: 95px;
+    -webkit-padding-end: 95px;
     -moz-margin-start: -26px;
     -moz-margin-end: -26px;
 }
