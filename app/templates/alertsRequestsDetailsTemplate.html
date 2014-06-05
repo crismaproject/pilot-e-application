@@ -11,13 +11,13 @@
                         <form ng-show='editing' name="timepickerForm" class="form-inline timepicker" role="form">
                             <div class="form-group" ng-class="{'has-error': timepickerForm.time.$invalid}">
                                 <input 
-                                    class="form-control"
+                                    class="form-control timeinput"
                                     size="5"
                                     ng-model="selectedAlertRequest.time" 
                                     name="time"
                                     bs-timepicker 
                                     type="text">
-                                <span class='glyphicon glyphicon-time' style="position: absolute; padding: 9px 58px; pointer-events: none;"></span>
+                                <span class='glyphicon glyphicon-time input-icon timefix'></span>
                             </div>
                         </form>
                         <div style="height: 34px; display: table-cell; vertical-align: middle;" ng-show="!editing">
