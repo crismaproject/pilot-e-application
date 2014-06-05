@@ -35,8 +35,6 @@
         <![endif]-->
 
         <div ng-controller="eu.crismaproject.pilotE.controllers.WirecloudController">
-            <button ng-click="editing=!editing">Editing toggle</button>
-            <button ng-click="toggleWCEditing(editing)">WC Editing toggle</button>
             <div class="ex-header"><h3>Exercise {{model.wsName}}</h3></div>
             <tabset>
                 <tab select="patientsVisible=true" deselect="patientsVisible=false">
@@ -106,14 +104,14 @@
                             <div class='col-lg-8'>
                                 <alerts-requests-master-widget 
                                     alerts-requests="exercise.alertsRequests"
-                                    selected-alert-request="selectedAlertRequest"
+                                    selected-alert-request="model.selectedAlertRequest"
                                     editing="editing">
                                 </alerts-requests-master-widget>
                             </div>
                             <div class='col-lg-4'>
                                 <div class="margintop10"></div>
                                 <alerts-requests-details-widget 
-                                    selected-alert-request="selectedAlertRequest"
+                                    selected-alert-request="model.selectedAlertRequest"
                                     editing="editing">
                                 </alerts-requests-details-widget>
                             </div>
@@ -179,7 +177,7 @@
                     '$provide',
                     function ($provide) {
                         'use strict';
-                        
+
                         $provide.constant('DEBUG', MashupPlatform.prefs.get('DEBUG'));
                     }
                 ]

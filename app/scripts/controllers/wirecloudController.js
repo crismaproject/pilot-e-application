@@ -19,16 +19,11 @@ angular.module(
                 console.log('initialising wirecloud controller');
             }
 
-            $scope.toggleWCEditing = function () {
-                $scope.wcEditing = !$scope.wcEditing;
-                MashupPlatform.wiring.pushEvent('setEditing', $scope.wcEditing.toString());
-            };
-
             initScope = function () {
                 $scope.editing = false;
                 $scope.worldstate = null;
-                $scope.selectedAlertRequest = null;
                 $scope.model = {};
+                $scope.model.selectedAlertRequest = null;
                 $scope.exercise = null;
                 $scope.apiurl = null;
                 $scope.allTacticalAreas = [
@@ -195,7 +190,7 @@ angular.module(
                     'rescueMeans': []
                 };
                 $scope.exercise.alertsRequests.push(ar);
-                $scope.selectedAlertRequest = ar;
+                $scope.model.selectedAlertRequest = ar;
             };
 
             if (typeof MashupPlatform === 'undefined') {

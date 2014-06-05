@@ -34,3 +34,44 @@ body {
 .ex-header {
     margin-left: 10px;
 }
+
+.input-icon {
+    position: absolute;
+    pointer-events: none;
+}
+
+.timeinput {
+    width: 84px !important;
+}
+
+.dateinput {
+    width: 120px !important;
+}
+
+.timefix {
+    padding-bottom: 9px;
+    padding-top: 9px;
+    -webkit-padding-start: 58px;
+    -webkit-padding-end: 58px;
+    -moz-margin-start: -26px;
+    -moz-margin-end: -26px;
+}
+
+.datefix {
+    padding-bottom: 9px;
+    padding-top: 9px;
+    -webkit-padding-start: 95px;
+    -webkit-padding-end: 95px;
+    -moz-margin-start: -26px;
+    -moz-margin-end: -26px;
+}
+
+.latlonfix {
+    padding-bottom: 9px;
+    padding-top: 9px;
+    right: 0px;
+    -webkit-padding-start: 40px;
+    -webkit-padding-end: 40px;
+    -moz-padding-start: 50px;
+    -moz-padding-end: 50px;
+}
