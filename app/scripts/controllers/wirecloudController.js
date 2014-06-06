@@ -464,6 +464,7 @@ angular.module(
                     } else {
                         $scope.worldstate = JSON.parse(ws);
                         $scope.processWorldstate();
+                        mashupPlatform.wiring.pushEvent('isEditing', 'false');
                     }
                 });
             }
