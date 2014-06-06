@@ -21,8 +21,8 @@ This is not the implementation of whole pilot e application anymore but only of 
                          value 'false' is issued, otherwise the worldstate will remain
                          the old one and an 'isEditing' event with value 'false' is
                          issued. In case that the widget is not in editing mode and a
-			 new worldstate is set and 'isEditing' event with the value
-			 'false' is issued, too."
+                         new worldstate is set and 'isEditing' event with the value
+                         'false' is issued, too."
             friendcode="worldstate_json_expanded"/>
         <InputEndpoint
             name="setEditing"
