@@ -253,6 +253,7 @@ angular.module(
 
                                 angularTools.safeApply($scope, function () {
                                     $scope.model.selectedPatient = selP;
+                                    $scope.model.selectedAlertRequest = null;
                                     $scope.editing = true;
                                 });
                             });
@@ -458,6 +459,7 @@ angular.module(
                     } else {
                         $scope.worldstate = JSON.parse(ws);
                         $scope.processWorldstate();
+                        mashupPlatform.wiring.pushEvent('isEditing', 'false');
                     }
                 });
             }
