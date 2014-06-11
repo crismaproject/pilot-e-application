@@ -39,11 +39,11 @@
             <button ng-click="toggleWCEditing(model.editing)">WC Editing toggle</button>
             <div class="ex-header"><h3>Exercise {{model.exerciseName}}</h3></div>
             <tabset>
-                <tab select="patientsVisible=true" deselect="patientsVisible=false">
+                <tab select="model.patientsVisible=true" deselect="model.patientsVisible=false">
                     <tab-heading>
                         <span>Patients</span>
-                        <span ng-show='patientsVisible && model.editing'>&nbsp;</span>
-                        <button ng-show='patientsVisible && model.editing'
+                        <span ng-show='model.patientsVisible && model.editing'>&nbsp;</span>
+                        <button ng-show='model.patientsVisible && model.editing'
                                 type="button"
                                 class="btn btn-success btn-xs" 
                                 ng-click='addPatient()'>
@@ -65,7 +65,7 @@
                         </div>
                     </div>
                 </tab>
-                <tab heading='Site' select="siteVisible=true" deselect="siteVisible=false">
+                <tab heading='Site' select="model.siteVisible=true" deselect="model.siteVisible=false">
                     <div class="container-fluid">
                         <div class="row">
                             <div class='col-lg-8'>
@@ -73,7 +73,7 @@
                                     location="exercise.location"
                                     location-title="Exercise location"
                                     tactical-areas="exercise.tacticalAreas"
-                                    visible="siteVisible"
+                                    visible="model.siteVisible"
                                     editing="model.editing"
                                     selected-coordinate="selectedCoordinate">
                                 </site-map-widget>
@@ -90,11 +90,11 @@
                         </div>
                     </div>
                 </tab>
-                <tab select="alertsRequestsVisible=true" deselect="alertsRequestsVisible=false">
+                <tab select="model.alertsRequestsVisible=true" deselect="model.alertsRequestsVisible=false">
                     <tab-heading>
                         <span>Alerts & Requests</span>
-                        <span ng-show='alertsRequestsVisible && model.editing'>&nbsp;</span>
-                        <button ng-show='alertsRequestsVisible && model.editing'
+                        <span ng-show='model.alertsRequestsVisible && model.editing'>&nbsp;</span>
+                        <button ng-show='model.alertsRequestsVisible && model.editing'
                                 type="button"
                                 class="btn btn-success btn-xs" 
                                 ng-click='addAlertRequest()'>
