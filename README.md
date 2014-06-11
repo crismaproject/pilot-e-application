@@ -31,9 +31,11 @@ This is not the implementation of whole pilot e application anymore but only of 
             description="Toggle editing mode. If the provided value is 'true' the
                          widget will display a modal dialog asking for initial data,
                          such as exercise name (a.k.a. worldstate name), exercise 
-                         description (a.k.a. worldstate description) and incident time.
-                         If the user provides appropriate values and accepts his input
-                         (answer 'OK') the widget will switch to editing mode. If the
+                         description (a.k.a. worldstate description), incident time
+                         and reference time. If the user provides appropriate values
+                         and accepts his input (answer 'OK') the widget will switch to
+                         editing mode and will also issue a 'getExerciseMetadata' event.
+                         It contains the four afore mentioned properties as JSON. If the
                          user cancels entry of exercise data the widget does not enter
                          editing mode and issues an 'isEditing' event with the value
                          'false'.
@@ -63,18 +65,11 @@ This is not the implementation of whole pilot e application anymore but only of 
             description="Event that is issued on various occasions, see input endpoints"
             friendcode="boolean"/>
         <OutputEndpoint
-            name="getWorldstateName"
+            name="getExerciseMetadata"
             type="text"
-            label="Get the new name of the worldstate"
+            label="Get the metadata of the new exercise"
             description="Event that is issued if the editing mode is actually entered 
                          (setEditing=true), see setEditing input endpoint"
-            friendcode="string"/>
-        <OutputEndpoint
-            name="getWorldstateDesc"
-            type="text"
-            label="Get the new description of the worldstate"
-            description="Event that is issued if the editing mode is actually entered 
-                         (setEditing=true), see setEditing input endpoint"
-            friendcode="string"/>
+            friendcode="exercise_metadata_json"/>
     </Platform.Wiring>
 ```
