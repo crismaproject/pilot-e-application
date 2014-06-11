@@ -31,7 +31,7 @@ angular.module(
                 $scope.model.selectedAlertRequest = null;
                 $scope.exercise = null;
                 $scope.apiurl = null;
-                $scope.allTacticalAreas = [
+                $scope.model.allTacticalAreas = [
                     {
                         'name': 'Area of danger',
                         'icon': 'img/area_of_danger_16.png'
