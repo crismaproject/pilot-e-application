@@ -11,7 +11,8 @@
         <Name>pilot-e-capture-widget</Name>
         <!-- Version: Current widget version number-->
         <!-- if 4th value is set it is a beta, wc does not like anything but numbers and dots -->
-        <Version>1.0.0.3</Version>
+        <!-- we include a build # to prevent caching by wirecloud -->
+        <Version>1.0.0.4</Version>
         <!-- DisplayName: Name shown in the UI of the widget -->
         <DisplayName>CRISMA Pilot E Capture Widget</DisplayName>
         <!-- Author: Widget developer(s) -->
@@ -68,17 +69,11 @@
             description="See https://github.com/crismaproject/pilot-e-application"
             friendcode="boolean"/>
         <OutputEndpoint
-            name="getWorldstateName"
+            name="getExerciseMetadata"
             type="text"
-            label="Get the new name of the worldstate"
+            label="Get the metadata of the new exercise"
             description="See https://github.com/crismaproject/pilot-e-application"
-            friendcode="string"/>
-        <OutputEndpoint
-            name="getWorldstateDesc"
-            type="text"
-            label="Get the new description of the worldstate"
-            description="See https://github.com/crismaproject/pilot-e-application"
-            friendcode="string"/>
+            friendcode="exercise_metadata_json"/>
     </Platform.Wiring>
 
     <!-- Platform.Link element. It binds the template with the actual widget's source code. -->

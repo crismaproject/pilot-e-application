@@ -67,7 +67,7 @@ angular.module(
                     console.log('parse dataitem and fetch patients');
                 }
                 
-                $scope.model.wsName = $scope.worldstate.name;
+                $scope.model.exerciseName = $scope.worldstate.name;
                 items = $scope.worldstate.worldstatedata;
                 if (items) {
                     for (i = 0; i < items.length && !item; ++i) {
@@ -205,8 +205,8 @@ angular.module(
                     if (nuu && nuu.toLowerCase() === 'true' && $scope.worldstate !== null) {
                         $scope.incidentTime = new Date().toISOString();
                         $scope.referenceTime = new Date().toISOString();
-                        $scope.model.wsName = $scope.worldstate.name;
-                        $scope.wsDesc = $scope.worldstate.description;
+                        $scope.model.exerciseName = $scope.worldstate.name;
+                        $scope.exerciseDesc = $scope.worldstate.description;
 
                         dialog = $modal.open({
                             templateUrl: 'templates/newExerciseModalTemplate.html',
@@ -214,8 +214,15 @@ angular.module(
                         });
 
                         dialog.result.then(function () {
-                            mashupPlatform.wiring.pushEvent('getWorldstateName', $scope.model.wsName);
-                            mashupPlatform.wiring.pushEvent('getWorldstateDesc', $scope.wsDesc);
+                            var exerciseMetadata;
+                            
+                            exerciseMetadata = {
+                                'name': $scope.model.exerciseName,
+                                'description': $scope.exerciseDesc,
+                                'incidentTime': $scope.incidentTime,
+                                'referenceTime': $scope.referenceTime
+                            };
+                            mashupPlatform.wiring.pushEvent('getExerciseMetadata', JSON.stringify(exerciseMetadata));
 
                             ooi.getNextId($scope.apiurl, '/CRISMA.capturePatients').then(function (id) {
                                 var currP, i, newPatients, maxId, p, selP;
@@ -264,7 +271,7 @@ angular.module(
                         if ($scope.editing) {
                             // modal dialog: veto finish editing
                             dialog = $modal.open({
-                                template: '<div class="modal-header"><h3>Finish Editing</h3></div><div class="modal-body">Finish editing of exercise \'' + $scope.model.wsName + '\'?</div><div class="modal-footer"><button class="btn btn-primary" ng-click="ok()">OK</button><button class="btn btn-warning" ng-click="cancel()">Cancel</button></div>',
+                                template: '<div class="modal-header"><h3>Finish Editing</h3></div><div class="modal-body">Finish editing of exercise \'' + $scope.model.exerciseName + '\'?</div><div class="modal-footer"><button class="btn btn-primary" ng-click="ok()">OK</button><button class="btn btn-warning" ng-click="cancel()">Cancel</button></div>',
                                 scope: $scope
                             });
 
