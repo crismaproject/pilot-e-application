@@ -35,15 +35,15 @@
         <![endif]-->
 
         <div ng-controller="eu.crismaproject.pilotE.controllers.WirecloudController">
-            <button ng-click="editing=!editing">Editing toggle</button>
-            <button ng-click="toggleWCEditing(editing)">WC Editing toggle</button>
+            <button ng-click="model.editing=!model.editing">Editing toggle</button>
+            <button ng-click="toggleWCEditing(model.editing)">WC Editing toggle</button>
             <div class="ex-header"><h3>Exercise {{model.exerciseName}}</h3></div>
             <tabset>
-                <tab select="patientsVisible=true" deselect="patientsVisible=false">
+                <tab select="model.patientsVisible=true" deselect="model.patientsVisible=false">
                     <tab-heading>
                         <span>Patients</span>
-                        <span ng-show='patientsVisible && editing'>&nbsp;</span>
-                        <button ng-show='patientsVisible && editing'
+                        <span ng-show='model.patientsVisible && model.editing'>&nbsp;</span>
+                        <button ng-show='model.patientsVisible && model.editing'
                                 type="button"
                                 class="btn btn-success btn-xs" 
                                 ng-click='addPatient()'>
@@ -56,16 +56,16 @@
                             <div class='col-lg-8'>
                                 <master-patient-widget patients="exercise.patients"
                                                        selected-patient="model.selectedPatient"
-                                                       editing="editing">
+                                                       editing="model.editing">
                                 </master-patient-widget>
                             </div>
                             <div class='col-lg-4'>
-                                <detail-patient-widget patient="model.selectedPatient" editing="editing"></detail-patient-widget>
+                                <detail-patient-widget patient="model.selectedPatient" editing="model.editing"></detail-patient-widget>
                             </div>
                         </div>
                     </div>
                 </tab>
-                <tab heading='Site' select="siteVisible=true" deselect="siteVisible=false">
+                <tab heading='Site' select="model.siteVisible=true" deselect="model.siteVisible=false">
                     <div class="container-fluid">
                         <div class="row">
                             <div class='col-lg-8'>
@@ -73,28 +73,28 @@
                                     location="exercise.location"
                                     location-title="Exercise location"
                                     tactical-areas="exercise.tacticalAreas"
-                                    visible="siteVisible"
-                                    editing="editing"
-                                    selected-coordinate="selectedCoordinate">
+                                    visible="model.siteVisible"
+                                    editing="model.editing"
+                                    selected-coordinate="model.selectedCoordinate">
                                 </site-map-widget>
                             </div>
                             <div class='col-lg-4'>
                                 <div class="margintop10"></div>
                                 <site-detail-widget 
                                     areas="exercise.tacticalAreas"
-                                    all-areas="allTacticalAreas"
-                                    editing="editing"
-                                    selected-coordinate="selectedCoordinate">
+                                    all-areas="model.allTacticalAreas"
+                                    editing="model.editing"
+                                    selected-coordinate="model.selectedCoordinate">
                                 </site-detail-widget>
                             </div>
                         </div>
                     </div>
                 </tab>
-                <tab select="alertsRequestsVisible=true" deselect="alertsRequestsVisible=false">
+                <tab select="model.alertsRequestsVisible=true" deselect="model.alertsRequestsVisible=false">
                     <tab-heading>
                         <span>Alerts & Requests</span>
-                        <span ng-show='alertsRequestsVisible && editing'>&nbsp;</span>
-                        <button ng-show='alertsRequestsVisible && editing'
+                        <span ng-show='model.alertsRequestsVisible && model.editing'>&nbsp;</span>
+                        <button ng-show='model.alertsRequestsVisible && model.editing'
                                 type="button"
                                 class="btn btn-success btn-xs" 
                                 ng-click='addAlertRequest()'>
@@ -107,14 +107,14 @@
                                 <alerts-requests-master-widget 
                                     alerts-requests="exercise.alertsRequests"
                                     selected-alert-request="model.selectedAlertRequest"
-                                    editing="editing">
+                                    editing="model.editing">
                                 </alerts-requests-master-widget>
                             </div>
                             <div class='col-lg-4'>
                                 <div class="margintop10"></div>
                                 <alerts-requests-details-widget 
                                     selected-alert-request="model.selectedAlertRequest"
-                                    editing="editing">
+                                    editing="model.editing">
                                 </alerts-requests-details-widget>
                             </div>
                         </div>

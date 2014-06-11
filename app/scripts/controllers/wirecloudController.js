@@ -25,13 +25,13 @@ angular.module(
             };
 
             initScope = function () {
-                $scope.editing = false;
                 $scope.worldstate = null;
                 $scope.model = {};
+                $scope.model.editing = false;
                 $scope.model.selectedAlertRequest = null;
                 $scope.exercise = null;
                 $scope.apiurl = null;
-                $scope.allTacticalAreas = [
+                $scope.model.allTacticalAreas = [
                     {
                         'name': 'Area of danger',
                         'icon': 'img/area_of_danger_16.png'
@@ -208,10 +208,10 @@ angular.module(
 
                 mashupPlatform.wiring.registerCallback('setEditing', function (nuu) {
                     if (nuu && nuu.toLowerCase() === 'true' && $scope.worldstate !== null) {
-                        $scope.incidentTime = new Date().toISOString();
-                        $scope.referenceTime = new Date().toISOString();
+                        $scope.model.incidentTime = new Date().toISOString();
+                        $scope.model.referenceTime = new Date().toISOString();
                         $scope.model.exerciseName = $scope.worldstate.name;
-                        $scope.exerciseDesc = $scope.worldstate.description;
+                        $scope.model.exerciseDesc = $scope.worldstate.description;
 
                         dialog = $modal.open({
                             templateUrl: 'templates/newExerciseModalTemplate.html',
@@ -223,9 +223,9 @@ angular.module(
                             
                             exerciseMetadata = {
                                 'name': $scope.model.exerciseName,
-                                'description': $scope.exerciseDesc,
-                                'incidentTime': $scope.incidentTime,
-                                'referenceTime': $scope.referenceTime
+                                'description': $scope.model.exerciseDesc,
+                                'incidentTime': $scope.model.incidentTime,
+                                'referenceTime': $scope.model.referenceTime
                             };
                             mashupPlatform.wiring.pushEvent('getExerciseMetadata', JSON.stringify(exerciseMetadata));
 
@@ -243,8 +243,8 @@ angular.module(
                                     newPatients.push($scope.model.createPatient(p.name, p.forename, p.correctTriage));
                                 }
 
-                                $scope.exercise.incidentTime = $scope.incidentTime;
-                                $scope.exercise.referenceTime = $scope.referenceTime;
+                                $scope.exercise.incidentTime = $scope.model.incidentTime;
+                                $scope.exercise.referenceTime = $scope.model.referenceTime;
                                 $scope.exercise.patients = newPatients;
                                 $scope.exercise.alertsRequests = [];
                                 $scope.exercise.tacticalAreas = [];
@@ -266,14 +266,14 @@ angular.module(
                                 angularTools.safeApply($scope, function () {
                                     $scope.model.selectedPatient = selP;
                                     $scope.model.selectedAlertRequest = null;
-                                    $scope.editing = true;
+                                    $scope.model.editing = true;
                                 });
                             });
                         }, function () {
                             mashupPlatform.wiring.pushEvent('isEditing', 'false');
                         });
                     } else {
-                        if ($scope.editing) {
+                        if ($scope.model.editing) {
                             // modal dialog: veto finish editing
                             dialog = $modal.open({
                                 template: '<div class="modal-header"><h3>Finish Editing</h3></div><div class="modal-body">Finish editing of exercise \'' + $scope.model.exerciseName + '\'?</div><div class="modal-footer"><button class="btn btn-primary" ng-click="ok()">OK</button><button class="btn btn-warning" ng-click="cancel()">Cancel</button></div>',
@@ -346,7 +346,7 @@ angular.module(
 
                                     // save current state and create the dataslot without self and id
                                     angularTools.safeApply($scope, function () {
-                                        $scope.editing = false;
+                                        $scope.model.editing = false;
                                     });
 
                                     createSpatialCoverage = function (exercise) {
@@ -451,7 +451,7 @@ angular.module(
                         dialog.dismiss();
                     };
 
-                    if ($scope.editing) {
+                    if ($scope.model.editing) {
                         // modal dialog: discard changes
                         dialog = $modal.open({
                             template: '<div class="modal-header"><h3>Cancel Editing</h3></div><div class="modal-body">Discard current changes?</div><div class="modal-footer"><button class="btn btn-primary" ng-click="ok()">OK</button><button class="btn btn-warning" ng-click="cancel()">Cancel</button></div>',
@@ -460,7 +460,7 @@ angular.module(
 
                         dialog.result.then(function () {
                             angularTools.safeApply($scope, function () {
-                                $scope.editing = false;
+                                $scope.model.editing = false;
                             });
                             $scope.worldstate = JSON.parse(ws);
                             $scope.processWorldstate();

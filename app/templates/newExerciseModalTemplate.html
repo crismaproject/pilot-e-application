@@ -16,7 +16,7 @@
                 <span style="height: 34px; display: table-cell; vertical-align: middle;">Exercise description:</span>
             </div>
             <div class="col-lg-9">
-                <textarea class="form-control" rows="8" ng-model='exerciseDesc'></textarea>
+                <textarea class="form-control" rows="8" ng-model='model.exerciseDesc'></textarea>
             </div>
         </div>
         <div class="row margintop10">
@@ -29,7 +29,7 @@
                         <input 
                             class="form-control dateinput"
                             size="11"
-                            ng-model="incidentTime" 
+                            ng-model="model.incidentTime" 
                             placeholder="Date"
                             name="date"
                             bs-datepicker 
@@ -41,7 +41,7 @@
                             ng-disabled="timepickerIncidentForm.date.$invalid"
                             class="form-control timeinput"
                             size="5"
-                            ng-model="incidentTime"
+                            ng-model="model.incidentTime"
                             placeholder="Time"
                             name="time"
                             bs-timepicker 
@@ -62,7 +62,7 @@
                             ng-disabled="timepickerReferenceForm.date.$invalid"
                             class="form-control timeinput"
                             size="5"
-                            ng-model="referenceTime"
+                            ng-model="model.referenceTime"
                             placeholder="Time"
                             name="time"
                             bs-timepicker 
