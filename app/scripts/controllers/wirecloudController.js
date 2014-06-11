@@ -208,10 +208,10 @@ angular.module(
 
                 mashupPlatform.wiring.registerCallback('setEditing', function (nuu) {
                     if (nuu && nuu.toLowerCase() === 'true' && $scope.worldstate !== null) {
-                        $scope.incidentTime = new Date().toISOString();
-                        $scope.referenceTime = new Date().toISOString();
+                        $scope.model.incidentTime = new Date().toISOString();
+                        $scope.model.referenceTime = new Date().toISOString();
                         $scope.model.exerciseName = $scope.worldstate.name;
-                        $scope.exerciseDesc = $scope.worldstate.description;
+                        $scope.model.exerciseDesc = $scope.worldstate.description;
 
                         dialog = $modal.open({
                             templateUrl: 'templates/newExerciseModalTemplate.html',
@@ -223,9 +223,9 @@ angular.module(
                             
                             exerciseMetadata = {
                                 'name': $scope.model.exerciseName,
-                                'description': $scope.exerciseDesc,
-                                'incidentTime': $scope.incidentTime,
-                                'referenceTime': $scope.referenceTime
+                                'description': $scope.model.exerciseDesc,
+                                'incidentTime': $scope.model.incidentTime,
+                                'referenceTime': $scope.model.referenceTime
                             };
                             mashupPlatform.wiring.pushEvent('getExerciseMetadata', JSON.stringify(exerciseMetadata));
 
@@ -243,8 +243,8 @@ angular.module(
                                     newPatients.push($scope.model.createPatient(p.name, p.forename, p.correctTriage));
                                 }
 
-                                $scope.exercise.incidentTime = $scope.incidentTime;
-                                $scope.exercise.referenceTime = $scope.referenceTime;
+                                $scope.exercise.incidentTime = $scope.model.incidentTime;
+                                $scope.exercise.referenceTime = $scope.model.referenceTime;
                                 $scope.exercise.patients = newPatients;
                                 $scope.exercise.alertsRequests = [];
                                 $scope.exercise.tacticalAreas = [];
