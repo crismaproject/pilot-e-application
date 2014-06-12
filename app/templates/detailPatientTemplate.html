@@ -35,11 +35,6 @@
     </div>
     <div class="well well-sm sm-well">
         <table>
-            <thead>
-                <tr>
-                    <th colspan='2' class="text-left">Boundary times</th>
-                </tr>
-            </thead>
             <tbody>
                 <tr class="defaultinsets">
                     <td  class="col1 defaultinsets">Located:</td>
@@ -58,27 +53,6 @@
                                 </div>
                             </form>
                             <span ng-show="!editing" >{{patient.located_timestamp | date:'HH:mm' }}</span>
-                            <span ng-show="!editing" class='glyphicon glyphicon-time' style="margin-left: 3px;"></span>
-                        </div>
-                    </td>
-                </tr>
-                <tr>
-                    <td class="col1 defaultinsets">Evacuated:</td>
-                    <td class="col2 defaultinsets">
-                        <div style="position: relative">
-                            <form ng-show="editing" name="timepickerForm6" class="form-inline timepicker" role="form">
-                                <div class="form-group" ng-class="{'has-error': timepickerForm6.time.$invalid}">
-                                    <input 
-                                        class="form-control timeinput"
-                                        size="5"
-                                        ng-model="patient.transportation_timestamp" 
-                                        name="time"
-                                        bs-timepicker 
-                                        type="text">
-                                    <span class='glyphicon glyphicon-time' style="position: absolute; padding: 9px; margin-left: -37px; pointer-events: none;"></span>
-                                </div>
-                            </form>
-                            <span ng-show="!editing" >{{patient.transportation_timestamp| date:'HH:mm' }}</span>
                             <span ng-show="!editing" class='glyphicon glyphicon-time' style="margin-left: 3px;"></span>
                         </div>
                     </td>
@@ -186,7 +160,7 @@
             </tbody>
         </table>
     </div>
-    <div class="well well-sm">
+    <div class="well well-sm sm-well">
         <table>
             <thead>
                 <tr>
@@ -231,6 +205,33 @@
                     <td class="col1 defaultinsets">{{cm.measure}}:</td>
                     <td class="col2 defaultinsets">
                         <input ng-disabled="!editing" class='checkbox' type="checkbox" ng-model="cm.value" style="margin-left: 60px">
+                    </td>
+                </tr>
+            </tbody>
+        </table>
+    </div>
+    <div class="well well-sm sm-well">
+        <table>
+            <tbody>
+                <tr>
+                    <td class="col1 defaultinsets">Evacuated:</td>
+                    <td class="col2 defaultinsets">
+                        <div style="position: relative">
+                            <form ng-show="editing" name="timepickerForm6" class="form-inline timepicker" role="form">
+                                <div class="form-group" ng-class="{'has-error': timepickerForm6.time.$invalid}">
+                                    <input 
+                                        class="form-control timeinput"
+                                        size="5"
+                                        ng-model="patient.transportation_timestamp" 
+                                        name="time"
+                                        bs-timepicker 
+                                        type="text">
+                                    <span class='glyphicon glyphicon-time' style="position: absolute; padding: 9px; margin-left: -37px; pointer-events: none;"></span>
+                                </div>
+                            </form>
+                            <span ng-show="!editing" >{{patient.transportation_timestamp| date:'HH:mm' }}</span>
+                            <span ng-show="!editing" class='glyphicon glyphicon-time' style="margin-left: 3px;"></span>
+                        </div>
                     </td>
                 </tr>
             </tbody>
