@@ -29,7 +29,7 @@ angular.module(
                 $scope.model = {};
                 $scope.model.editing = false;
                 $scope.model.selectedAlertRequest = null;
-                $scope.exercise = null;
+                $scope.model.exercise = null;
                 $scope.apiurl = null;
                 $scope.model.allTacticalAreas = [
                     {
@@ -71,7 +71,7 @@ angular.module(
                 if (DEBUG) {
                     console.log('parse dataitem and fetch patients');
                 }
-                
+
                 $scope.model.exerciseName = $scope.worldstate.name;
                 items = $scope.worldstate.worldstatedata;
                 if (items) {
@@ -91,12 +91,11 @@ angular.module(
                     dai = item.datadescriptor.defaultaccessinfo;
                     res = ooi.exercises(dai);
                     $scope.apiurl = dai.substr(0, dai.indexOf('icmm_api') + 8);
-                    $scope.exercise = res.get({id: item.actualaccessinfo});
+                    $scope.model.exercise = res.get({id: item.actualaccessinfo});
                 } else {
                     initScope();
                     throw 'the worldstate has to have a proper exercise_data dataitem';
                 }
-
             };
 
             $scope.model.createPatient = function (name, forename, correctTriage) {
@@ -181,7 +180,7 @@ angular.module(
 
                 p = $scope.model.createPatient('', '', null);
                 angularTools.safeApply($scope, function () {
-                    $scope.exercise.patients.push(p);
+                    $scope.model.exercise.patients.push(p);
                     $scope.model.selectedPatient = p;
                 });
             };
@@ -194,7 +193,7 @@ angular.module(
                     'alert': '',
                     'rescueMeans': []
                 };
-                $scope.exercise.alertsRequests.push(ar);
+                $scope.model.exercise.alertsRequests.push(ar);
                 $scope.model.selectedAlertRequest = ar;
             };
 
@@ -220,7 +219,7 @@ angular.module(
 
                         dialog.result.then(function () {
                             var exerciseMetadata;
-                            
+
                             exerciseMetadata = {
                                 'name': $scope.model.exerciseName,
                                 'description': $scope.model.exerciseDesc,
@@ -238,23 +237,23 @@ angular.module(
                                 };
 
                                 newPatients = [];
-                                for (i = 0; i < $scope.exercise.patients.length; ++i) {
-                                    p = $scope.exercise.patients[i];
+                                for (i = 0; i < $scope.model.exercise.patients.length; ++i) {
+                                    p = $scope.model.exercise.patients[i];
                                     newPatients.push($scope.model.createPatient(p.name, p.forename, p.correctTriage));
                                 }
 
-                                $scope.exercise.incidentTime = $scope.model.incidentTime;
-                                $scope.exercise.referenceTime = $scope.model.referenceTime;
-                                $scope.exercise.patients = newPatients;
-                                $scope.exercise.alertsRequests = [];
-                                $scope.exercise.tacticalAreas = [];
+                                $scope.model.exercise.incidentTime = $scope.model.incidentTime;
+                                $scope.model.exercise.referenceTime = $scope.model.referenceTime;
+                                $scope.model.exercise.patients = newPatients;
+                                $scope.model.exercise.alertsRequests = [];
+                                $scope.model.exercise.tacticalAreas = [];
 
                                 // preserve selection
                                 selP = null;
                                 if ($scope.model.selectedPatient) {
                                     selP = $scope.model.selectedPatient;
-                                    for (i = 0; i < $scope.exercise.patients.length; ++i) {
-                                        currP = $scope.exercise.patients[i];
+                                    for (i = 0; i < $scope.model.exercise.patients.length; ++i) {
+                                        currP = $scope.model.exercise.patients[i];
                                         if (currP.name === selP.name && currP.forename === selP.forename) {
                                             selP = currP;
 
@@ -296,11 +295,11 @@ angular.module(
                                 ).then(function (ids) {
                                     var ar, createSpatialCoverage, dataitem, getMaxTimestamp, i, j, pat;
 
-                                    $scope.exercise.$self = '/CRISMA.exercises/' + ids[0];
-                                    $scope.exercise.id = ids[0];
+                                    $scope.model.exercise.$self = '/CRISMA.exercises/' + ids[0];
+                                    $scope.model.exercise.id = ids[0];
 
-                                    for (i = 0; i < $scope.exercise.patients.length; ++i) {
-                                        pat = $scope.exercise.patients[i];
+                                    for (i = 0; i < $scope.model.exercise.patients.length; ++i) {
+                                        pat = $scope.model.exercise.patients[i];
                                         pat.preTriage.$self = '/CRISMA.preTriages/' + ids[1]++;
                                         pat.triage.$self = '/CRISMA.triages/' + ids[2]++;
                                         for (j = 0; j < pat.careMeasures.length; ++j) {
@@ -309,40 +308,41 @@ angular.module(
 
                                         // set dates relative to incident time
                                         pat.located_timestamp = $scope.model.correctDate(
-                                            $scope.exercise.incidentTime,
+                                            $scope.model.exercise.incidentTime,
                                             pat.located_timestamp
                                         );
                                         pat.transportation_timestamp = $scope.model.correctDate(
-                                            $scope.exercise.incidentTime,
+                                            $scope.model.exercise.incidentTime,
                                             pat.transportation_timestamp
                                         );
                                         pat.treatment_timestamp = $scope.model.correctDate(
-                                            $scope.exercise.incidentTime,
+                                            $scope.model.exercise.incidentTime,
                                             pat.treatment_timestamp
                                         );
                                         pat.preTriage.timestamp = $scope.model.correctDate(
-                                            $scope.exercise.incidentTime,
+                                            $scope.model.exercise.incidentTime,
                                             pat.preTriage.timestamp
                                         );
                                         pat.triage.timestamp = $scope.model.correctDate(
-                                            $scope.exercise.incidentTime,
+                                            $scope.model.exercise.incidentTime,
                                             pat.triage.timestamp
                                         );
                                     }
 
-                                    for (i = 0; i < $scope.exercise.tacticalAreas.length; ++i) {
-                                        $scope.exercise.tacticalAreas[i].$self = '/CRISMA.tacticalAreas/' + ids[4]++;
+                                    for (i = 0; i < $scope.model.exercise.tacticalAreas.length; ++i) {
+                                        $scope.model.exercise.tacticalAreas[i].$self =
+                                            '/CRISMA.tacticalAreas/' + ids[4]++;
                                     }
 
-                                    for (i = 0; i < $scope.exercise.alertsRequests.length; ++i) {
-                                        ar = $scope.exercise.alertsRequests[i];
+                                    for (i = 0; i < $scope.model.exercise.alertsRequests.length; ++i) {
+                                        ar = $scope.model.exercise.alertsRequests[i];
                                         ar.$self = '/CRISMA.alertsRequests/' + ids[5]++;
                                         for (j = 0; j < ar.rescueMeans.length; ++j) {
                                             ar.rescueMeans[j].$self = '/CRISMA.rescueMeans/' + ids[6]++;
                                         }
                                     }
 
-                                    $scope.exercise.$save();
+                                    $scope.model.exercise.$save();
 
                                     // save current state and create the dataslot without self and id
                                     angularTools.safeApply($scope, function () {
@@ -416,14 +416,14 @@ angular.module(
                                         'name': 'Exercise Data',
                                         'description': 'Data relevant for the exercise',
                                         'lastmodified': new Date().toISOString(),
-                                        'temporalcoveragefrom': $scope.exercise.incidentTime,
-                                        'temporalcoverageto': getMaxTimestamp($scope.exercise),
-                                        'spatialcoverage': createSpatialCoverage($scope.exercise),
+                                        'temporalcoveragefrom': $scope.model.exercise.incidentTime,
+                                        'temporalcoverageto': getMaxTimestamp($scope.model.exercise),
+                                        'spatialcoverage': createSpatialCoverage($scope.model.exercise),
                                         'datadescriptor': {
                                             '$ref': '/CRISMA.datadescriptors/2'
                                         },
                                         'actualaccessinfocontenttype': 'text/plain',
-                                        'actualaccessinfo': $scope.exercise.id,
+                                        'actualaccessinfo': $scope.model.exercise.id,
                                         'categories': [{
                                             '$ref': '/CRISMA.categories/5'
                                         }]

@@ -54,7 +54,7 @@
                     <div class="container-fluid">
                         <div class="row">
                             <div class='col-lg-8'>
-                                <master-patient-widget patients="exercise.patients"
+                                <master-patient-widget patients="model.exercise.patients"
                                                        selected-patient="model.selectedPatient"
                                                        editing="model.editing">
                                 </master-patient-widget>
@@ -70,9 +70,9 @@
                         <div class="row">
                             <div class='col-lg-8'>
                                 <site-map-widget 
-                                    location="exercise.location"
+                                    location="model.exercise.location"
                                     location-title="Exercise location"
-                                    tactical-areas="exercise.tacticalAreas"
+                                    tactical-areas="model.exercise.tacticalAreas"
                                     visible="model.siteVisible"
                                     editing="model.editing"
                                     selected-coordinate="model.selectedCoordinate">
@@ -81,7 +81,7 @@
                             <div class='col-lg-4'>
                                 <div class="margintop10"></div>
                                 <site-detail-widget 
-                                    areas="exercise.tacticalAreas"
+                                    areas="model.exercise.tacticalAreas"
                                     all-areas="model.allTacticalAreas"
                                     editing="model.editing"
                                     selected-coordinate="model.selectedCoordinate">
@@ -105,7 +105,7 @@
                         <div class="row">
                             <div class='col-lg-8'>
                                 <alerts-requests-master-widget 
-                                    alerts-requests="exercise.alertsRequests"
+                                    alerts-requests="model.exercise.alertsRequests"
                                     selected-alert-request="model.selectedAlertRequest"
                                     editing="model.editing">
                                 </alerts-requests-master-widget>
