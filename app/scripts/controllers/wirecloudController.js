@@ -81,6 +81,7 @@ angular.module(
                             for (j = 0; j < cats.length && !item; ++j) {
                                 if (cats[j].key === 'exercise_data') {
                                     item = items[i];
+                                    $scope.itemCategory = cats[j];
                                 }
                             }
                         }
@@ -90,7 +91,6 @@ angular.module(
                 if (item) {
                     dai = item.datadescriptor.defaultaccessinfo;
                     res = ooi.exercises(dai);
-                    $scope.dataitem = item;
                     $scope.datadescriptor = item.datadescriptor;
                     $scope.apiurl = dai.substr(0, dai.indexOf('icmm_api') + 8);
                     $scope.exercise = res.get({id: item.actualaccessinfo});
@@ -427,7 +427,7 @@ angular.module(
                                         'actualaccessinfocontenttype': 'text/plain',
                                         'actualaccessinfo': $scope.exercise.id,
                                         'categories': [{
-                                            '$ref': $scope.dataitem.$self
+                                            '$ref': $scope.itemCategory.$self
                                         }]
                                     };
 
