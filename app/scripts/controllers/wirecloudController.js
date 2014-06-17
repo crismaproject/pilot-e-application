@@ -425,7 +425,7 @@ angular.module(
                                             '$ref': $scope.datadescriptor.$self
                                         },
                                         'actualaccessinfocontenttype': 'text/plain',
-                                        'actualaccessinfo': $scope.exercise.id,
+                                        'actualaccessinfo': $scope.exercise.id.toString(),
                                         'categories': [{
                                             '$ref': $scope.itemCategory.$self
                                         }]
