@@ -66,7 +66,7 @@ angular.module(
                 if (DEBUG) {
                     console.log('parse dataitem and fetch patients');
                 }
-                
+
                 $scope.model.exerciseName = $scope.worldstate.name;
                 items = $scope.worldstate.worldstatedata;
                 if (items) {
@@ -166,7 +166,7 @@ angular.module(
                     toCorrect.setDate(date.getDate());
                     toCorrect.setMonth(date.getMonth());
                     toCorrect.setFullYear(date.getFullYear());
-                    if(resetSeconds) {
+                    if (resetSeconds) {
                         toCorrect.setSeconds(0);
                         toCorrect.setMilliseconds(0);
                     }
@@ -221,15 +221,15 @@ angular.module(
 
                         dialog.result.then(function () {
                             var exerciseMetadata;
-                            
+
                             // resets the (milli)seconds only
                             $scope.model.incidentTime = $scope.model.correctDate(
-                                $scope.model.incidentTime, 
-                                $scope.model.incidentTime, 
+                                $scope.model.incidentTime,
+                                $scope.model.incidentTime,
                                 true
                             );
                             $scope.model.referenceTime = $scope.model.correctDate(
-                                $scope.model.incidentTime, 
+                                $scope.model.incidentTime,
                                 $scope.model.referenceTime,
                                 true
                             );
@@ -358,6 +358,7 @@ angular.module(
                                             ar.rescueMeans[j].$self = '/CRISMA.rescueMeans/' + ids[6]++;
                                         }
                                     }
+
                                     $scope.exercise.$save();
 
                                     // save current state and create the dataslot without self and id
