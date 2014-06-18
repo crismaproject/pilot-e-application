@@ -35,8 +35,6 @@
         <![endif]-->
 
         <div ng-controller="eu.crismaproject.pilotE.controllers.WirecloudController">
-            <button ng-click="model.editing=!model.editing">Editing toggle</button>
-            <button ng-click="toggleWCEditing(model.editing)">WC Editing toggle</button>
             <div class="ex-header"><h3>Exercise {{model.exerciseName}}</h3></div>
             <tabset>
                 <tab select="model.patientsVisible=true" deselect="model.patientsVisible=false">
@@ -180,58 +178,10 @@
                     function ($provide) {
                         'use strict';
 
-                        $provide.constant('DEBUG', 'true');
-                        $provide.constant('CRISMA_DOMAIN', 'CRISMA');
-                        $provide.constant('CRISMA_ICMM_API', 'http://crisma.cismet.de/pilotE/icmm_api');
-                        $provide.constant('OOI_API', 'http://crisma.cismet.de/pilotE/icmm_api');
+                        $provide.constant('DEBUG', MashupPlatform.prefs.get('DEBUG'));
                     }
                 ]
             );
-    
-            MashupPlatform = {
-                wiring: {
-                    registerCallback: function (name, func) {
-                        console.log("registerCallback: [name=" + name + "]");
-                        MashupPlatform[name] = func;
-                    },
-                    pushEvent: function (name, value) {
-                        console.log("pushEvent: [name=" + name + "|value=" + value + "]");
-                        try {
-                            MashupPlatform[name](value);
-                        } catch(e) {
-                            
-                        }
-                    }
-                }
-            };
-            
-            window.setTimeout(function() {
-                console.log("push ws");
-                $.getJSON('http://crisma.cismet.de/pilotE/icmm_api/CRISMA.worldstates/3?omitNullValues=true&deduplicate=true', function (data) {
-                    MashupPlatform.setWorldstate(JSON.stringify(data));
-                })
-            }, 2000);
-//            window.setTimeout(function() {
-//                console.log("set editing");
-//                MashupPlatform.setEditing('true');
-//            }, 3000);
-//            
-//            window.setTimeout(function() {
-//                console.log("push ws");
-//                MashupPlatform.setWorldstate('{}');
-//            }, 4000);
-//            window.setTimeout(function() {
-//                console.log("set editing");
-//                MashupPlatform.setEditing(false);
-//            }, 5000);
-//            window.setTimeout(function() {
-//                console.log("set editing");
-//                MashupPlatform.setEditing('false');
-//            }, 10000);
-//            window.setTimeout(function() {
-//                console.log("set editing");
-//                MashupPlatform.setEditing(false);
-//            }, 20000);
         </script>
     </body>
 </html>
