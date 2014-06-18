@@ -156,7 +156,7 @@ angular.module(
                 return p;
             };
 
-            $scope.model.correctDate = function (dateIso, toCorrectIso) {
+            $scope.model.correctDate = function (dateIso, toCorrectIso, resetSeconds) {
                 var date, toCorrect;
 
                 if (toCorrectIso) {
@@ -166,6 +166,10 @@ angular.module(
                     toCorrect.setDate(date.getDate());
                     toCorrect.setMonth(date.getMonth());
                     toCorrect.setFullYear(date.getFullYear());
+                    if(resetSeconds) {
+                        toCorrect.setSeconds(0);
+                        toCorrect.setMilliseconds(0);
+                    }
                 } else {
                     toCorrect = null;
                 }
@@ -218,6 +222,17 @@ angular.module(
                         dialog.result.then(function () {
                             var exerciseMetadata;
                             
+                            // resets the (milli)seconds only
+                            $scope.model.incidentTime = $scope.model.correctDate(
+                                $scope.model.incidentTime, 
+                                $scope.model.incidentTime, 
+                                true
+                            );
+                            $scope.model.referenceTime = $scope.model.correctDate(
+                                $scope.model.incidentTime, 
+                                $scope.model.referenceTime,
+                                true
+                            );
                             exerciseMetadata = {
                                 'name': $scope.model.exerciseName,
                                 'description': $scope.model.exerciseDesc,
@@ -307,23 +322,28 @@ angular.module(
                                         // set dates relative to incident time
                                         pat.located_timestamp = $scope.model.correctDate(
                                             $scope.exercise.incidentTime,
-                                            pat.located_timestamp
+                                            pat.located_timestamp,
+                                            true
                                         );
                                         pat.transportation_timestamp = $scope.model.correctDate(
                                             $scope.exercise.incidentTime,
-                                            pat.transportation_timestamp
+                                            pat.transportation_timestamp,
+                                            true
                                         );
                                         pat.treatment_timestamp = $scope.model.correctDate(
                                             $scope.exercise.incidentTime,
-                                            pat.treatment_timestamp
+                                            pat.treatment_timestamp,
+                                            true
                                         );
                                         pat.preTriage.timestamp = $scope.model.correctDate(
                                             $scope.exercise.incidentTime,
-                                            pat.preTriage.timestamp
+                                            pat.preTriage.timestamp,
+                                            true
                                         );
                                         pat.triage.timestamp = $scope.model.correctDate(
                                             $scope.exercise.incidentTime,
-                                            pat.triage.timestamp
+                                            pat.triage.timestamp,
+                                            true
                                         );
                                     }
 
@@ -338,7 +358,6 @@ angular.module(
                                             ar.rescueMeans[j].$self = '/CRISMA.rescueMeans/' + ids[6]++;
                                         }
                                     }
-
                                     $scope.exercise.$save();
 
                                     // save current state and create the dataslot without self and id
@@ -389,7 +408,7 @@ angular.module(
                                             }
                                         };
 
-                                        cur = new Date(exercise.patients[0].transportation_timestamp);
+                                        cur = new Date($scope.model.incidentTime);
                                         for (i = 0; i < exercise.patients.length; ++i) {
                                             patient = exercise.patients[i];
                                             cur = getMax(new Date(patient.transportation_timestamp), cur);
