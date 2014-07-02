@@ -100,7 +100,7 @@ angular.module(
 
             };
 
-            $scope.model.createPatient = function (name, forename, correctTriage) {
+            $scope.model.createPatient = function (name, forename, correctTriage, injuryPattern) {
                 var id, p;
 
                 id = $scope.model.getNextPatientId();
@@ -110,6 +110,7 @@ angular.module(
                     'name': name,
                     'forename': forename,
                     'correctTriage': correctTriage,
+                    'injuryPattern': injuryPattern,
                     'located_timestamp': null,
                     'treatment_timestamp': null,
                     'transportation_timestamp': null,
@@ -257,7 +258,12 @@ angular.module(
                                 newPatients = [];
                                 for (i = 0; i < $scope.exercise.patients.length; ++i) {
                                     p = $scope.exercise.patients[i];
-                                    newPatients.push($scope.model.createPatient(p.name, p.forename, p.correctTriage));
+                                    newPatients.push($scope.model.createPatient(
+                                        p.name,
+                                        p.forename,
+                                        p.correctTriage,
+                                        p.injuryPattern
+                                    ));
                                 }
 
                                 $scope.exercise.incidentTime = $scope.model.incidentTime;
