@@ -196,7 +196,7 @@ angular.module(
 
                 ar = {
                     'time': new Date().toISOString(),
-                    'alert': '',
+                    'status': '',
                     'rescueMeans': []
                 };
                 $scope.exercise.alertsRequests.push(ar);
