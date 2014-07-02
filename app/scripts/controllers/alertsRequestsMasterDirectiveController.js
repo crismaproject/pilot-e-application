@@ -12,6 +12,8 @@ angular.module('eu.crismaproject.pilotE.controllers')
                 if (DEBUG) {
                     console.log('initialising master alerts requests directive controller');
                 }
+                
+                $scope.ooi = ooi;
 
                 $scope.tableParams = new NgTableParams(
                     {
@@ -26,7 +28,16 @@ angular.module('eu.crismaproject.pilotE.controllers')
                             var ordered;
 
                             if ($scope.alertsRequests) {
-                                ordered = params.filter() ? $filter('filter')($scope.alertsRequests, params.filter()) : $scope.alertsRequests;
+                                ordered = params.filter() ? $filter('filter')($scope.alertsRequests, function(ar) {
+                                    if (!params.filter().status) {
+                                        return true;
+                                    }
+                                    if (ar.status) {
+                                        return ooi.getStatusName(ar.status).toLowerCase().indexOf(params.filter().status.toLowerCase()) !== -1;
+                                    }
+                                    
+                                    return false;
+                                }) : $scope.alertsRequests;
                                 ordered = params.sorting() ? $filter('orderBy')(ordered, params.orderBy()) : $scope.alertsRequests;
 
                                 params.total(ordered.length);
