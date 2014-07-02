@@ -11,6 +11,12 @@ angular.module('eu.crismaproject.pilotE.controllers')
                     console.log('initialising detail patient directive controller');
                 }
 
+                $scope.injuryPatterns = ooi.getInjuryPatterns();
+                $scope.ooi = ooi;
+                $scope.select2Options = {
+                    allowClear: true
+                };
+
                 $scope.$watch('patient.careMeasures', function () {
                     if ($scope.patient) {
                         $scope.patient.ratedMeasuresCount = ooi.getRatedMeasuresCount($scope.patient);

@@ -14,6 +14,8 @@ angular.module(
                 getNextId,
                 getMaxCareMeasures,
                 getClassifications,
+                getInjuryPatterns,
+                getInjuryPatternName,
                 getRatedMeasuresCount,
                 getAbbreviatedRequests,
                 getQueue,
@@ -158,6 +160,48 @@ angular.module(
                 ];
             };
 
+            getInjuryPatterns = function () {
+                return [
+                    'chestTrauma',
+                    'unconsciousness',
+                    'lowerLegFracture',
+                    'ankleFracture',
+                    'thighFracture',
+                    'whiplashInjury',
+                    'multipleBruice',
+                    'scrape',
+                    'uninjured',
+                    'handSprain',
+                    'multipleTrauma',
+                    'lowerLegAmputation',
+                    'forearmAmputation',
+                    'hyperventilation',
+                    'pelvisFracture',
+                    'craniocerebralInjury'
+                ];
+            };
+
+            getInjuryPatternName = function (injuryPattern) {
+                switch (injuryPattern) {
+                case 'chestTrauma': return 'Chest Trauma';
+                case 'unconsciousness': return 'Unconsciousness';
+                case 'lowerLegFracture': return 'Lower leg fracture';
+                case 'ankleFracture': return 'Ankle fracture';
+                case 'thighFracture': return 'Thigh fracture';
+                case 'whiplashInjury': return 'Whiplash';
+                case 'multipleBruice': return 'Multiple bruice';
+                case 'scrape': return 'Scrape';
+                case 'uninjured': return 'Uninjured';
+                case 'handSprain': return 'Hand sprain';
+                case 'multipleTrauma': return 'Multiple Trauma';
+                case 'lowerLegAmputation': return 'Lower leg amputation';
+                case 'forearmAmputation': return 'Forearm amputation';
+                case 'hyperventilation': return 'Hyperventilation';
+                case 'pelvisFracture': return 'Pelvis fracture';
+                case 'craniocerebralInjury': return 'Craniocerebral injury';
+                }
+            };
+
             getRatedMeasuresCount = function (patient) {
                 var i, count;
 
@@ -227,6 +271,8 @@ angular.module(
                 getNextId: getNextId,
                 getMaxCareMeasures : getMaxCareMeasures,
                 getClassifications : getClassifications,
+                getInjuryPatterns : getInjuryPatterns,
+                getInjuryPatternName : getInjuryPatternName,
                 getRatedMeasuresCount : getRatedMeasuresCount,
                 getAbbreviatedRequests : getAbbreviatedRequests,
                 getQueue : getQueue

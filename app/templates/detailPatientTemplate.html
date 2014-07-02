@@ -26,6 +26,18 @@
                         </span>
                     </td>
                 </tr>
+                <tr>
+                    <td class="col1 defaultinsets">Injury pattern:</td>
+                    <td class="col2 defaultinsets">
+                        <select ng-show="editing" id="injury-pattern-select" data-ui-select2="select2Options" data-ng-model="patient.injuryPattern" data-placeholder="-- injury pattern --">
+                            <option value=""></option>
+                            <option ng-repeat="pattern in injuryPatterns" value="{{pattern}}">{{ooi.getInjuryPatternName(pattern)}}</option>
+                        </select>
+                        <span ng-show="!editing">
+                            {{ooi.getInjuryPatternName(patient.injuryPattern)}}
+                        </span>
+                    </td>
+                </tr>
             </tbody>
         </table>
     </div>
