@@ -60,6 +60,10 @@ angular.module(
 
             initScope();
 
+            $scope.isNaN = function (no) {
+                return isNaN(parseInt(no, 10));
+            };
+
             $scope.processWorldstate = function () {
                 var cats, dai, i, item, items, j, res;
 
@@ -213,6 +217,7 @@ angular.module(
                         $scope.model.referenceTime = new Date().toISOString();
                         $scope.model.exerciseName = $scope.worldstate.name;
                         $scope.model.exerciseDesc = $scope.worldstate.description;
+                        $scope.model.noOfResponders = null;
 
                         dialog = $modal.open({
                             templateUrl: 'templates/newExerciseModalTemplate.html',
@@ -260,6 +265,7 @@ angular.module(
                                 $scope.exercise.patients = newPatients;
                                 $scope.exercise.alertsRequests = [];
                                 $scope.exercise.tacticalAreas = [];
+                                $scope.exercise.numberOfResponders = parseInt($scope.model.noOfResponders, 10);
 
                                 // preserve selection
                                 selP = null;

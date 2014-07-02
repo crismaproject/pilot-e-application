@@ -72,6 +72,24 @@
                 </form>
             </div>
         </div>
+        <div class="row margintop10">
+            <div class="col-lg-8">
+                <span style="height: 34px; display: table-cell; vertical-align: middle;">Total number of responders:</span>
+            </div>
+            <div class="col-lg-4">
+                <form name="responderCountForm" class="form-inline pull-right" role="form">
+                    <div class="form-group" ng-class="{'has-error': isNaN(model.noOfResponders)}">
+                        <input
+                            class="form-control"
+                            size="5"
+                            ng-model="model.noOfResponders"
+                            placeholder="# of Res."
+                            name="noOfResponders"
+                            type="text">
+                    </div>
+                </form>
+            </div>
+        </div>
     </div>
 </div>
 <div class="modal-footer">
