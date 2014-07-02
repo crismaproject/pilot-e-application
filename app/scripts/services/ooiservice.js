@@ -16,6 +16,7 @@ angular.module(
                 getClassifications,
                 getInjuryPatterns,
                 getInjuryPatternName,
+                getStatusName,
                 getRatedMeasuresCount,
                 getAbbreviatedRequests,
                 getQueue,
@@ -183,22 +184,31 @@ angular.module(
 
             getInjuryPatternName = function (injuryPattern) {
                 switch (injuryPattern) {
-                case 'chestTrauma': return 'Chest Trauma';
-                case 'unconsciousness': return 'Unconsciousness';
-                case 'lowerLegFracture': return 'Lower leg fracture';
-                case 'ankleFracture': return 'Ankle fracture';
-                case 'thighFracture': return 'Thigh fracture';
-                case 'whiplashInjury': return 'Whiplash';
-                case 'multipleBruice': return 'Multiple bruice';
-                case 'scrape': return 'Scrape';
-                case 'uninjured': return 'Uninjured';
-                case 'handSprain': return 'Hand sprain';
-                case 'multipleTrauma': return 'Multiple Trauma';
-                case 'lowerLegAmputation': return 'Lower leg amputation';
-                case 'forearmAmputation': return 'Forearm amputation';
-                case 'hyperventilation': return 'Hyperventilation';
-                case 'pelvisFracture': return 'Pelvis fracture';
-                case 'craniocerebralInjury': return 'Craniocerebral injury';
+                    case 'chestTrauma': return 'Chest Trauma';
+                    case 'unconsciousness': return 'Unconsciousness';
+                    case 'lowerLegFracture': return 'Lower leg fracture';
+                    case 'ankleFracture': return 'Ankle fracture';
+                    case 'thighFracture': return 'Thigh fracture';
+                    case 'whiplashInjury': return 'Whiplash';
+                    case 'multipleBruice': return 'Multiple bruice';
+                    case 'scrape': return 'Scrape';
+                    case 'uninjured': return 'Uninjured';
+                    case 'handSprain': return 'Hand sprain';
+                    case 'multipleTrauma': return 'Multiple Trauma';
+                    case 'lowerLegAmputation': return 'Lower leg amputation';
+                    case 'forearmAmputation': return 'Forearm amputation';
+                    case 'hyperventilation': return 'Hyperventilation';
+                    case 'pelvisFracture': return 'Pelvis fracture';
+                    case 'craniocerebralInjury': return 'Craniocerebral injury';
+                }
+            };
+
+            getStatusName = function (status) {
+                switch (status) {
+                    case 'request': return 'Request';
+                    case 'arrival': return 'Arrival (Status 4)';
+                    case 'evacuation': return 'Evacuation (Status 7)';
+                    default: return '';
                 }
             };
 
@@ -273,6 +283,7 @@ angular.module(
                 getClassifications : getClassifications,
                 getInjuryPatterns : getInjuryPatterns,
                 getInjuryPatternName : getInjuryPatternName,
+                getStatusName: getStatusName,
                 getRatedMeasuresCount : getRatedMeasuresCount,
                 getAbbreviatedRequests : getAbbreviatedRequests,
                 getQueue : getQueue

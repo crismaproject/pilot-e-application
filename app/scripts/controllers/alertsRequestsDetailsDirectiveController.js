@@ -7,13 +7,24 @@ angular.module('eu.crismaproject.pilotE.controllers')
             function ($scope, ooi, DEBUG) {
                 'use strict';
 
-                var select2Format;
+                var select2Format, select2FormatStatus;
 
                 if (DEBUG) {
                     console.log('initialising master alerts requests directive controller');
                 }
 
                 $scope.quantity = 1;
+                $scope.ooi = ooi;
+                
+                select2FormatStatus = function (selection) {
+                    return ooi.getStatusName(selection.text);
+                };
+
+                $scope.select2OptionsStatus = {
+                    allowClear: true,
+                    formatResult: select2FormatStatus,
+                    formatSelection: select2FormatStatus
+                };
 
                 select2Format = function (selection) {
                     try {
