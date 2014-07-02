@@ -6,9 +6,6 @@
                 data-ng-click="setSelected(patient)"
                 ng-mouseenter="hovering = true"
                 ng-mouseleave="hovering = false">
-                <td data-title="'ID'" sortable="'id'">
-                    {{patient.id}}
-                </td>
                 <td data-title="'Name'" sortable="'name'" filter="{'name': 'text'}">
                     {{patient.name}}
                 </td>
