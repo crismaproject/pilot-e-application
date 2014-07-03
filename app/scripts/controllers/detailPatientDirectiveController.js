@@ -17,6 +17,18 @@ angular.module('eu.crismaproject.pilotE.controllers')
                     allowClear: true
                 };
 
+                $scope.sortCareMeasures = function (cm) {
+                    switch (cm.measure) {
+                        case 'Position': return 1;
+                        case 'Supplemental Oxygen': return 2;
+                        case 'Ventilation': return 3;
+                        case 'Hemorrhage': return 4;
+                        case 'Consciousness': return 5;
+                        case 'Warmth preservation': return 6;
+                        case 'Attendance': return 7;
+                    }
+                };
+
                 $scope.$watch('patient.careMeasures', function () {
                     if ($scope.patient) {
                         $scope.patient.ratedMeasuresCount = ooi.getRatedMeasuresCount($scope.patient);
