@@ -17,6 +17,7 @@ angular.module(
                 getInjuryPatterns,
                 getInjuryPatternName,
                 getStatusName,
+                getMeasureCategory,
                 getRatedMeasuresCount,
                 getAbbreviatedRequests,
                 getQueue,
@@ -211,6 +212,18 @@ angular.module(
                     default: return '';
                 }
             };
+            
+            getMeasureCategory = function (measure) {
+                switch(measure) {
+                    case 'Position': return 'A';
+                    case 'Supplemental Oxygen': return 'B';
+                    case 'Ventilation': return 'B';
+                    case 'Hemorrhage': return 'C';
+                    case 'Consciousness': return 'D';
+                    case 'Warmth preservation': return 'E';
+                    case 'Attendance': return 'E';
+                }
+            };
 
             getRatedMeasuresCount = function (patient) {
                 var i, count;
@@ -284,6 +297,7 @@ angular.module(
                 getInjuryPatterns : getInjuryPatterns,
                 getInjuryPatternName : getInjuryPatternName,
                 getStatusName: getStatusName,
+                getMeasureCategory : getMeasureCategory,
                 getRatedMeasuresCount : getRatedMeasuresCount,
                 getAbbreviatedRequests : getAbbreviatedRequests,
                 getQueue : getQueue

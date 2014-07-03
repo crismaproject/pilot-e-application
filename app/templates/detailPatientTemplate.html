@@ -209,10 +209,10 @@
                     </td>
                 </tr>
                 <!-- assumes care measures available -->
-                <tr data-ng-repeat="cm in patient.careMeasures| orderBy:'measure'">
-                    <td class="col1 defaultinsets">{{cm.measure}}:</td>
+                <tr data-ng-repeat="cm in patient.careMeasures| orderBy:sortCareMeasures">
+                    <td class="col1 defaultinsets"><b>{{ooi.getMeasureCategory(cm.measure)}}</b> - {{cm.measure}}:</td>
                     <td class="col2 defaultinsets">
-                        <input ng-disabled="!editing" class='checkbox' type="checkbox" ng-model="cm.value" style="margin-left: 60px">
+                        <input ng-disabled="!editing" class='checkbox' type="checkbox" ng-model="cm.value" style="margin-left: 70px">
                     </td>
                 </tr>
             </tbody>
