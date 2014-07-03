@@ -9,9 +9,8 @@
         <Vendor>cismet_GmbH</Vendor>
         <!-- Name: Name of the widget -->
         <Name>pilot-e-capture-widget</Name>
-        <!-- Version: Current widget version number -->
-        <!-- if 4th value is set it is a beta, wc does not like anything but numbers and dots -->
-        <Version>1.0.0.5</Version>
+        <!-- Version: Current widget version number-->
+        <Version>1.2</Version>
         <!-- DisplayName: Name shown in the UI of the widget -->
         <DisplayName>CRISMA Pilot E Capture Widget</DisplayName>
         <!-- Author: Widget developer(s) -->

@@ -36,9 +36,9 @@
         </div>
         <div class="container-fluid margintop10">
             <div class="row">
-                <div class='col-lg-4'>
+                <div class='col-lg-4' style="padding-right: 5px">
                     <!-- hack to have the text centered vertically, actually we don't really know the height oO -->
-                    <span style="height: 34px; display: table-cell; vertical-align: middle;">When:</span>
+                    <span style="height: 34px; display: table-cell; vertical-align: middle;">Time of order:</span>
                 </div>
                 <div class='col-lg-8'>
                     <form name="timepickerForm" class="form-inline timepicker" role="form">
@@ -81,7 +81,7 @@
             <div class="container-fluid">
                 <div class="row">
                     <div class="col-lg-5">
-                        Created:
+                        Time of order:
                     </div>
                     <div class="col-lg-7">
                         {{area.time | date:'HH:mm'}}

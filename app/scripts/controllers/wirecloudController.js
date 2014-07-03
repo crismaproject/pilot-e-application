@@ -60,6 +60,10 @@ angular.module(
 
             initScope();
 
+            $scope.isNaN = function (no) {
+                return isNaN(parseInt(no, 10));
+            };
+
             $scope.processWorldstate = function () {
                 var cats, dai, i, item, items, j, res;
 
@@ -96,7 +100,7 @@ angular.module(
 
             };
 
-            $scope.model.createPatient = function (name, forename, correctTriage) {
+            $scope.model.createPatient = function (name, forename, correctTriage, injuryPattern) {
                 var id, p;
 
                 id = $scope.model.getNextPatientId();
@@ -106,6 +110,7 @@ angular.module(
                     'name': name,
                     'forename': forename,
                     'correctTriage': correctTriage,
+                    'injuryPattern': injuryPattern,
                     'located_timestamp': null,
                     'treatment_timestamp': null,
                     'transportation_timestamp': null,
@@ -192,7 +197,7 @@ angular.module(
 
                 ar = {
                     'time': new Date().toISOString(),
-                    'alert': '',
+                    'status': '',
                     'rescueMeans': []
                 };
                 $scope.exercise.alertsRequests.push(ar);
@@ -213,6 +218,7 @@ angular.module(
                         $scope.model.referenceTime = new Date().toISOString();
                         $scope.model.exerciseName = $scope.worldstate.name;
                         $scope.model.exerciseDesc = $scope.worldstate.description;
+                        $scope.model.noOfResponders = null;
 
                         dialog = $modal.open({
                             templateUrl: 'templates/newExerciseModalTemplate.html',
@@ -252,7 +258,12 @@ angular.module(
                                 newPatients = [];
                                 for (i = 0; i < $scope.exercise.patients.length; ++i) {
                                     p = $scope.exercise.patients[i];
-                                    newPatients.push($scope.model.createPatient(p.name, p.forename, p.correctTriage));
+                                    newPatients.push($scope.model.createPatient(
+                                        p.name,
+                                        p.forename,
+                                        p.correctTriage,
+                                        p.injuryPattern
+                                    ));
                                 }
 
                                 $scope.exercise.incidentTime = $scope.model.incidentTime;
@@ -260,6 +271,7 @@ angular.module(
                                 $scope.exercise.patients = newPatients;
                                 $scope.exercise.alertsRequests = [];
                                 $scope.exercise.tacticalAreas = [];
+                                $scope.exercise.numberOfResponders = parseInt($scope.model.noOfResponders, 10);
 
                                 // preserve selection
                                 selP = null;
