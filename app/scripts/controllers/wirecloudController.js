@@ -361,6 +361,11 @@ angular.module(
 
                                     for (i = 0; i < $scope.exercise.tacticalAreas.length; ++i) {
                                         $scope.exercise.tacticalAreas[i].$self = '/CRISMA.tacticalAreas/' + ids[4]++;
+                                        $scope.exercise.tacticalAreas[i].time = $scope.model.correctDate(
+                                            $scope.exercise.incidentTime,
+                                            $scope.exercise.tacticalAreas[i].time,
+                                            true
+                                        );
                                     }
 
                                     for (i = 0; i < $scope.exercise.alertsRequests.length; ++i) {
@@ -369,6 +374,11 @@ angular.module(
                                         for (j = 0; j < ar.rescueMeans.length; ++j) {
                                             ar.rescueMeans[j].$self = '/CRISMA.rescueMeans/' + ids[6]++;
                                         }
+                                        ar.time = $scope.model.correctDate(
+                                            $scope.exercise.incidentTime,
+                                            ar.time,
+                                            true
+                                        );
                                     }
 
                                     $scope.exercise.$save();
