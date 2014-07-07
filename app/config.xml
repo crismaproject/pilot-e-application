@@ -10,8 +10,7 @@
         <!-- Name: Name of the widget -->
         <Name>pilot-e-capture-widget</Name>
         <!-- Version: Current widget version number-->
-        <!-- we include a build # to prevent caching by wirecloud -->
-        <Version>1.2</Version>
+        <Version>1.2.1</Version>
         <!-- DisplayName: Name shown in the UI of the widget -->
         <DisplayName>CRISMA Pilot E Capture Widget</DisplayName>
         <!-- Author: Widget developer(s) -->
